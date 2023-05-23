@@ -1,0 +1,2 @@
+base_img: haproxy/haproxy-ubuntu:2.6
+packages: nano curl telnet
