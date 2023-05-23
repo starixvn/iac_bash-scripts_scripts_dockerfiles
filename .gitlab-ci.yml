@@ -4,6 +4,10 @@ stages:
   - build
   - deploy
 ############
+include:
+  - ref: master
+    file: 'deploy-vars.gitlab-ci.yml'
+###########
 test:
   stage: test
   script:
