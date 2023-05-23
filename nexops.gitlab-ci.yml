@@ -4,7 +4,7 @@ stages:
   - build
   - deploy
 ############
-.test:
+test:
   stage: test
   script:
     - echo "test - $CI_ENVIRONMENT_NAME"
@@ -13,7 +13,7 @@ stages:
   tags:
     - docker
 
-.build:
+build:
   stage: build
   script:
     - echo "build - $CI_ENVIRONMENT_NAME"
@@ -21,7 +21,7 @@ stages:
   tags:
     - docker
 
-.deploy:
+deploy:
   stage: deploy
   script:
     - echo "Push - $CI_ENVIRONMENT_NAME"
