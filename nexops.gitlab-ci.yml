@@ -1,0 +1,30 @@
+image: $DOCKER_REG_LOCAL_URL/base/docker:20.10.7-bash-jq
+stages:
+  - test
+  - build
+  - deploy
+############
+.test:default:image:
+  stage: test
+  script:
+    - echo "test - $CI_ENVIRONMENT_NAME"
+    - docker login -u $docker_reg_user -p $docker_reg_pass $docker_reg_url
+    - echo "[$ORG] [$CI_ENVIRONMENT_NAME] - Testing is DONE!";
+  tags:
+    - docker
+
+.build:default:image:
+  stage: build
+  script:
+    - echo "build - $CI_ENVIRONMENT_NAME"
+    - echo "[$ORG] [$CI_ENVIRONMENT_NAME] - Build is DONE!";
+  tags:
+    - docker
+
+.deploy:default:image:
+  stage: deploy
+  script:
+    - echo "Push - $CI_ENVIRONMENT_NAME"
+    - echo "[$ORG] [$CI_ENVIRONMENT_NAME] - deploy is DONE!";
+  tags:
+    - docker
