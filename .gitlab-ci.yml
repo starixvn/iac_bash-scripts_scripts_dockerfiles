@@ -42,7 +42,7 @@ variables:
 .ha-proxy:
   extends: .base-rules
   variables:
-      RULES_CHANGES_PATH: "ha-proxy/**/*"
+      RULES_CHANGES_PATH: "haproxy/**/*"
       PROJECT: HA-PROXY
 
 ha-proxy-test:
