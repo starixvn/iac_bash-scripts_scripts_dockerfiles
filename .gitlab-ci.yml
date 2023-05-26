@@ -6,7 +6,14 @@ stages:
 ############
 include: 'deploy-vars.gitlab-ci.yml'
 ###########
-test:
+variables:
+  RULES_CHANGES_PATH: "**/*"
+.base-rules:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+      changes: 
+        - $RULES_CHANGES_PATH
+.test: &test
   stage: test
   script:
     - echo "test - $CI_ENVIRONMENT_NAME"
@@ -15,7 +22,7 @@ test:
   tags:
     - docker
 
-build:
+.build: &build
   stage: build
   script:
     - echo "build - $CI_ENVIRONMENT_NAME"
@@ -23,10 +30,31 @@ build:
   tags:
     - docker
 
-deploy:
+.deploy: &deploy
   stage: deploy
   script:
     - echo "Push - $CI_ENVIRONMENT_NAME"
     - echo "[$ORG] [$CI_ENVIRONMENT_NAME] - deploy is DONE!";
   tags:
     - docker
+
+##HA-PROXY-TOOL
+.ha-proxy:
+  extends: .base-rules
+  variables:
+      RULES_CHANGES_PATH: "ha-proxy/**/*"
+      PROJECT: HA-PROXY
+
+ha-proxy-test:
+  extends: .ha-proxy
+  <<: *test
+
+ha-proxy-build:
+  extends: .ha-proxy
+  needs: ["ha-proxy-test"]
+  <<: *build
+
+ha-proxy-deploy:
+  extends: .ha-proxy
+  needs: ["ha-proxy-build"]
+  <<: *deploy
