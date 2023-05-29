@@ -46,7 +46,6 @@ before_script:
 
 .deploy: &deploy
   stage: deploy
-  extends: .before_script_template
   script:
     - echo "Push - hub.nexdev.net/$IMAGE_PATH"
     - docker push hub.nexdev.net/$IMAGE_PATH
