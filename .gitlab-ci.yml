@@ -22,7 +22,6 @@ before_script:
         - $RULES_CHANGES_PATH
 .test: &test
   stage: test
-  extends: .before_script_template
   script:
     - wget --no-verbose https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz?inline=false -O - | tar -zxvf -
     - wget https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivyignore?inline=false
