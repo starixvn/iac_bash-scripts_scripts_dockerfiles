@@ -1,0 +1,48 @@
+######### HAPROXY
+.haproxy:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "haproxy/**/*"
+    DIR_PATH: "haproxy"
+    BASE_IMAGE: "haproxytech/haproxy-ubuntu:$IMAGE_VERSION"
+    IMAGE_VERSION: "2.7"
+    IMAGE_PATH: "base/haproxy/haproxy-ubuntu:$IMAGE_VERSION"
+
+haproxy-test:
+  extends: .haproxy
+  <<: *test
+
+haproxy-build:
+  extends: .haproxy
+  needs: ["haproxy-test"]
+  <<: *build
+
+haproxy-deploy:
+  extends: .haproxy
+  needs: ["haproxy-build"]
+  <<: *deploy
+#########
+######### portainer
+.portainer:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "portainer/**/*"
+    DIR_PATH: "portainer"
+    BASE_IMAGE: "portainer/portainer:$IMAGE_VERSION"
+    IMAGE_VERSION: "2.18"
+    IMAGE_PATH: "base/portainer:$IMAGE_VERSION"
+
+portainer-test:
+  extends: .portainer
+  <<: *test
+
+portainer-build:
+  extends: .portainer
+  needs: ["portainer-test"]
+  <<: *build
+
+portainer-deploy:
+  extends: .portainer
+  needs: ["portainer-build"]
+  <<: *deploy
+#########
