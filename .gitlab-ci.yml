@@ -19,24 +19,26 @@ variables:
   script:
     - echo "test - $CI_ENVIRONMENT_NAME"
     - docker login -u $docker_reg_user -p $docker_reg_pass $docker_reg_url
-    - echo "[$ORG] [$CI_ENVIRONMENT_NAME] - Testing is DONE!";
+    - echo "$DIR_PATH - Testing is DONE!";
   tags:
     - docker
 
 .build: &build
   stage: build
   script:
-    - echo "build - $CI_ENVIRONMENT_NAME"
+    - echo "build - $DIR_PATH"
     - echo "docker build --no-cache --build-arg BASE_IMAGE="$BASE_IMAGE" -f $DIR_PATH/Dockerfile -t hub.nexdev.net/$IMAGE_PATH ."
-    - echo "[$ORG] [$CI_ENVIRONMENT_NAME] - Build is DONE!";
+    - docker build --no-cache --build-arg BASE_IMAGE="$BASE_IMAGE" -f $DIR_PATH/Dockerfile -t hub.nexdev.net/$IMAGE_PATH .
+    - echo "$DIR_PATH - Build is DONE!";
   tags:
     - docker
 
 .deploy: &deploy
   stage: deploy
   script:
-    - echo "Push - $CI_ENVIRONMENT_NAME"
-    - echo "[$ORG] [$CI_ENVIRONMENT_NAME] - deploy is DONE!";
+    - echo "Push - hub.nexdev.net/$IMAGE_PATH"
+    - docker push hub.nexdev.net/$IMAGE_PATH
+    - echo "hub.nexdev.net/$IMAGE_PATH - deploy is DONE!";
   tags:
     - docker
 
