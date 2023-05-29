@@ -5,7 +5,7 @@ stages:
 ############
 include: 'deploy-vars.gitlab-ci.yml'
 include: 'before-script.gitlab-ci.yml'
-include: 'tools.gitlab-ci.yml'
+include: 'nexops-tools.gitlab-ci.yml'
 ###########
 variables:
   RULES_CHANGES_PATH: "**/*"
