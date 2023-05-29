@@ -27,7 +27,7 @@ variables:
   stage: build
   script:
     - echo "build - $CI_ENVIRONMENT_NAME"
-    - echo "docker build --no-cache --build-arg base_img="$base_img" --build-arg packages="$packages" -f Dockerfile -t hub.nexdev.net/$base_img ."
+    - echo "docker build --no-cache --build-arg BASE_IMAGE="$BASE_IMAGE" -f $DIR_PATH/Dockerfile -t hub.nexdev.net/$IMAGE_PATH ."
     - echo "[$ORG] [$CI_ENVIRONMENT_NAME] - Build is DONE!";
   tags:
     - docker
@@ -44,9 +44,10 @@ variables:
   extends: .base-rules
   variables:
     RULES_CHANGES_PATH: "haproxy/**/*"
-    base_img: "haproxy/haproxy-ubuntu:2.6"
-    packages: "nano curl telnet"
-
+    DIR_PATH: "haproxy"
+    BASE_IMAGE: "haproxytech/haproxy-ubuntu:$IMAGE_VERSION"
+    IMAGE_VERSION: "2.7"
+    IMAGE_PATH: "base/haproxy/haproxy-ubuntu:$IMAGE_VERSION"
 
 haproxy-test:
   extends: .haproxy
