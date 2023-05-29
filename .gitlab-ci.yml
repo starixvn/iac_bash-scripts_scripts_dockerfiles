@@ -3,9 +3,6 @@ stages:
   - build
   - deploy
 ############
-
-include: 'deploy-vars.gitlab-ci.yml'
-#include: 'before-script.gitlab-ci.yml'
 include: 'nexops-tools.gitlab-ci.yml'
 ###########
 image: $DOCKER_REG_LOCAL_URL/base/docker:20.10.7-bash-jq
