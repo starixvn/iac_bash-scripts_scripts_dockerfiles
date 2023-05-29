@@ -41,7 +41,7 @@ variables:
     - echo "hub.nexdev.net/$IMAGE_PATH - deploy is DONE!";
   tags:
     - docker
-
+###########
 haproxy-test:
   extends: .haproxy
   <<: *test
@@ -55,7 +55,7 @@ haproxy-deploy:
   extends: .haproxy
   needs: ["haproxy-build"]
   <<: *deploy
-
+###########
 portainer-test:
   extends: .portainer
   <<: *test
