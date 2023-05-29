@@ -1,1 +1,1 @@
-portainer 6
+portainer 7
