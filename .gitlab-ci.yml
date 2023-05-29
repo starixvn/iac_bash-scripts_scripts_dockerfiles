@@ -5,7 +5,7 @@ stages:
   - deploy
 ############
 include: 'deploy-vars.gitlab-ci.yml'
-#include: 'service-tools.gitlab-ci.yml'
+include: 'before-script.gitlab-ci.yml'
 ###########
 variables:
   RULES_CHANGES_PATH: "**/*"
@@ -17,8 +17,8 @@ variables:
 .test: &test
   stage: test
   script:
-    - echo "test - $CI_ENVIRONMENT_NAME"
-    - docker login -u $docker_reg_user -p $docker_reg_pass $docker_reg_url
+    - echo "test - $DIR_PATH"
+    #- docker login -u $docker_reg_user -p $docker_reg_pass $docker_reg_url
     - echo "$DIR_PATH - Testing is DONE!";
   tags:
     - docker
