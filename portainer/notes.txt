@@ -1,1 +1,1 @@
-portainer sv
+portainer ce 2.18
