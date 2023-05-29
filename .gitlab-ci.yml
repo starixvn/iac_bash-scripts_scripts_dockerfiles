@@ -5,6 +5,7 @@ stages:
   - deploy
 ############
 include: 'deploy-vars.gitlab-ci.yml'
+include: 'service-tools.gitlab-ci.yml'
 ###########
 variables:
   RULES_CHANGES_PATH: "**/*"
@@ -26,6 +27,7 @@ variables:
   stage: build
   script:
     - echo "build - $CI_ENVIRONMENT_NAME"
+    - echo "docker build --no-cache --build-arg base_img="$base_img" --build-arg packages="$packages" -f Dockerfile -t hub.nexdev.net/$base_img ."
     - echo "[$ORG] [$CI_ENVIRONMENT_NAME] - Build is DONE!";
   tags:
     - docker
@@ -38,23 +40,3 @@ variables:
   tags:
     - docker
 
-##HA-PROXY-TOOL
-.ha-proxy:
-  extends: .base-rules
-  variables:
-      RULES_CHANGES_PATH: "haproxy/**/*"
-      PROJECT: HA-PROXY
-
-ha-proxy-test:
-  extends: .ha-proxy
-  <<: *test
-
-ha-proxy-build:
-  extends: .ha-proxy
-  needs: ["ha-proxy-test"]
-  <<: *build
-
-ha-proxy-deploy:
-  extends: .ha-proxy
-  needs: ["ha-proxy-build"]
-  <<: *deploy
