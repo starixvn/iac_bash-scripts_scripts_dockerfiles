@@ -3,12 +3,20 @@ stages:
   - build
   - deploy
 ############
+
 include: 'deploy-vars.gitlab-ci.yml'
-include: 'before-script.gitlab-ci.yml'
 include: 'nexops-tools.gitlab-ci.yml'
 ###########
+image: $DOCKER_REG_LOCAL_URL/base/docker:20.10.7-bash-jq
 variables:
+  TRIVY_VERSION: "0.22.0"
+  TRIVY_TOKEN: "H5nF5ywy262wt881ZWpq"
+  TRIVY_SERVER: "http://10.18.200.131:1115"
   RULES_CHANGES_PATH: "**/*"
+before_script:
+  - docker login -u $docker_reg_user -p $docker_reg_pass $docker_reg_url
+  - echo "$TRIVY_SERVER - $TRIVY_VERSION";
+
 .base-rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
@@ -16,10 +24,6 @@ variables:
         - $RULES_CHANGES_PATH
 .test: &test
   stage: test
-  variables:
-    TRIVY_VERSION: "0.22.0"
-    TRIVY_TOKEN: "H5nF5ywy262wt881ZWpq"
-    TRIVY_SERVER: "http://10.18.200.131:1115"
   script:
     - wget --no-verbose https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz?inline=false -O - | tar -zxvf -
     - wget https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivyignore?inline=false
