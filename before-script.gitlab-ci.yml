@@ -2,3 +2,4 @@ image: $DOCKER_REG_LOCAL_URL/base/docker:20.10.7-bash-jq
 include: 'deploy-vars.gitlab-ci.yml'
 before_script:
   - docker login -u $docker_reg_user -p $docker_reg_pass $docker_reg_url
+  - echo "$TRIVY_SERVER - $TRIVY_VERSION";
