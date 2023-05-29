@@ -5,7 +5,6 @@ stages:
   - deploy
 ############
 include: 'deploy-vars.gitlab-ci.yml'
-include: 'service-tools.gitlab-ci.yml'
 ###########
 variables:
   RULES_CHANGES_PATH: "**/*"
@@ -40,3 +39,4 @@ variables:
   tags:
     - docker
 
+include: 'service-tools.gitlab-ci.yml'
