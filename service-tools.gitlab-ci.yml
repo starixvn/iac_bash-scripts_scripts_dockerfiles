@@ -1,10 +1,9 @@
-##HA-PROXY-TOOL
 .haproxy:
   extends: .base-rules
   variables:
-      RULES_CHANGES_PATH: "haproxy/**/*"
-      #base_img: "haproxy/haproxy-ubuntu:2.6"
-      #packages: "nano curl telnet"
+    RULES_CHANGES_PATH: "haproxy/**/*"
+#base_img: "haproxy/haproxy-ubuntu:2.6"
+#packages: "nano curl telnet"
 
 haproxy-test:
   extends: .haproxy
