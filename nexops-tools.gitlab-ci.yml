@@ -2,7 +2,7 @@
 .haproxy:
   extends: .base-rules
   variables:
-    RULES_CHANGES_PATH: "$DIR_PATH/**/*"
+    RULES_CHANGES_PATH: "haproxy/**/*"
     DIR_PATH: "haproxy"
     BASE_IMAGE: "haproxytech/haproxy-ubuntu:$IMAGE_VERSION"
     IMAGE_VERSION: "2.7"
@@ -13,7 +13,7 @@
 .portainer:
   extends: .base-rules
   variables:
-    RULES_CHANGES_PATH: "$DIR_PATH/**/*"
+    RULES_CHANGES_PATH: "portainer/**/*"
     DIR_PATH: "portainer"
     BASE_IMAGE: "portainer/portainer:$IMAGE_VERSION"
     IMAGE_VERSION: "2.18.1"
