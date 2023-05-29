@@ -15,7 +15,7 @@
   variables:
     RULES_CHANGES_PATH: "portainer/**/*"
     DIR_PATH: "portainer"
-    BASE_IMAGE: "portainer/portainer:$IMAGE_VERSION"
+    BASE_IMAGE: "portainer/portainer-ce:$IMAGE_VERSION"
     IMAGE_VERSION: "2.18.1"
-    IMAGE_PATH: "base/portainer:$IMAGE_VERSION"
+    IMAGE_PATH: "base/portainer/portainer-ce:$IMAGE_VERSION"
 #########
