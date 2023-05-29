@@ -5,6 +5,7 @@ stages:
 ############
 include: 'deploy-vars.gitlab-ci.yml'
 include: 'before-script.gitlab-ci.yml'
+include: 'tools.gitlab-ci.yml'
 ###########
 variables:
   RULES_CHANGES_PATH: "**/*"
@@ -41,25 +42,3 @@ variables:
   tags:
     - docker
 
-.haproxy:
-  extends: .base-rules
-  variables:
-    RULES_CHANGES_PATH: "haproxy/**/*"
-    DIR_PATH: "haproxy"
-    BASE_IMAGE: "haproxytech/haproxy-ubuntu:$IMAGE_VERSION"
-    IMAGE_VERSION: "2.7"
-    IMAGE_PATH: "base/haproxy/haproxy-ubuntu:$IMAGE_VERSION"
-
-haproxy-test:
-  extends: .haproxy
-  <<: *test
-
-haproxy-build:
-  extends: .haproxy
-  needs: ["haproxy-test"]
-  <<: *build
-
-haproxy-deploy:
-  extends: .haproxy
-  needs: ["haproxy-build"]
-  <<: *deploy
