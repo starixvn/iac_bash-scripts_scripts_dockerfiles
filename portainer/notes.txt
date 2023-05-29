@@ -1,1 +1,1 @@
-portainer 7d
+portainer 7s
