@@ -1,5 +1,6 @@
 ARG BASE_IMAGE
 FROM $BASE_IMAGE
 LABEL org.opencontainers.image.authors="NexOps"
-RUN apt-get update
-RUN apt-get install nano curl telnet -y
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y nano curl telnet
+USER non-root
