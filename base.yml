@@ -1,4 +1,5 @@
-image: $DOCKER_REG_LOCAL_URL/base/docker:20.10.7-bash-jq
+#image: $DOCKER_REG_LOCAL_URL/base/docker:20.10.7-bash-jq
+image: $DOCKER_REG_LOCAL_URL/rebuild-baseimage/docker:git
 variables:
   RULES_CHANGES_PATH: "**/*"
   docker_reg_user: "$DOCKER_REG_LOCAL_USERNAME"
