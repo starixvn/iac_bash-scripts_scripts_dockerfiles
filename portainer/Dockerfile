@@ -1,3 +1,3 @@
 ARG BASE_IMAGE
 FROM $BASE_IMAGE
-MAINTAINER NexOps
+LABEL org.opencontainers.image.authors="NexOps"
