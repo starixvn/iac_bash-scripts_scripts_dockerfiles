@@ -24,6 +24,7 @@ include:
     - wget --no-verbose https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz?inline=false -O - | tar -zxvf -
     - wget https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivyignore?inline=false
     - cat $DIR_PATH/Dockerfile
+    - echo "$TRIVY_SERVER - $TRIVY_VERSION";
 #    - ./trivy config --exit-code 1 --severity HIGH,CRITICAL $DIR_PATH/
     - ./trivy config --exit-code 1 --severity CRITICAL $DIR_PATH/
     - echo "done Scan Dockerfile !"
