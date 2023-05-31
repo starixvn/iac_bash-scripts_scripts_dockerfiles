@@ -1,7 +1,7 @@
 stages:
   - test
   - build
-  - deploy
+#  - deploy
 ############
 include:
   - local: "base.yml"
@@ -41,15 +41,18 @@ include:
     - echo "docker build --no-cache --build-arg BASE_IMAGE="$BASE_IMAGE" -f $DIR_PATH/Dockerfile -t hub.nexdev.net/$IMAGE_PATH ."
     - docker build --no-cache --build-arg BASE_IMAGE="$BASE_IMAGE" -f $DIR_PATH/Dockerfile -t hub.nexdev.net/$IMAGE_PATH .
     - echo "$DIR_PATH - Build is DONE!";
+    - echo "Push - hub.nexdev.net/$IMAGE_PATH"
+    - docker push hub.nexdev.net/$IMAGE_PATH
+    - echo "hub.nexdev.net/$IMAGE_PATH - Push is DONE!";
   tags:
     - docker
 
-.deploy:
-  stage: deploy
-  script:
-    - !reference [.general-script, docker-login]
-    - echo "Push - hub.nexdev.net/$IMAGE_PATH"
-    - docker push hub.nexdev.net/$IMAGE_PATH
-    - echo "hub.nexdev.net/$IMAGE_PATH - deploy is DONE!";
-  tags:
-    - docker
+# .deploy:
+#   stage: deploy
+#   script:
+#     - !reference [.general-script, docker-login]
+#     - echo "Push - hub.nexdev.net/$IMAGE_PATH"
+#     - docker push hub.nexdev.net/$IMAGE_PATH
+#     - echo "hub.nexdev.net/$IMAGE_PATH - deploy is DONE!";
+#   tags:
+#     - docker
