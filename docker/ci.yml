@@ -1,0 +1,19 @@
+.docker:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "docker/**/*"
+    DIR_PATH: "docker"
+    IMAGE_VERSION: "git"
+    BASE_IMAGE: "docker:$IMAGE_VERSION"
+    IMAGE_PATH: "rebuild-baseimage/docker:$IMAGE_VERSION"
+
+docker-test:
+  extends: [.docker, .test]
+
+docker-build:
+  extends: [.docker, .build]
+  needs: ["docker-test"]
+
+docker-deploy:
+  extends: [.docker, .deploy]
+  needs: ["docker-build"]
