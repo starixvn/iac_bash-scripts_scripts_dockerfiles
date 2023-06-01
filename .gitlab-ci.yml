@@ -11,7 +11,7 @@ include:
 .general-script:
   docker-login:
     - docker login -u $docker_reg_user -p $docker_reg_pass $docker_reg_url
-    - echo "$TRIVY_SERVER - $TRIVY_VERSION";
+#    - echo "$TRIVY_SERVER - $TRIVY_VERSION";
 
 .base-rules:
   rules:
@@ -44,6 +44,7 @@ include:
     - echo "docker build --no-cache --build-arg BASE_IMAGE="$BASE_IMAGE" -f $DIR_PATH/Dockerfile -t $DOCKER_REG_URL/$IMAGE_PATH ."
     - docker build --no-cache --build-arg BASE_IMAGE="$BASE_IMAGE" -f $DIR_PATH/Dockerfile -t $DOCKER_REG_URL/$IMAGE_PATH .
     - echo "$DIR_PATH - Build is DONE!";
+    - echo "Trivy Scan image $DOCKER_REG_URL/$IMAGE_PATH"
     - echo "$TRIVY_SERVER - $TRIVY_VERSION";
     - ./trivy -d client --remote $TRIVY_SERVER --ignore-unfixed --exit-code 0 --severity HIGH --token $TRIVY_TOKEN $DOCKER_REG_URL/$IMAGE_PATH
     - ./trivy -d client --remote $TRIVY_SERVER --ignore-unfixed --exit-code 1 --severity CRITICAL --token $TRIVY_TOKEN $DOCKER_REG_URL/$IMAGE_PATH
