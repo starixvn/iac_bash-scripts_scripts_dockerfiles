@@ -25,12 +25,11 @@ include:
     - wget https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivyignore?inline=false
     - cat $DIR_PATH/Dockerfile
     - echo "$TRIVY_SERVER - $TRIVY_VERSION";
-#    - ./trivy config --exit-code 1 --severity HIGH,CRITICAL $DIR_PATH/
     - ./trivy config --exit-code 0 --severity HIGH $DIR_PATH/
     - ./trivy config --exit-code 1 --severity CRITICAL $DIR_PATH/
     - echo "done Scan Dockerfile !"
-    - ./trivy -d client --remote $TRIVY_SERVER --ignore-unfixed --exit-code 0 --severity HIGH --token $TRIVY_TOKEN $BASE_IMAGE
-    - ./trivy -d client --remote $TRIVY_SERVER --ignore-unfixed --exit-code 1 --severity CRITICAL --token $TRIVY_TOKEN $BASE_IMAGE
+    - ./trivy -d client --remote $TRIVY_SERVER --ignore-unfixed --exit-code 0 --severity HIGH,CRITICAL --token $TRIVY_TOKEN $BASE_IMAGE
+#    - ./trivy -d client --remote $TRIVY_SERVER --ignore-unfixed --exit-code 1 --severity CRITICAL --token $TRIVY_TOKEN $BASE_IMAGE
     - echo "done Scan Image $BASE_IMAGE !"
   tags:
     - docker
@@ -39,13 +38,19 @@ include:
   stage: build
   script:
     - !reference [.general-script, docker-login]
+    - wget --no-verbose https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz?inline=false -O - | tar -zxvf -
+    - wget https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivyignore?inline=false
     - echo "build - $DIR_PATH"
-    - echo "docker build --no-cache --build-arg BASE_IMAGE="$BASE_IMAGE" -f $DIR_PATH/Dockerfile -t hub.nexdev.net/$IMAGE_PATH ."
-    - docker build --no-cache --build-arg BASE_IMAGE="$BASE_IMAGE" -f $DIR_PATH/Dockerfile -t hub.nexdev.net/$IMAGE_PATH .
+    - echo "docker build --no-cache --build-arg BASE_IMAGE="$BASE_IMAGE" -f $DIR_PATH/Dockerfile -t $DOCKER_REG_URL/$IMAGE_PATH ."
+    - docker build --no-cache --build-arg BASE_IMAGE="$BASE_IMAGE" -f $DIR_PATH/Dockerfile -t $DOCKER_REG_URL/$IMAGE_PATH .
     - echo "$DIR_PATH - Build is DONE!";
-    - echo "Push - hub.nexdev.net/$IMAGE_PATH"
-    - docker push hub.nexdev.net/$IMAGE_PATH
-    - echo "hub.nexdev.net/$IMAGE_PATH - Push is DONE!";
+    - echo "$TRIVY_SERVER - $TRIVY_VERSION";
+    - ./trivy -d client --remote $TRIVY_SERVER --ignore-unfixed --exit-code 0 --severity HIGH --token $TRIVY_TOKEN $DOCKER_REG_URL/$IMAGE_PATH
+    - ./trivy -d client --remote $TRIVY_SERVER --ignore-unfixed --exit-code 1 --severity CRITICAL --token $TRIVY_TOKEN $DOCKER_REG_URL/$IMAGE_PATH
+    - echo "done Scan Image $DOCKER_REG_URL/$IMAGE_PATH !"
+    - echo "Push - $DOCKER_REG_URL/$IMAGE_PATH"
+    - docker push $DOCKER_REG_URL/$IMAGE_PATH
+    - echo "$DOCKER_REG_URL/$IMAGE_PATH - Push is DONE!";
   tags:
     - docker
 
