@@ -1,4 +1,4 @@
-.zabbix:
+.zabbix-server-pgsql:
   extends: .base-rules
   variables:
     RULES_CHANGES_PATH: "zabbix-server-pgsql/**/*"
