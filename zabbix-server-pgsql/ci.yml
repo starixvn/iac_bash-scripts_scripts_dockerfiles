@@ -1,0 +1,15 @@
+.zabbix:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "zabbix-server-pgsql/**/*"
+    DIR_PATH: "zabbix-server-pgsql"
+    BASE_IMAGE: "zabbix/zabbix-server-pgsql:$IMAGE_VERSION"
+    IMAGE_VERSION: "ubuntu-5.4-latest"
+    IMAGE_PATH: "rebuild-baseimage/zabbix/zabbix-server-pgsql:$IMAGE_VERSION"
+    
+zabbix-server-pgsql-test:
+  extends: [.zabbix-server-pgsql, .test]
+
+zabbix-server-pgsql-build:
+  extends: [.zabbix-server-pgsql, .build]
+  needs: ["zabbix-server-pgsql-test"]
