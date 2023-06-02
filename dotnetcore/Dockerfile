@@ -6,7 +6,7 @@ RUN apk update && apk add --no-cache curl busybox-extras \
     libcrypto3=3.0.9-r1 libssl3=3.0.9-r1 \
     && apk add --upgrade openssl && rm -rf /var/cache/apk/*
 
-COPY ./openssl.cnf /etc/ssl/openssl.cnf
+COPY dotnetcore/openssl.cnf /etc/ssl/openssl.cnf
 
 
 
