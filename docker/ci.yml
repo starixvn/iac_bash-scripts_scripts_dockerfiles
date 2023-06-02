@@ -3,8 +3,8 @@
   variables:
     RULES_CHANGES_PATH: "docker/**/*"
     DIR_PATH: "docker"
-    IMAGE_VERSION: "git"
-    BASE_IMAGE: "docker:$IMAGE_VERSION"
+    IMAGE_VERSION: "24.0.2"
+    BASE_IMAGE: "docker:git"
     IMAGE_PATH: "rebuild-baseimage/docker:$IMAGE_VERSION"
 
 docker-test:
