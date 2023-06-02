@@ -3,7 +3,7 @@ FROM $BASE_IMAGE
 LABEL maintainer=NexOps
 # FIX CRITICAL, HIGH, MEDIUM Vuln
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl telnet libgdiplus fonts-indic libfontconfig1 smbclient \
+    curl telnet libgdiplus fonts-indic libfontconfig1 smbclient openssl  \
     dpkg=1.19.8 libc-bin=2.28-10+deb10u2 libc6=2.28-10+deb10u2 libssl1.1=1.1.1n-0+deb10u3 \
     libtasn1-6=4.13-3+deb10u1 openssl=1.1.1n-0+deb10u3 zlib1g=1:1.2.11.dfsg-1+deb10u2 \
     gzip=1.9-3+deb10u1  libgnutls30=3.6.7-4+deb10u10  libgssapi-krb5-2=1.17-3+deb10u5 \

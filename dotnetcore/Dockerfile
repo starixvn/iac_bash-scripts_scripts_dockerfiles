@@ -2,10 +2,11 @@ ARG BASE_IMAGE
 FROM $BASE_IMAGE
 LABEL maintainer=NexOps
 # FIX Medium Vuln
-RUN apk update && apk add --no-cache curl busybox-extras \ 
+RUN apk update && apk add --no-cache curl busybox-extras openssl \ 
     libcrypto3=3.0.9-r1 libssl3=3.0.9-r1 \
     && rm -rf /var/cache/apk/*
-    # && apk add --upgrade openssl && rm -rf /var/cache/apk/*
+
+
 
 # COPY dotnetcore/openssl.cnf /etc/ssl/openssl.cnf
 
