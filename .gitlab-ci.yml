@@ -22,15 +22,11 @@ include:
   stage: test
   script:
     - wget --no-verbose https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz?inline=false -O - | tar -zxvf -
-    - wget https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivyignore?inline=false
     - cat $DIR_PATH/Dockerfile
     - echo "$TRIVY_SERVER - $TRIVY_VERSION";
     - ./trivy config --exit-code 0 --severity HIGH $DIR_PATH/
     - ./trivy config --exit-code 1 --severity CRITICAL $DIR_PATH/
     - echo "done Scan Dockerfile !"
-    - ./trivy -d client --remote $TRIVY_SERVER --ignore-unfixed --exit-code 0 --severity HIGH,CRITICAL --token $TRIVY_TOKEN $BASE_IMAGE
-#    - ./trivy -d client --remote $TRIVY_SERVER --ignore-unfixed --exit-code 1 --severity CRITICAL --token $TRIVY_TOKEN $BASE_IMAGE
-    - echo "done Scan Image $BASE_IMAGE !"
   tags:
     - docker
 

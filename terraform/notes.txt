@@ -1,2 +1,2 @@
 hashicorp/terraform
-test 1
+test
