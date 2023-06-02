@@ -8,5 +8,5 @@ RUN apt-get update && apt-get install -y \
     bc \
     whois \
     ca-certificates \
-    libssl1.1=1.1.1f-1ubuntu2.17
+    libssl1.1=1.1.1f-1ubuntu2.19
 USER 1997
