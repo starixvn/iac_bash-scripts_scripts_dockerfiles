@@ -1,0 +1,16 @@
+.dotnetcore5:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "dotnetcore5/**/*"
+    DIR_PATH: "dotnetcore5"
+    IMAGE_VERSION: "5.0.16-buster-slim"
+    BASE_IMAGE: "mcr.microsoft.com/dotnet/aspnet:$IMAGE_VERSION"
+    IMAGE_PATH: "rebuild-baseimage/dotnetcore/aspnet:$IMAGE_VERSION"
+
+dotnetcore5-test:
+  extends: [.dotnetcore5, .test]
+
+dotnetcore5-build:
+  extends: [.dotnetcore5, .build]
+  needs: ["dotnetcore5-test"]
+
