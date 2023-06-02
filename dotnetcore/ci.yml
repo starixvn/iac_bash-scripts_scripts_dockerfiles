@@ -3,8 +3,8 @@
   variables:
     RULES_CHANGES_PATH: "dotnetcore/**/*"
     DIR_PATH: "dotnetcore"
-#    IMAGE_VERSION: "6.0-alpine"
-    IMAGE_VERSION: "7.0-alpine"
+    IMAGE_VERSION: "6.0-alpine"
+#    IMAGE_VERSION: "7.0-alpine"
     BASE_IMAGE: "mcr.microsoft.com/dotnet/aspnet:$IMAGE_VERSION"
     IMAGE_PATH: "rebuild-baseimage/dotnetcore/aspnet:$IMAGE_VERSION"
 
