@@ -1,0 +1,16 @@
+.dotnetcore:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "dotnetcore/**/*"
+    DIR_PATH: "dotnetcore"
+    IMAGE_VERSION: "6.0-alpine"
+    BASE_IMAGE: "mcr.microsoft.com/dotnetcore/aspnet:$IMAGE_VERSION"
+    IMAGE_PATH: "rebuild-baseimage/dotnetcore/aspnet:$IMAGE_VERSION"
+
+dotnetcore-test:
+  extends: [.dotnetcore, .test]
+
+dotnetcore-build:
+  extends: [.dotnetcore, .build]
+  needs: ["dotnetcore-test"]
+
