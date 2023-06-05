@@ -1,0 +1,15 @@
+.zabbix-web-nginx-pgsql:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "zabbix-web-nginx-pgsql/**/*"
+    DIR_PATH: "zabbix-web-nginx-pgsql"
+    BASE_IMAGE: "zabbix/zabbix-web-nginx-pgsql:$IMAGE_VERSION"
+    IMAGE_VERSION: "ubuntu-5.4.12"
+    IMAGE_PATH: "rebuild-baseimage/zabbix/zabbix-web-nginx-pgsql:$IMAGE_VERSION"
+    
+zabbix-web-nginx-pgsql-test:
+  extends: [.zabbix-web-nginx-pgsql, .test]
+
+zabbix-web-nginx-pgsql-build:
+  extends: [.zabbix-web-nginx-pgsql, .build]
+  needs: ["zabbix-web-nginx-pgsql-test"]
