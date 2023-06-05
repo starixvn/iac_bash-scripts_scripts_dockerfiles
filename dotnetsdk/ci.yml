@@ -1,0 +1,18 @@
+.dotnetsdk:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "dotnetsdk/**/*"
+    DIR_PATH: "dotnetsdk"
+    IMAGE_VERSION: "6.0-alpine"
+    # IMAGE_TAG: "6.0-alpine"
+    # IMAGE_VERSION: "7.0-alpine"
+    BASE_IMAGE: "mcr.microsoft.com/dotnet/sdk:6.0-alpine"
+    IMAGE_PATH: "rebuild-baseimage/dotnet/sdk:$IMAGE_VERSION"
+
+dotnetsdk-test:
+  extends: [.dotnetsdk, .test]
+
+dotnetsdk-build:
+  extends: [.dotnetsdk, .build]
+  needs: ["dotnetsdk-test"]
+
