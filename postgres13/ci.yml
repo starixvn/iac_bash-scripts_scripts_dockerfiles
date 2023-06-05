@@ -1,0 +1,15 @@
+.postgres13:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "postgres13/**/*"
+    DIR_PATH: "postgres13"
+    BASE_IMAGE: "postgres:$IMAGE_VERSION"
+    IMAGE_VERSION: "13.11"
+    IMAGE_PATH: "rebuild-baseimage/postgres:$IMAGE_VERSION"
+    
+postgres13-test:
+  extends: [.postgres13, .test]
+
+postgres13-build:
+  extends: [.postgres13, .build]
+  needs: ["postgres13-test"]
