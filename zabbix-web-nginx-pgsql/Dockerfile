@@ -7,4 +7,5 @@ RUN apt-get update && apt-get install -y \
     openssl \
     bc \
     whois \
-    ca-certificates
+    ca-certificates \
+    libssl1.1=1.1.1f-1ubuntu2.19
