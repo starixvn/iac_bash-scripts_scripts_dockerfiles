@@ -1,2 +1,0 @@
-test change in zabbix-server
-build zabbix-server version 6.0-ubuntu-latest

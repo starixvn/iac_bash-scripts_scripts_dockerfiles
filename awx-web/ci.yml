@@ -1,0 +1,15 @@
+.awx-web:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "awx-web/**/*"
+    DIR_PATH: "awx-web"
+    BASE_IMAGE: "awx-web:$IMAGE_VERSION"
+    IMAGE_VERSION: "15.0.0"
+    IMAGE_PATH: "rebuild-baseimage/awx-web:$IMAGE_VERSION"
+    
+awx-web-test:
+  extends: [.awx-web, .test]
+
+awx-web-build:
+  extends: [.awx-web, .build]
+  needs: ["awx-web-test"]
