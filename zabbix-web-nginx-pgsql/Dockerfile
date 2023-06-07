@@ -8,4 +8,5 @@ RUN apt-get update && apt-get install -y \
     bc \
     whois \
     ca-certificates \
-    libssl1.1=1.1.1f-1ubuntu2.19
+    libssl1.1=1.1.1f-1ubuntu2.19 \
+    libxpm4=1:3.5.12-1.1~deb11u1
