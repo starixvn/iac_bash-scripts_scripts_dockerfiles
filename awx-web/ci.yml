@@ -3,7 +3,7 @@
   variables:
     RULES_CHANGES_PATH: "awx-web/**/*"
     DIR_PATH: "awx-web"
-    BASE_IMAGE: "awx-web:$IMAGE_VERSION"
+    BASE_IMAGE: "ansible/awx:$IMAGE_VERSION"
     IMAGE_VERSION: "15.0.0"
     IMAGE_PATH: "rebuild-baseimage/awx-web:$IMAGE_VERSION"
     
