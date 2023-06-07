@@ -1,0 +1,17 @@
+.dotnetcore5-alpine:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "dotnetcore5-alpine/**/*"
+    DIR_PATH: "dotnetcore5-alpine"
+    IMAGE_VERSION: "5.0-alpine"
+    IMAGE_TAG: "5.0.16-alpine3.14"
+    BASE_IMAGE: "mcr.microsoft.com/dotnet/aspnet:$IMAGE_TAG"
+    IMAGE_PATH: "rebuild-baseimage/dotnetcore/aspnet:$IMAGE_VERSION"
+
+dotnetcore5-alpine-test:
+  extends: [.dotnetcore5-alpine, .test]
+
+dotnetcore5-alpine-build:
+  extends: [.dotnetcore5-alpine, .build]
+  needs: ["dotnetcore5-alpine-test"]
+
