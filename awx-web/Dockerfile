@@ -1,5 +1,4 @@
 ARG BASE_IMAGE
 FROM $BASE_IMAGE
 LABEL maintainer=NexOps
-RUN apt-get update && apt-get install -y \
-    nss=3.67.0-7.el8_5
+RUN nss=3.67.0-7.el8_5
