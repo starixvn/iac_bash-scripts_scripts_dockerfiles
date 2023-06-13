@@ -6,7 +6,9 @@
     IMAGE_VERSION: "5.0-alpine"
     IMAGE_TAG: "5.0.16-alpine3.14"
     BASE_IMAGE: "mcr.microsoft.com/dotnet/aspnet:$IMAGE_TAG"
-    IMAGE_PATH: "rebuild-baseimage/dotnetcore/aspnet:$IMAGE_VERSION"
+    # IMAGE_PATH: "rebuild-baseimage/dotnetcore/aspnet:$IMAGE_VERSION"
+    IMAGE_PATH: "base/dotnet/core/aspnet:$IMAGE_VERSION"
+
 
 dotnetcore5-alpine-test:
   extends: [.dotnetcore5-alpine, .test]

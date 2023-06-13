@@ -5,7 +5,9 @@
     DIR_PATH: "dotnetcore5"
     IMAGE_VERSION: "5.0-nap-mail-core"
     BASE_IMAGE: "mcr.microsoft.com/dotnet/aspnet:5.0.16-buster-slim"
-    IMAGE_PATH: "rebuild-baseimage/dotnetcore/aspnet:$IMAGE_VERSION"
+    # IMAGE_PATH: "rebuild-baseimage/dotnetcore/aspnet:$IMAGE_VERSION"
+    IMAGE_PATH: "base/dotnet/core/aspnet:$IMAGE_VERSION"
+
 
 dotnetcore5-test:
   extends: [.dotnetcore5, .test]
