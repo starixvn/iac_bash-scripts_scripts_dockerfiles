@@ -3,10 +3,12 @@
   variables:
     RULES_CHANGES_PATH: "dotnetcore6/**/*"
     DIR_PATH: "dotnetcore6"
-    IMAGE_VERSION: "6.0-alpine-iculibs"
+    # IMAGE_VERSION: "6.0-alpine-iculibs"
+    IMAGE_VERSION: "6.0-alpine"
     IMAGE_TAG: "6.0-alpine"
     BASE_IMAGE: "mcr.microsoft.com/dotnet/aspnet:$IMAGE_TAG"
-    IMAGE_PATH: "rebuild-baseimage/dotnetcore/aspnet:$IMAGE_VERSION"
+    # IMAGE_PATH: "rebuild-baseimage/dotnetcore/aspnet:$IMAGE_VERSION"
+    IMAGE_PATH: "base/dotnet/core/aspnet:$IMAGE_VERSION"
 
 dotnetcore6-test:
   extends: [.dotnetcore6, .test]
