@@ -5,7 +5,7 @@
     DIR_PATH: "dotnetcore3"
     IMAGE_VERSION: "3.1.32-alpine"
     BASE_IMAGE: "mcr.microsoft.com/dotnet/aspnet:3.1.32-alpine3.16"
-    IMAGE_PATH: "rebuild-baseimage/dotnetcore/aspnet:$IMAGE_VERSION"
+    IMAGE_PATH: "base/dotnet/core/aspnet:$IMAGE_VERSION"
 
 dotnetcore3-test:
   extends: [.dotnetcore3, .test]
