@@ -1,0 +1,17 @@
+.dotnetcore7-bulleyes:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "dotnetcore7-bulleyes/**/*"
+    DIR_PATH: "dotnetcore7-bulleyes"
+    IMAGE_VERSION: "7.0-nap-mail-core"
+    IMAGE_TAG: "7.0-bullseye-slim"
+    BASE_IMAGE: "mcr.microsoft.com/dotnet/aspnet:$IMAGE_TAG"
+    IMAGE_PATH: "base/dotnet/core/aspnet:$IMAGE_VERSION"
+
+dotnetcore7-bulleyes-test:
+  extends: [.dotnetcore7-bulleyes, .test]
+
+dotnetcore7-bulleyes-build:
+  extends: [.dotnetcore7-bulleyes, .build]
+  needs: ["dotnetcore7-bulleyes-test"]
+
