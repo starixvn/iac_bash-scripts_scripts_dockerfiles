@@ -1,0 +1,19 @@
+.sentry:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "sentry/**/*"
+    DIR_PATH: "sentry"
+    BASE_IMAGE: "baseimage/sentry:9.1.2"
+    IMAGE_VERSION: "9.1.2-kbt"
+    IMAGE_PATH: "rebuild-baseimage/sentry:$IMAGE_VERSION"
+    
+sentry-test:
+  extends: [.sentry, .test]
+
+sentry-build:
+  extends: [.sentry, .build]
+  needs: ["sentry-test"]
+
+# sentry-deploy:
+#   extends: [.sentry, .deploy]
+#   needs: ["sentry-build"]
