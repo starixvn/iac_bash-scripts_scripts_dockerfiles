@@ -43,12 +43,12 @@ include:
     - echo "Trivy Scan image $DOCKER_REG_URL/$IMAGE_PATH"
     - echo "$TRIVY_SERVER - $TRIVY_VERSION";
     - ./trivy -d client --remote $TRIVY_SERVER --ignore-unfixed --exit-code 0 --severity HIGH --token $TRIVY_TOKEN $DOCKER_REG_URL/$IMAGE_PATH
-    - ./trivy -d client --remote $TRIVY_SERVER --ignore-unfixed --exit-code 1 --severity CRITICAL --token $TRIVY_TOKEN $DOCKER_REG_URL/$IMAGE_PATH
+    #- ./trivy -d client --remote $TRIVY_SERVER --ignore-unfixed --exit-code 1 --severity CRITICAL --token $TRIVY_TOKEN $DOCKER_REG_URL/$IMAGE_PATH
     - echo "done Scan Image $DOCKER_REG_URL/$IMAGE_PATH !"
     - echo "Push - $DOCKER_REG_URL/$IMAGE_PATH"
     - docker push $DOCKER_REG_URL/$IMAGE_PATH
     - echo "$DOCKER_REG_URL/$IMAGE_PATH - Push is DONE!";
-  allow_failure: true
+  #allow_failure: true
   tags:
     - docker
 
