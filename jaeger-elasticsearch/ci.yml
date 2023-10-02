@@ -4,8 +4,8 @@
     RULES_CHANGES_PATH: "jaeger-elasticsearch/**/*"
     DIR_PATH: "jaeger-elasticsearch"
     BASE_IMAGE: "hub.lumigame.com/base/nexops-tools/jaeger/elasticsearch:$IMAGE_VERSION"
-    IMAGE_VERSION: "7.17.0"
-    IMAGE_PATH: "rebuild-baseimage/jaeger-elasticsearch:$IMAGE_VERSION"
+    IMAGE_VERSION: "7.17.0-test"
+    IMAGE_PATH: "hub.lumigame.com/base/nexops-tools/jaeger/elasticsearch:$IMAGE_VERSION"
 
 jaeger-elasticsearch-test:
   extends: [.jaeger-elasticsearch, .test]
