@@ -1,0 +1,19 @@
+.logstash:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "logstash/**/*"
+    DIR_PATH: "logstash"
+    BASE_IMAGE: "hub.nexdev.net/base/logstash:7.17.6"
+    IMAGE_VERSION: "7.17.6-fix"
+    IMAGE_PATH: "rebuild-baseimage/logstash:$IMAGE_VERSION"
+    
+logstash-test:
+  extends: [.logstash, .test]
+
+logstash-build:
+  extends: [.logstash, .build]
+  needs: ["logstash-test"]
+
+# logstash-deploy:
+#   extends: [.logstash, .deploy]
+#   needs: ["logstash-build"]
