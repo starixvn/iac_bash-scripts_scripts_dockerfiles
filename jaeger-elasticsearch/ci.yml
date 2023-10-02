@@ -1,15 +1,15 @@
-.verdaccio:
+.jaeger-elasticsearch:
   extends: .base-rules
   variables:
-    RULES_CHANGES_PATH: "verdaccio/**/*"
-    DIR_PATH: "verdaccio"
-    BASE_IMAGE: "verdaccio/verdaccio:$IMAGE_VERSION"
-    IMAGE_VERSION: "5.24.1"
-    IMAGE_PATH: "base/nexops-tools/verdaccio:$IMAGE_VERSION"
+    RULES_CHANGES_PATH: "jaeger-elasticsearch/**/*"
+    DIR_PATH: "jaeger-elasticsearch"
+    BASE_IMAGE: "hub.lumigame.com/base/nexops-tools/jaeger/elasticsearch:$IMAGE_VERSION"
+    IMAGE_VERSION: "7.17.0"
+    IMAGE_PATH: "rebuild-baseimage/jaeger-elasticsearch:$IMAGE_VERSION"
 
-verdaccio-test:
-  extends: [.verdaccio, .test]
+jaeger-elasticsearch-test:
+  extends: [.jaeger-elasticsearch, .test]
 
-verdaccio-build:
-  extends: [.verdaccio, .build]
-  needs: ["verdaccio-test"]
+jaeger-elasticsearch-build:
+  extends: [.jaeger-elasticsearch, .build]
+  needs: ["jaeger-elasticsearch-test"]
