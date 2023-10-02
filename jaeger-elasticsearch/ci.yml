@@ -1,0 +1,15 @@
+.verdaccio:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "verdaccio/**/*"
+    DIR_PATH: "verdaccio"
+    BASE_IMAGE: "verdaccio/verdaccio:$IMAGE_VERSION"
+    IMAGE_VERSION: "5.24.1"
+    IMAGE_PATH: "base/nexops-tools/verdaccio:$IMAGE_VERSION"
+
+verdaccio-test:
+  extends: [.verdaccio, .test]
+
+verdaccio-build:
+  extends: [.verdaccio, .build]
+  needs: ["verdaccio-test"]
