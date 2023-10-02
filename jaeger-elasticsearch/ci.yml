@@ -3,7 +3,7 @@
   variables:
     RULES_CHANGES_PATH: "jaeger-elasticsearch/**/*"
     DIR_PATH: "jaeger-elasticsearch"
-    BASE_IMAGE: "hub.lumigame.com/base/nexops-tools/jaeger/elasticsearch:$IMAGE_VERSION"
+    BASE_IMAGE: "hub.lumigame.com/base/nexops-tools/jaeger/elasticsearch:7.17.0"
     IMAGE_VERSION: "7.17.0-test"
     IMAGE_PATH: "base/nexops-tools/jaeger/elasticsearch:$IMAGE_VERSION"
 

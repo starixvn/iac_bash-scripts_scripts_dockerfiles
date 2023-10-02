@@ -1,4 +1,4 @@
 ARG BASE_IMAGE
 FROM $BASE_IMAGE
 MAINTAINER NexOps
-RUN chown -R 1000:1000 /usr/share/elasticsearch
+RUN chown -R 1000:root /usr/share/elasticsearch
