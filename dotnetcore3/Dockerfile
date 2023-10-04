@@ -7,4 +7,4 @@ RUN apk update && apk add --no-cache curl busybox-extras openssl openssl icu-lib
     rm -rf /var/cache/apk/*
 RUN wget https://pingpros.com/pub/tcpping -O /usr/bin/tcpping && chmod +x /usr/bin/tcpping
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false \
-    TZ=Asia/Ho_Chi_Minh
+    COMPlus_EnableDiagnostics=0

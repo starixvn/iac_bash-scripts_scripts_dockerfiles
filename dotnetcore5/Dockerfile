@@ -14,3 +14,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends  \
     gpgv=2.2.12-1+deb10u2  libbz2-1.0=1.0.6-9.2~deb10u2 tzdata=2021a-0+deb10u11 && \
     rm -rf /var/lib/apt/lists/*
 RUN wget https://pingpros.com/pub/tcpping -O /usr/bin/tcpping && chmod +x /usr/bin/tcpping
+ENV COMPlus_EnableDiagnostics=0
