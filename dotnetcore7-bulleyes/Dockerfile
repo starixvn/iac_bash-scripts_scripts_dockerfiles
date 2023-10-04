@@ -9,5 +9,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends  \
     rm -rf /var/lib/apt/lists/*
 
 RUN wget https://pingpros.com/pub/tcpping -O /usr/bin/tcpping && chmod +x /usr/bin/tcpping
-
+ENV COMPlus_EnableDiagnostics=0
 
