@@ -1,0 +1,18 @@
+.dotnetcore8:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "dotnetcore8/**/*"
+    DIR_PATH: "dotnetcore8"
+    IMAGE_VERSION: "8.0-alpine"
+    IMAGE_TAG: "8.0-alpine"
+    BASE_IMAGE: "mcr.microsoft.com/dotnet/aspnet:$IMAGE_TAG"
+    # IMAGE_PATH: "rebuild-baseimage/dotnetcore/aspnet:$IMAGE_VERSION"
+    IMAGE_PATH: "base/dotnet/core/aspnet:$IMAGE_VERSION"
+
+dotnetcore8-test:
+  extends: [.dotnetcore8, .test]
+
+dotnetcore8-build:
+  extends: [.dotnetcore8, .build]
+  needs: ["dotnetcore8-test"]
+
