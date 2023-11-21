@@ -50,7 +50,7 @@ include:
     - echo "$DOCKER_REG_URL/$IMAGE_PATH - Push is DONE!";
   #allow_failure: true
   tags:
-    - docker
+    - testlab-runner
 
 .deploy:
   stage: deploy
@@ -60,4 +60,4 @@ include:
     - docker push hub.nexdev.net/$IMAGE_PATH
     - echo "hub.nexdev.net/$IMAGE_PATH - deploy is DONE!";
   tags:
-    - docker
+    - testlab-runner 
