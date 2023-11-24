@@ -2,6 +2,6 @@ ARG BASE_IMAGE
 FROM $BASE_IMAGE
 LABEL maintainer=NexOps
 RUN mkdir -p /tmp /var/tmp /usr/tmp && chmod 777 -R /tmp /var/tmp /usr/tmp
-RUN export http_proxy="http://10.2.252.100:8801" \
-    export https_proxy="http://10.2.252.100:8801" \
+RUN export http_proxy="http://lisasqd-dev.nebula.prod:8801" \
+    export https_proxy="http://lisasqd-dev.nebula.prod:8801" \
     export no_proxy=localhost,127.0.0.0,127.0.1.1,127.0.1.1,local.home

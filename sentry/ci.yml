@@ -4,8 +4,8 @@
     RULES_CHANGES_PATH: "sentry/**/*"
     DIR_PATH: "sentry"
     BASE_IMAGE: "sentry:9.1.2"
-    IMAGE_VERSION: "9.1.2-kbt-fix"
-    IMAGE_PATH: "rebuild-baseimage/sentry:$IMAGE_VERSION"
+    IMAGE_VERSION: "9.1.2-kbt-proxy"
+    IMAGE_PATH: "base/sentry:$IMAGE_VERSION"
     
 sentry-test:
   extends: [.sentry, .test]
