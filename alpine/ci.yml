@@ -5,8 +5,8 @@
     DIR_PATH: "alpine"
     IMAGE_VERSION: "3.18.2"
     IMAGE_TAG: "3.18.2-test"
-    BASE_IMAGE: "postgres:$IMAGE_VERSION"
-    IMAGE_PATH: "base/postgres:$IMAGE_TAG"
+    BASE_IMAGE: "alpine:$IMAGE_VERSION"
+    IMAGE_PATH: "base/alpine:$IMAGE_TAG"
     
 alpine-test:
   extends: [.alpine, .test]
