@@ -1,8 +1,6 @@
 .node20-9-alpine:
   extends: .base-rules
   variables:
-    # for Lumi Hub
-    DOCKER_REG_URL: hub.lumigame.com
     RULES_CHANGES_PATH: "node20-9-alpine/**/*"
     DIR_PATH: "node20-9-alpine"
     IMAGE_VERSION: "20.9.0-alpine"
