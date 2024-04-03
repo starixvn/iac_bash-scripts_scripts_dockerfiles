@@ -21,7 +21,7 @@ include:
 .test:
   stage: test
   script:
-    - wget --no-verbose https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz?inline=false -O - | tar -zxvf -
+    - wget --no-verbose https://gitlab.nexdev.net/iac/bash-scripts/trivy-scan/-/raw/main/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz?inline=false -O - | tar -zxvf -
     - cat $DIR_PATH/Dockerfile
     - echo "$TRIVY_SERVER - $TRIVY_VERSION";
     - ./trivy config --exit-code 0 --severity HIGH $DIR_PATH/
