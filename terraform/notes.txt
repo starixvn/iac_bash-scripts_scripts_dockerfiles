@@ -1,2 +1,2 @@
 hashicorp/terraform
-add vault
+add unzip vault 
