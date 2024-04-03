@@ -3,10 +3,10 @@
   variables:
     RULES_CHANGES_PATH: "terraform/**/*"
     DIR_PATH: "terraform"
-    BASE_IMAGE: "hashicorp/terraform:$IMAGE_VERSION-vault"
+    BASE_IMAGE: "hashicorp/terraform:$IMAGE_VERSION"
     IMAGE_VERSION: "1.4.5"
 ###    IMAGE_PATH: "rebuild-baseimage/hashicorp/terraform:$IMAGE_VERSION"
-    IMAGE_PATH: "base/hashicorp/terraform:$IMAGE_VERSION"
+    IMAGE_PATH: "base/hashicorp/terraform:$IMAGE_VERSION-vault"
     
 terraform-test:
   extends: [.terraform, .test]
