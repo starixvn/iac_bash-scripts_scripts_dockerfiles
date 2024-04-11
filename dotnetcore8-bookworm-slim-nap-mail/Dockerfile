@@ -12,7 +12,7 @@ RUN sed -i 's/^Components: main$/& contrib/' /etc/apt/sources.list.d/debian.sour
 RUN apt-get install -y ttf-mscorefonts-installer fontconfig
 RUN fc-cache -f -v
  
-apt-get install -y libgdiplus
+RUN apt-get install -y libgdiplus
 
 ENV COMPlus_EnableDiagnostics=0
 #
