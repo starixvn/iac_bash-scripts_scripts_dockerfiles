@@ -7,6 +7,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends  \
     rm -rf /var/lib/apt/lists/*
 
 RUN wget https://pingpros.com/pub/tcpping -O /usr/bin/tcpping && chmod +x /usr/bin/tcpping
+
+RUN sed -i 's/^Components: main$/& contrib/' /etc/apt/sources.list.d/debian.sources
+RUN apt-get install -y ttf-mscorefonts-installer fontconfig
+RUN fc-cache -f -v
+ 
+apt-get install -y libgdiplus
+
 ENV COMPlus_EnableDiagnostics=0
 #
 
