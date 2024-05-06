@@ -2,5 +2,5 @@ ARG BASE_IMAGE
 FROM $BASE_IMAGE
 LABEL maintainer=NexOps
 
-COPY requirements.yml /tmp/requirements.yml
-RUN ansible-galaxy install -r /tmp/requirements.yml 
+COPY awx-runner/requirements.yml collection/requirements.yml
+RUN ansible-galaxy install -r collection/requirements.yml
