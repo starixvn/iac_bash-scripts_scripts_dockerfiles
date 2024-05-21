@@ -1,0 +1,16 @@
+.file-beat:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "file-beat/**/*"
+    DIR_PATH: "file-beat"
+    IMAGE_VERSION: "7.17.6"
+    IMAGE_TAG: "7.17.6"
+    BASE_IMAGE: "docker.elastic.co/beats/filebeat:$IMAGE_TAG"
+    IMAGE_PATH: "base/logging/filebeat:$IMAGE_VERSION"
+
+file-beat-test:
+  extends: [.file-beat, .test]
+
+file-beat-build:
+  extends: [.file-beat, .build]
+  needs: ["file-beat-test"]
