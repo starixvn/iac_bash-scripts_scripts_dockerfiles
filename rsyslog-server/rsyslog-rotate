@@ -1,6 +1,6 @@
 #!/bin/sh
 
-kill -HUP 1
+kill -HUP $(pidof rsyslogd)
 
 # if [ -d /run/systemd/system ]; then
 #     systemctl kill -s HUP rsyslog.service
