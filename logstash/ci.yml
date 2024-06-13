@@ -3,9 +3,9 @@
   variables:
     RULES_CHANGES_PATH: "logstash/**/*"
     DIR_PATH: "logstash"
-    BASE_IMAGE: "hub.nexdev.net/base/logstash:7.17.6"
-    IMAGE_VERSION: "7.17.6-fix"
-    IMAGE_PATH: "rebuild-baseimage/logstash:$IMAGE_VERSION"
+    BASE_IMAGE: "docker.elastic.co/logstash/logstash:8.5.1"
+    IMAGE_VERSION: "8.5.1"
+    IMAGE_PATH: "base/elk/logstash:$IMAGE_VERSION"
     
 logstash-test:
   extends: [.logstash, .test]
