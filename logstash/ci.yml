@@ -3,9 +3,10 @@
   variables:
     RULES_CHANGES_PATH: "logstash/**/*"
     DIR_PATH: "logstash"
-    BASE_IMAGE: "docker.elastic.co/logstash/logstash:8.5.1"
-    IMAGE_VERSION: "8.5.1"
-    IMAGE_PATH: "base/elk/logstash:$IMAGE_VERSION"
+    # BASE_IMAGE: "docker.elastic.co/logstash/logstash:8.5.1"
+    BASE_IMAGE: "opensearchproject/logstash-oss-with-opensearch-output-plugin:8.9.0"
+    IMAGE_VERSION: "8.9.0"
+    IMAGE_PATH: "base/elk/logstash-opensearch:$IMAGE_VERSION"
     
 logstash-test:
   extends: [.logstash, .test]
