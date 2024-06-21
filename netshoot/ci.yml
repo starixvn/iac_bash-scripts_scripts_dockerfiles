@@ -13,4 +13,3 @@ netshoot-test:
 netshoot-build:
   extends: [.netshoot, .build]
   needs: ["netshoot-test"]
-
