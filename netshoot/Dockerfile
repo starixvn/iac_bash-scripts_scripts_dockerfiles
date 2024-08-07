@@ -11,4 +11,4 @@ RUN \
 	wget https://releases.hashicorp.com/vault/1.17.1/vault_1.17.1_linux_amd64.zip && \
 	unzip vault_1.17.1_linux_amd64.zip && rm vault_1.17.1_linux_amd64.zip LICENSE.txt
 
-ENTRYPOINT sleep 800000
+ENTRYPOINT sleep 8000d
