@@ -3,6 +3,7 @@ FROM $BASE_IMAGE
 LABEL maintainer=NexOps
 #####################################################
 
+USER 0
 RUN apt update && apt install -y --no-install-recommends wget unzip
 
 ## Install vault-cli
@@ -13,4 +14,6 @@ RUN \
 
 COPY --chmod=755 vault-snapshot/vault-snapshot.sh /vault-snapshot.sh
 
+
+USER 1001
 CMD ["/vault-snapshot.sh"]
