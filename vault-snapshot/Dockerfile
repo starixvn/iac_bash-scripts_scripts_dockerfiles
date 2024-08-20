@@ -7,8 +7,7 @@ USER 0
 RUN apt update && apt install -y --no-install-recommends wget unzip
 
 ## Install vault-cli
-RUN \
-	cd /usr/bin && \
+RUN cd /usr/bin && \
 	wget https://releases.hashicorp.com/vault/1.17.1/vault_1.17.1_linux_amd64.zip && \
 	unzip vault_1.17.1_linux_amd64.zip && rm vault_1.17.1_linux_amd64.zip LICENSE.txt
 
