@@ -3,7 +3,7 @@ FROM $BASE_IMAGE
 LABEL maintainer=NexOps
 #####################################################
 
-RUN apt update && apt install wget unzip
+RUN apt update && apt install -y --no-install-recommends wget unzip
 
 ## Install vault-cli
 RUN \
