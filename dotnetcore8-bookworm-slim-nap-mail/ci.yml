@@ -5,7 +5,8 @@
     DIR_PATH: "dotnetcore8-bookworm-slim-nap-mail"
     IMAGE_VERSION: "8.0-nap-mail-core"
     IMAGE_TAG: "8.0-bookworm-slim"
-    BASE_IMAGE: "mcr.microsoft.com/dotnet/aspnet:$IMAGE_TAG"
+    # BASE_IMAGE: "mcr.microsoft.com/dotnet/aspnet:$IMAGE_TAG"
+    BASE_IMAGE: "hub.nexdev.net/base/dotbet/aspnet:$IMAGE_TAG"
     IMAGE_PATH: "rebuild-baseimage/dotnetcore/aspnet:$IMAGE_VERSION"
     # IMAGE_PATH: "base/dotnet/core/aspnet:$IMAGE_VERSION"
 
