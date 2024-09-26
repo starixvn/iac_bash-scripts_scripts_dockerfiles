@@ -5,7 +5,7 @@
     DIR_PATH: "logstash"
     # BASE_IMAGE: "docker.elastic.co/logstash/logstash:8.5.1"
     # BASE_IMAGE: "docker.elastic.co/logstash/logstash:7.17.6"
-    BASE_IMAGE: "opensearchproject/logstash-oss-with-opensearch-output-plugin:8.9.0"
+    BASE_IMAGE: "hub.nexdev.net/base/opensearchproject/logstash-oss-with-opensearch-output-plugin:8.9.0"
     IMAGE_VERSION: "8.9.0"
     IMAGE_PATH: "base/logstash/logstash-opensearch:$IMAGE_VERSION"
     
