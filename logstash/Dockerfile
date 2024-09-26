@@ -6,4 +6,4 @@ LABEL maintainer=NexOp
 # COPY logstash/logstash-input-cloudwatch_logs-1.0.3.gem /tmp/logstash-input-cloudwatch_logs-1.0.3.gem 
 # RUN bin/logstash-plugin install /tmp/logstash-input-cloudwatch_logs-1.0.3.gem && rm /tmp/logstash-input-cloudwatch_logs-1.0.3.gem 
 
-RUN bin/logstash-plugin update && bin/logstash-plugin install logstash-integration-logstash
+RUN bin/logstash-plugin update && bin/logstash-plugin install logstash-integration-logstash logstash-input-cloudwatch_logs_importer
