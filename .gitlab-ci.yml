@@ -63,4 +63,4 @@ include:
     - docker push hub.nexdev.net/$IMAGE_PATH
     - echo "hub.nexdev.net/$IMAGE_PATH - deploy is DONE!";
   tags:
-    - testlab-runner 
+    - docker
