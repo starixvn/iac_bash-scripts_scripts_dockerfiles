@@ -3,7 +3,8 @@
   variables:
     RULES_CHANGES_PATH: "grafana/**/*"
     DIR_PATH: "grafana"
-    IMAGE_VERSION: "10.1.4-d11"
+    ENV: "local"
+    IMAGE_VERSION: "$ENV-10.1.4-d11"
     IMAGE_TAG: "10.1.4-debian-11-r7"
     BASE_IMAGE: "bitnami/grafana:$IMAGE_TAG"
     IMAGE_PATH: "base/grafana:$IMAGE_VERSION"
