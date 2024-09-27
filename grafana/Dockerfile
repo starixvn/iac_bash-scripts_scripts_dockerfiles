@@ -8,5 +8,6 @@ RUN grafana cli plugins install alexanderzobnin-zabbix-app
 RUN grafana cli plugins install redis-datasource
 RUN grafana cli plugins install grafana-clock-panel
 RUN grafana cli plugins install grafana-piechart-panel
+RUN grafana cli plugins install grafana-sentry-datasource
 ENV GF_SECURITY_ADMIN_PASSWORD=RHk^QbNE0C5Q \
     GF_SECURITY_ADMIN_USER=admin
