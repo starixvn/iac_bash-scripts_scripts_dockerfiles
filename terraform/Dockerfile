@@ -3,10 +3,11 @@ FROM $BASE_IMAGE
 LABEL maintainer=NexOps
 # FIX  CRITICAL, HIGH Vulnerability
 
-RUN apk update && apk add ansible aws-cli jq curl openssh=9.1_p1-r4 openssh-client-common=9.1_p1-r4 \
-        openssh-client-default=9.1_p1-r4 openssh-keygen=9.1_p1-r4 openssh-server=9.1_p1-r4 \
-        openssh-server-common=9.1_p1-r4 openssh-sftp-server=9.1_p1-r4 \
-        ncurses-libs=6.3_p20221119-r1 ncurses-terminfo-base=6.3_p20221119-r1 git=2.38.5-r0 && \
+RUN apk update && apk upgrade && \
+        apk add ansible aws-cli jq  curl unzip && \
         rm -rf /var/cache/apk/*
-RUN apk add unzip && curl https://releases.hashicorp.com/vault/1.15.2/vault_1.15.2_linux_386.zip --output vault.zip && unzip vault.zip \
-        rm -rf /var/cache/apk/*
+
+RUN wget https://releases.hashicorp.com/vault/1.16.0/vault_1.16.0_linux_386.zip -O vault.zip && \
+        unzip vault.zip && \
+        mv vault /usr/bin/vault && \
+        chmod +x /usr/bin/vault

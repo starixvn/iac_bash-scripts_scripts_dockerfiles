@@ -1,0 +1,4 @@
+---
+collections:
+  - name: gluster.gluster
+  - name: community.windows

@@ -1,0 +1,15 @@
+.awx-runner:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "awx-runner/**/*"
+    DIR_PATH: "awx-runner"
+    BASE_IMAGE: "quay.io/ansible/awx-ee:$IMAGE_VERSION"
+    IMAGE_VERSION: "24.1.0"
+    IMAGE_PATH: "base/awx/awx-runner:$IMAGE_VERSION"
+    
+awx-runner-test:
+  extends: [.awx-runner, .test]
+
+awx-runner-build:
+  extends: [.awx-runner, .build]
+  needs: ["awx-runner-test"]

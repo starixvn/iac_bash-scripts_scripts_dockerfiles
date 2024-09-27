@@ -1,0 +1,15 @@
+.axosyslog:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "axosyslog/**/*"
+    DIR_PATH: "axosyslog"
+    IMAGE_VERSION: "4.8.0"
+    BASE_IMAGE: "ghcr.io/axoflow/axosyslog:4.8.0"
+    IMAGE_PATH: "base/nexops-tools/logging/axosyslog:$IMAGE_VERSION"
+
+axosyslog-test:
+  extends: [.axosyslog, .test]
+
+axosyslog-build:
+  extends: [.axosyslog, .build]
+  needs: ["axosyslog-test"]

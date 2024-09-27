@@ -3,9 +3,11 @@
   variables:
     RULES_CHANGES_PATH: "logstash/**/*"
     DIR_PATH: "logstash"
-    BASE_IMAGE: "hub.nexdev.net/base/logstash:7.17.6"
-    IMAGE_VERSION: "7.17.6-fix"
-    IMAGE_PATH: "rebuild-baseimage/logstash:$IMAGE_VERSION"
+    # BASE_IMAGE: "docker.elastic.co/logstash/logstash:8.5.1"
+    # BASE_IMAGE: "docker.elastic.co/logstash/logstash:7.17.6"
+    BASE_IMAGE: "hub.nexdev.net/base/opensearchproject/logstash-oss-with-opensearch-output-plugin:8.9.0"
+    IMAGE_VERSION: "8.9.0"
+    IMAGE_PATH: "base/logstash/logstash-opensearch:$IMAGE_VERSION"
     
 logstash-test:
   extends: [.logstash, .test]
@@ -13,7 +15,3 @@ logstash-test:
 logstash-build:
   extends: [.logstash, .build]
   needs: ["logstash-test"]
-
-# logstash-deploy:
-#   extends: [.logstash, .deploy]
-#   needs: ["logstash-build"]

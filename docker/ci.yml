@@ -4,7 +4,7 @@
     RULES_CHANGES_PATH: "docker/**/*"
     DIR_PATH: "docker"
     IMAGE_VERSION: "26.0.0-alpine3.19"
-    BASE_IMAGE: "docker:git"
+    BASE_IMAGE: "docker:26.0.0-alpine3.19"
     IMAGE_PATH: "rebuild-baseimage/docker:$IMAGE_VERSION"
 
 docker-test:
