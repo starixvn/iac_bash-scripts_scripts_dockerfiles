@@ -6,10 +6,10 @@ RUN apk update && apk add -y --no-cache tcptraceroute bc curl websocat && rm -rf
 RUN wget --no-check-certificate https://pingpros.com/pub/tcpping -O /usr/bin/tcpping && chmod +x /usr/bin/tcpping
 
 ## Install aws-cli
-# RUN \
-# 	curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
-# 	unzip awscliv2.zip && rm awscliv2.zip && \
-# 	./aws/install
+RUN \
+	curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+	unzip awscliv2.zip && rm awscliv2.zip && \
+	./aws/install
 
 ## Install vault-cli
 # RUN \
