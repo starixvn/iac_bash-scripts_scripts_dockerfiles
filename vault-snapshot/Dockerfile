@@ -12,7 +12,9 @@ RUN cd /usr/bin && \
 	unzip vault_1.17.1_linux_amd64.zip && rm vault_1.17.1_linux_amd64.zip LICENSE.txt
 
 COPY --chmod=755 vault-snapshot/vault-snapshot.sh /vault-snapshot.sh
+COPY --chmod=755 vault-snapshot/alert.sh /alert.sh
+COPY --chmod=755 vault-snapshot/run.sh /run.sh
 
 
 USER 1001
-CMD ["/vault-snapshot.sh"]
+CMD ["/run.sh"]
