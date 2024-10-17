@@ -10,7 +10,7 @@ export VAULT_TOKEN
 ####################################
 # create snapshot
 backupFileName=vault_"$(date +%F-%H%M).snapshot"
-vault operator raft snapshot save /vault-snapshots/${backupFileName}
+vault operator raft snapshot save /vault-snapshots/${backupFileName} || exit $?
 
 ####################################
 # upload to s3
