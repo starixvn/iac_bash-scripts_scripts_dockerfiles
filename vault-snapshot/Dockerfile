@@ -4,7 +4,7 @@ LABEL maintainer=NexOps
 #####################################################
 
 USER 0
-RUN apt update && apt install -y --no-install-recommends wget unzip
+RUN apt update && apt install -y --no-install-recommends wget unzip curl
 
 ## Install vault-cli
 RUN cd /usr/bin && \
