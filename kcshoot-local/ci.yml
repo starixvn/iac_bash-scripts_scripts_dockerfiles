@@ -10,6 +10,6 @@
 kcshoot-local-test:
   extends: [.kcshoot-local, .test]
 
-kcshoot-build:
+kcshoot-local-build:
   extends: [.kcshoot-local, .build]
   needs: ["kcshoot-local-test"]
