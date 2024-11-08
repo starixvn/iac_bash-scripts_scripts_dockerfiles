@@ -1,0 +1,15 @@
+.kcshoot-local:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "kcshoot-local/**/*"
+    DIR_PATH: "kcshoot-local"
+    IMAGE_VERSION: "local"
+    BASE_IMAGE: "alpine:3.20.3"
+    IMAGE_PATH: "base/kcshoot:$IMAGE_VERSION"
+
+kcshoot-local-test:
+  extends: [.kcshoot-local, .test]
+
+kcshoot-build:
+  extends: [.kcshoot-local, .build]
+  needs: ["kcshoot-local-test"]

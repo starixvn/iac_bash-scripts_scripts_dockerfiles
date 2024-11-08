@@ -1,0 +1,15 @@
+.kcshoot-kbt:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "kcshoot-kbt/**/*"
+    DIR_PATH: "kcshoot-kbt"
+    IMAGE_VERSION: "kbt"
+    BASE_IMAGE: "alpine:3.20.3"
+    IMAGE_PATH: "base/kcshoot:$IMAGE_VERSION"
+
+kcshoot-kbt-test:
+  extends: [.kcshoot-kbt, .test]
+
+kcshoot-kbt-build:
+  extends: [.kcshoot-kbt, .build]
+  needs: ["kcshoot-kbt-test"]
