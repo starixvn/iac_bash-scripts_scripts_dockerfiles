@@ -1,0 +1,19 @@
+.dotnetcore6-s1:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "dotnetcore6-s1/**/*"
+    DIR_PATH: "dotnetcore6-s1"
+    # IMAGE_VERSION: "6.0-alpine-iculibs"
+    IMAGE_VERSION: "6.0-alpine-s1"
+    IMAGE_TAG: "6.0-alpine"
+    BASE_IMAGE: "mcr.microsoft.com/dotnet/aspnet:$IMAGE_TAG"
+    # IMAGE_PATH: "rebuild-baseimage/dotnetcore/aspnet:$IMAGE_VERSION"
+    IMAGE_PATH: "base/dotnet/core/aspnet:$IMAGE_VERSION"
+
+dotnetcore6-s1-test:
+  extends: [.dotnetcore6-s1, .test]
+
+dotnetcore6-s1-build:
+  extends: [.dotnetcore6-s1, .build]
+  needs: ["dotnetcore6-s1-test"]
+
