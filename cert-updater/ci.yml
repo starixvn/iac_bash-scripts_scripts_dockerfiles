@@ -1,0 +1,15 @@
+.cert-updater:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "cert-updater/**/*"
+    DIR_PATH: "cert-updater"
+    BASE_IMAGE: "hashicorp/vault:1.13.3"
+    IMAGE_VERSION: "2024.11.28"
+    IMAGE_PATH: "base/nexops-tools/cert-updater:$IMAGE_VERSION"
+
+cert-updater-test:
+  extends: [.cert-updater, .test]
+
+cert-updater-build:
+  extends: [.cert-updater, .build]
+  needs: ["cert-updater-test"]
