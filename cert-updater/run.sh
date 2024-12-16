@@ -1,6 +1,5 @@
 #!/usr/bin/env sh
-
-/run/vault-authen.sh
+source /run/vault-authen.sh
 
 ls -1 /secret-volume/ | while read secretName
 do 

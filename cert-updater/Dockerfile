@@ -3,6 +3,8 @@ FROM $BASE_IMAGE
 LABEL maintainer=NexOps
 #####################################################
 
+RUN apk update && apk add -y --no-cache curl
+
 COPY --chmod=755 cert-updater/run.sh /run/run.sh
 COPY --chmod=755 cert-updater/alert.sh /run/alert.sh
 COPY --chmod=755 cert-updater/vault-authen.sh /run/vault-authen.sh
