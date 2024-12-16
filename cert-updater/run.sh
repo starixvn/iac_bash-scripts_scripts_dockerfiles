@@ -2,8 +2,6 @@
 
 /run/vault-authen.sh
 
-/cert-updater.sh
-
 ls -1 /secret-volume/ | while read line
 do 
 	vault kv get -field tls.crt -mount nexops certs/${secretName} > /tmp/${secretName}.crt
