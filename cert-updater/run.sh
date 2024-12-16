@@ -2,7 +2,7 @@
 
 /run/vault-authen.sh
 
-ls -1 /secret-volume/ | while read line
+ls -1 /secret-volume/ | while read secretName
 do 
 	vault kv get -field tls.crt -mount nexops certs/${secretName} > /tmp/${secretName}.crt
 	if [ $? -eq 2 ]; then
