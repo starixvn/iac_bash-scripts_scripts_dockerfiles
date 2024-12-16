@@ -9,4 +9,4 @@ COPY --chmod=755 cert-updater/vault-authen.sh /run/vault-authen.sh
 COPY --chmod=755 cert-updater/vault-update-secret.sh /run/vault-update-secret.sh
 
 USER 1001
-CMD ["/run.sh"]
+CMD ["/run/run.sh"]
