@@ -13,6 +13,8 @@ do
 		if [ $? -eq 1 ]; then
 			msg="{{Error}}{{Error}}{{Error}} Failed to update vault secrets{{NewLine}}{{BeginBold}}  Cert{{EndBold}}: ${secretName}{{NewLine}}  Timestamp: $(date +%F-%H%M)"
 			/run/vault-update-secret.sh ${secretName} || /run/alert.sh ${ALERT_GROUP_ID} ${msg}
+		else
+			echo "[*] Certificate ${secretName} not change."
 		fi
 	fi
 done
