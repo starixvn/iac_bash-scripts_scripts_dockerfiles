@@ -6,15 +6,17 @@ do
 	vault kv get -field tls.crt -mount nexops certs/${secretName} > /tmp/${secretName}.crt
 	if [ $? -eq 2 ]; then
 		echo "No value for cert ${secretName} on Vault server"
-		echo "[+] Start update new value"
+		echo "[+] Start update new value for ${secretName}"
 		/run/vault-update-secret.sh ${secretName} || /run/alert.sh ${ALERT_GROUP_ID} ${msg}
 	else
 		cmp /secret-volume/${secretName}/tls.crt /tmp/${secretName}.crt
 		if [ $? -eq 1 ]; then
 			msg="{{Error}}{{Error}}{{Error}} Failed to update vault secrets{{NewLine}}{{BeginBold}}  Cert{{EndBold}}: ${secretName}{{NewLine}}  Timestamp: $(date +%F-%H%M)"
 			/run/vault-update-secret.sh ${secretName} || /run/alert.sh ${ALERT_GROUP_ID} ${msg}
+			echo "[/] Found change on cert ${secretName}"
+			echo "[+] Start update new value for ${secretName}"
 		else
-			echo "[*] Certificate ${secretName} not change."
+			echo "[/] Certificate ${secretName} not change."
 		fi
 	fi
 done
