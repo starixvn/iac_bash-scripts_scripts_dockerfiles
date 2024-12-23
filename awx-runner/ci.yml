@@ -3,7 +3,7 @@
   variables:
     RULES_CHANGES_PATH: "awx-runner/**/*"
     DIR_PATH: "awx-runner"
-    BASE_IMAGE: "quay.io/ansible/awx-ee:$IMAGE_VERSION"
+    BASE_IMAGE: "quay.io/ansible/awx-ee:24.1.0"
     IMAGE_VERSION: "24.1.0"
     IMAGE_PATH: "base/awx/awx-runner:$IMAGE_VERSION"
     
