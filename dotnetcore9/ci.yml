@@ -1,0 +1,17 @@
+.dotnetcore9:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "dotnetcore9/**/*"
+    DIR_PATH: "dotnetcore9"
+    BASE_IMAGE: "mcr.microsoft.com/dotnet/aspnet:9.0-alpine"
+    IMAGE_VERSION: "9.0-alpine"
+    IMAGE_PATH: "rebuild-baseimage/dotnet/core/aspnet:$IMAGE_VERSION"
+    # IMAGE_PATH: "base/dotnet/core/aspnet:$IMAGE_VERSION"
+
+dotnetcore9-test:
+  extends: [.dotnetcore9, .test]
+
+dotnetcore9-build:
+  extends: [.dotnetcore9, .build]
+  needs: ["dotnetcore9-test"]
+

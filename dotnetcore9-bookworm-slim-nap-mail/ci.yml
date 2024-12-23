@@ -1,0 +1,18 @@
+.dotnetcore8-bookworm-slim-nap-mail:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "dotnetcore8-bookworm-slim-nap-mail/**/*"
+    DIR_PATH: "dotnetcore8-bookworm-slim-nap-mail"
+    IMAGE_VERSION: "8.0-nap-mail-core"
+    # BASE_IMAGE: "mcr.microsoft.com/dotnet/aspnet:8.0-bookworm-slim"
+    BASE_IMAGE: "hub.nexdev.net/base/dotbet/aspnet:8.0-bookworm-slim"
+    # IMAGE_PATH: "rebuild-baseimage/dotnetcore/aspnet:$IMAGE_VERSION"
+    IMAGE_PATH: "base/dotnet/core/aspnet:$IMAGE_VERSION"
+
+dotnetcore8-bookworm-slim-nap-mail-test:
+  extends: [.dotnetcore8-bookworm-slim-nap-mail, .test]
+
+dotnetcore8-bookworm-slim-nap-mail-build:
+  extends: [.dotnetcore8-bookworm-slim-nap-mail, .build]
+  needs: ["dotnetcore8-bookworm-slim-nap-mail-test"]
+
