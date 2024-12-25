@@ -5,8 +5,8 @@
     DIR_PATH: "dotnetcore9-slim"
     BASE_IMAGE: "mcr.microsoft.com/dotnet/aspnet:9.0-bookworm-slim"
     IMAGE_VERSION: "9.0-slim"
-    IMAGE_PATH: "rebuild-baseimage/dotnet/core/aspnet:$IMAGE_VERSION"
-    # IMAGE_PATH: "base/dotnet/core/aspnet:$IMAGE_VERSION"
+    # IMAGE_PATH: "rebuild-baseimage/dotnet/core/aspnet:$IMAGE_VERSION"
+    IMAGE_PATH: "base/dotnet/core/aspnet:$IMAGE_VERSION"
 
 dotnetcore9-slim-test:
   extends: [.dotnetcore9-slim, .test]
