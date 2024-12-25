@@ -4,8 +4,8 @@
     RULES_CHANGES_PATH: "haproxy/**/*"
     DIR_PATH: "haproxy"
     BASE_IMAGE: "haproxytech/haproxy-ubuntu:$IMAGE_VERSION"
-    IMAGE_VERSION: "2.7"
-    IMAGE_PATH: "rebuild-baseimage/haproxy-ubuntu:$IMAGE_VERSION"
+    IMAGE_VERSION: "3.1"
+    IMAGE_PATH: "base/haproxy/haproxy-ubuntu:$IMAGE_VERSION"
     
 haproxy-test:
   extends: [.haproxy, .test]
