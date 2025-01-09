@@ -3,8 +3,9 @@
   variables:
     RULES_CHANGES_PATH: "netshoot/**/*"
     DIR_PATH: "netshoot"
-    BASE_IMAGE: "alpine:3.20.3"
-    IMAGE_VERSION: "vault-cli"
+    # BASE_IMAGE: "alpine:3.20.3"
+    BASE_IMAGE: "ubuntu:noble"
+    IMAGE_VERSION: "aws-cli"
     IMAGE_PATH: "base/nexops-tools/netshoot:$IMAGE_VERSION"
 
 netshoot-test:
