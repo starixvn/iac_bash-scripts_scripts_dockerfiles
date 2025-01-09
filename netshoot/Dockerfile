@@ -3,13 +3,13 @@ FROM $BASE_IMAGE
 LABEL maintainer=NexOps
 
 # RUN apk update && apk add -y --no-cache tcptraceroute bc curl websocat && rm -rf /var/cache/apk/*
-RUN apt update && apt install -y --no-install-recommends vim tcptraceroute bc curl wget && \
+RUN apt update && apt install -y --no-install-recommends vim tcptraceroute bc curl wget unzip && \
 	rm -rf /var/lib/apt/lists/*
 RUN wget --no-check-certificate https://pingpros.com/pub/tcpping -O /usr/bin/tcpping && chmod +x /usr/bin/tcpping
 
 ## Install aws-cli
 RUN \
-	curl --insecure "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+	curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
 	unzip awscliv2.zip && rm awscliv2.zip && \
 	./aws/install
 
