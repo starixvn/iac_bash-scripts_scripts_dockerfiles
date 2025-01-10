@@ -16,7 +16,7 @@ RUN wget --no-check-certificate https://pingpros.com/pub/tcpping -O /usr/bin/tcp
 ## Install vault-cli
 RUN \
 	cd /usr/bin && \
-	wget https://releases.hashicorp.com/vault/1.17.1/vault_1.17.1_linux_amd64.zip && \
+	wget --no-check-certificate https://releases.hashicorp.com/vault/1.17.1/vault_1.17.1_linux_amd64.zip && \
 	unzip vault_1.17.1_linux_amd64.zip && rm vault_1.17.1_linux_amd64.zip LICENSE.txt
 
 ENTRYPOINT tail -f /dev/null
