@@ -5,7 +5,7 @@
     DIR_PATH: "netshoot"
     # BASE_IMAGE: "alpine:3.20.3"
     BASE_IMAGE: "ubuntu:noble"
-    IMAGE_VERSION: "aws-cli"
+    IMAGE_VERSION: "vault-cli"
     IMAGE_PATH: "base/nexops-tools/netshoot:$IMAGE_VERSION"
 
 netshoot-test:
