@@ -4,7 +4,7 @@
     RULES_CHANGES_PATH: "dotnet-core-sdk-8.0-alpine-nodejs/**/*"
     DIR_PATH: "dotnet-core-sdk-8.0-alpine-nodejs"
     BASE_IMAGE: "mcr.microsoft.com/dotnet/sdk:8.0-alpine3.20"
-    IMAGE_VERSION: "8.0-alpine-nodejs"
+    IMAGE_VERSION: "8.0-nodejs-v20"
     IMAGE_PATH: "base/dotnet/core/sdk:$IMAGE_VERSION"
 
 dotnetcoresdk80-alpine-nodejs-test:
