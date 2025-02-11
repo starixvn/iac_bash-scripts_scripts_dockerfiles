@@ -1,0 +1,16 @@
+.node-alpine:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "node/**/*"
+    DIR_PATH: "node"
+    IMAGE_VERSION: "20.18-alpine-25h1"
+    BASE_IMAGE: "node:20.18-alpine"
+    IMAGE_PATH: "base/node:$IMAGE_VERSION"
+
+node-alpine-test:
+  extends: [.node-alpine, .test]
+
+node-alpine-build:
+  extends: [.node-alpine, .build]
+  needs: ["node-alpine-test"]
+
