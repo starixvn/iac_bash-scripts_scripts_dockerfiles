@@ -5,7 +5,7 @@
     DIR_PATH: "dotnet-sdk-nodejs-alpine"
     IMAGE_VERSION: "8.0-node22-25h1"
     BASE_IMAGE: "mcr.microsoft.com/dotnet/sdk:8.0-alpine"
-    IMAGE_PATH: "base/dotnet/core/aspnet:$IMAGE_VERSION"
+    IMAGE_PATH: "base/dotnet/core/sdk:$IMAGE_VERSION"
 
 dotnetsdknodejs-test:
   extends: [.dotnetsdknodejs, .test]
