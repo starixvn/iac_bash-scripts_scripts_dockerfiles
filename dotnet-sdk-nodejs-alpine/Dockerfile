@@ -4,5 +4,5 @@ LABEL maintainer=NexOps
 
 RUN apk update && apk add --no-cache curl libcrypto3 libcurl libssl3 \
     nodejs=22.13.1-r0 npm=10.9.1-r0 \
-    && rm -rf /var/cache/apk/*
-
+    && rm -rf /var/cache/apk/* \
+    && npm install --global gulp-cli yarn
