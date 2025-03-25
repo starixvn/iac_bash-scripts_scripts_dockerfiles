@@ -67,15 +67,29 @@
         <div class="help-box">
             <p class="help-title">What you can do:</p>
             <ul>
-                <li>Verify the web address is spelled correctly</li>
+                <li>Verify the web address is spelled correctly hihi</li>
                 <li>Go back to the homepage</li>
                 <li>Contact the website administrator if the problem persists</li>
             </ul>
         </div>
     </div>
-
     <div class="cluster-info" id="cluster-identifier">
         ${CLUSTER_NAME}
     </div>
+
+    <script>
+        // Client-side environment variable replacement
+        document.addEventListener('DOMContentLoaded', function() {
+            const clusterNameElement = document.getElementById('cluster-identifier');
+            
+            // First, try to get the cluster name from environment
+            const clusterName = window.ENV && window.ENV.CLUSTER_NAME 
+                ? window.ENV.CLUSTER_NAME 
+                : (process.env.CLUSTER_NAME || '${CLUSTER_NAME}');
+            
+            // Replace the placeholder with the actual cluster name
+            clusterNameElement.textContent = clusterName || 'Unknown Cluster';
+        });
+    </script>
 </body>
 </html>
