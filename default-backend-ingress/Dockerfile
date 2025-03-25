@@ -9,5 +9,6 @@ RUN chmod -R a+w /var/cache/nginx/ \
 
 COPY default-backend-ingress/hello.conf /etc/nginx/conf.d/
 COPY default-backend-ingress/index.html /usr/share/nginx/html/
+COPY default-backend-ingress/404.html /usr/share/nginx/html/
 EXPOSE 8080
 USER nginx
