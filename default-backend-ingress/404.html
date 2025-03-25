@@ -49,13 +49,18 @@
             margin-bottom: 0.5rem;
             color: #444;
         }
-        .cluster-info {
+        /* Hidden by default */
+        #cluster-info {
+            display: none;
             position: fixed;
             bottom: 10px;
             right: 10px;
             font-size: 0.7rem;
             color: #aaa;
             opacity: 0.5;
+            background-color: #f0f0f0;
+            padding: 5px;
+            border-radius: 3px;
         }
     </style>
 </head>
@@ -67,29 +72,49 @@
         <div class="help-box">
             <p class="help-title">What you can do:</p>
             <ul>
-                <li>Verify the web address is spelled correctly hihi</li>
+                <li>Verify the web address is spelled correctly</li>
                 <li>Go back to the homepage</li>
                 <li>Contact the website administrator if the problem persists</li>
             </ul>
         </div>
     </div>
-    <div class="cluster-info" id="cluster-identifier">
-        ${CLUSTER_NAME}
+
+    <!-- Hidden cluster info -->
+    <div id="cluster-info">
+        Cluster: ${CLUSTER_NAME}
     </div>
 
     <script>
-        // Client-side environment variable replacement
-        document.addEventListener('DOMContentLoaded', function() {
-            const clusterNameElement = document.getElementById('cluster-identifier');
+        // Function to show cluster info
+        function revealClusterInfo() {
+            const clusterInfo = document.getElementById('cluster-info');
             
-            // First, try to get the cluster name from environment
-            const clusterName = window.ENV && window.ENV.CLUSTER_NAME 
-                ? window.ENV.CLUSTER_NAME 
-                : (process.env.CLUSTER_NAME || '${CLUSTER_NAME}');
+            // Check if DevTools is open
+            const isDevToolsOpen = window.outerWidth - window.innerWidth > 200;
             
-            // Replace the placeholder with the actual cluster name
-            clusterNameElement.textContent = clusterName || 'Unknown Cluster';
-        });
+            // Create a hidden element with cluster details for page source
+            const hiddenMeta = document.createElement('meta');
+            hiddenMeta.name = 'cluster-identifier';
+            hiddenMeta.content = '${CLUSTER_NAME}';
+            document.head.appendChild(hiddenMeta);
+
+            // Show cluster info when DevTools is opened
+            if (isDevToolsOpen) {
+                clusterInfo.style.display = 'block';
+            }
+
+            // Listen for DevTools open event
+            const checkDevTools = setInterval(() => {
+                const isCurrentlyOpen = window.outerWidth - window.innerWidth > 200;
+                clusterInfo.style.display = isCurrentlyOpen ? 'block' : 'none';
+            }, 500);
+
+            // Optional: Console log for developers
+            console.log('Cluster Identifier:', '${CLUSTER_NAME}');
+        }
+
+        // Trigger reveal when DevTools is opened
+        document.addEventListener('DOMContentLoaded', revealClusterInfo);
     </script>
 </body>
 </html>
