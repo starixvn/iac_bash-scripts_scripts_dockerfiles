@@ -79,42 +79,6 @@
         </div>
     </div>
 
-    <!-- Hidden cluster info -->
-    <div id="cluster-info">
-        Cluster: ${CLUSTER_NAME}
-    </div>
 
-    <script>
-        // Function to show cluster info
-        function revealClusterInfo() {
-            const clusterInfo = document.getElementById('cluster-info');
-            
-            // Check if DevTools is open
-            const isDevToolsOpen = window.outerWidth - window.innerWidth > 200;
-            
-            // Create a hidden element with cluster details for page source
-            const hiddenMeta = document.createElement('meta');
-            hiddenMeta.name = 'cluster-identifier';
-            hiddenMeta.content = '${CLUSTER_NAME}';
-            document.head.appendChild(hiddenMeta);
-
-            // Show cluster info when DevTools is opened
-            if (isDevToolsOpen) {
-                clusterInfo.style.display = 'block';
-            }
-
-            // Listen for DevTools open event
-            const checkDevTools = setInterval(() => {
-                const isCurrentlyOpen = window.outerWidth - window.innerWidth > 200;
-                clusterInfo.style.display = isCurrentlyOpen ? 'block' : 'none';
-            }, 500);
-
-            // Optional: Console log for developers
-            console.log('Cluster Identifier:', '${CLUSTER_NAME}');
-        }
-
-        // Trigger reveal when DevTools is opened
-        document.addEventListener('DOMContentLoaded', revealClusterInfo);
-    </script>
 </body>
 </html>

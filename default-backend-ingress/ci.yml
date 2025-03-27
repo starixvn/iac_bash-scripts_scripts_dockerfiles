@@ -3,7 +3,7 @@
   variables:
     RULES_CHANGES_PATH: "default-backend-ingress/**/*"
     DIR_PATH: "default-backend-ingress"
-    BASE_IMAGE: "nginx:mainline-alpine"
+    BASE_IMAGE: "nginx:stable"
     IMAGE_VERSION: "latest"
     IMAGE_PATH: "base/nexops-tools/default-backend-ingress:$IMAGE_VERSION"
 
