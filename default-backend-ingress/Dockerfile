@@ -9,10 +9,10 @@ RUN rm /etc/nginx/conf.d/*
 
 
 # Copy HTML templates
-COPY default-backend-ingress/custome-page/404.html.template /usr/share/nginx/html/
+COPY default-backend-ingress/custom-page/404.html.template /usr/share/nginx/html/
 COPY default-backend-ingress/hello.conf /etc/nginx/conf.d/
 # Copy entrypoint script
-COPY entrypoint.sh /
+COPY default-backend-ingress/entrypoint.sh /
 
 # Set permissions
 RUN chmod +x /entrypoint.sh
