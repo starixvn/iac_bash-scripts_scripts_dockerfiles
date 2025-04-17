@@ -7,4 +7,4 @@ LABEL maintainer=NexOps
 
 RUN apk update && apk add --no-cache --upgrade git grep coreutils
 
-USER 1001:1001
+# USER 1001:1001
