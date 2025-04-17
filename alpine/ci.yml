@@ -3,8 +3,8 @@
   variables:
     RULES_CHANGES_PATH: "alpine/**/*"
     DIR_PATH: "alpine"
-    IMAGE_TAG: "git"
-    BASE_IMAGE: "alpine/git:v2.47.2"
+    IMAGE_TAG: "git-3.21"
+    BASE_IMAGE: "alpine:3.21"
     IMAGE_PATH: "base/alpine:$IMAGE_TAG"
     
 alpine-test:
