@@ -1,0 +1,15 @@
+.postgres16:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "postgres16/**/*"
+    DIR_PATH: "postgres16"
+    BASE_IMAGE: "bitnami/postgresql:$IMAGE_VERSION"
+    IMAGE_VERSION: "16.3.0-debian-12-r19"
+    IMAGE_PATH: "base/postgres:$IMAGE_VERSION-pgvector"
+    
+postgres16-test:
+  extends: [.postgres16, .test]
+
+postgres16-build:
+  extends: [.postgres16, .build]
+  needs: ["postgres16-test"]
