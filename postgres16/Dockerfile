@@ -2,7 +2,7 @@ ARG BASE_IMAGE
 FROM $BASE_IMAGE
 LABEL maintainer=NexOps
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    git build-essential \
+    git build-essential && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Extentions pgvector
