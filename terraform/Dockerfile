@@ -3,6 +3,8 @@ FROM $BASE_IMAGE
 LABEL maintainer=NexOps
 # FIX  CRITICAL, HIGH Vulnerability
 
+ENV VAULT_VERSION=1.17.2
+
 RUN apk update && apk upgrade && \
         apk add ansible aws-cli jq curl unzip && \
         rm -rf /var/cache/apk/*
