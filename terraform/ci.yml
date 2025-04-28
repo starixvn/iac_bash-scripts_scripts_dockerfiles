@@ -6,8 +6,6 @@
     BASE_IMAGE: "hashicorp/terraform:$IMAGE_VERSION"
     IMAGE_VERSION: "1.11.4"
     VAULT_VERSION: "1.19.2"
-###    IMAGE_PATH: "rebuild-baseimage/hashicorp/terraform:$IMAGE_VERSION"
-    
     IMAGE_PATH: "base/hashicorp/terraform:$IMAGE_VERSION-vault"
     
 terraform-test:
