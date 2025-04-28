@@ -3,9 +3,9 @@
   variables:
     RULES_CHANGES_PATH: "terraform/**/*"
     DIR_PATH: "terraform"
-    BASE_IMAGE: "hashicorp/terraform:1.11.4"
-    IMAGE_VERSION: "1.4.5"
-    VAULT_VERSION: "1.16.0"
+    BASE_IMAGE: "hashicorp/terraform:$IMAGE_VERSION"
+    IMAGE_VERSION: "1.11.4"
+    VAULT_VERSION: "1.19.2"
 ###    IMAGE_PATH: "rebuild-baseimage/hashicorp/terraform:$IMAGE_VERSION"
     
     IMAGE_PATH: "base/hashicorp/terraform:$IMAGE_VERSION-vault"
