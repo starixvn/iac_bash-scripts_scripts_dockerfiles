@@ -4,16 +4,10 @@ FROM $BASE_IMAGE
 LABEL maintainer=NexOps
 
 # Install necessary system packages
-RUN apk add --no-cache \
-    curl \
-    git \
-    build-base \
-    chromium \
-    bash \
-    tar \
-    xz \
-    util-linux \
-    coreutils
+RUN apk update && apk -y add --no-cache \
+    curl git build-base chromium bash \
+    tar xz util-linux coreutils \
+    && rm -rf /var/cache/apk/*
 
 # Install Astral uv/uvx and make available system-wide
 RUN curl -Ls https://astral.sh/uv/install.sh | bash \
