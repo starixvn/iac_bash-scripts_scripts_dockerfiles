@@ -4,6 +4,7 @@ FROM $BASE_IMAGE
 LABEL maintainer=NexOps
 
 # Install necessary system packages
+USER 0
 RUN apk update && apk -y add --no-cache \
     curl git build-base chromium bash \
     tar xz util-linux coreutils \
