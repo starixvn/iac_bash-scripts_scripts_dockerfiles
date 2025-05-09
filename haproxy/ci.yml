@@ -5,8 +5,8 @@
     DIR_PATH: "haproxy"
     BASE_IMAGE: "haproxytech/haproxy-ubuntu:$IMAGE_VERSION"
     IMAGE_VERSION: "3.1"
-    IMAGE_VERSION_CUS: "3.1-custome"
-    IMAGE_PATH: "base/haproxy/haproxy-ubuntu:$IMAGE_VERSION_CUS"
+    # IMAGE_VERSION_CUS: "3.1-custome"
+    IMAGE_PATH: "base/haproxy/haproxy-ubuntu:$IMAGE_VERSION"
     
 haproxy-test:
   extends: [.haproxy, .test]

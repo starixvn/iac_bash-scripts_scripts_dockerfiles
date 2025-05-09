@@ -1,0 +1,16 @@
+.haproxy-ci:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "haproxy-ci/**/*"
+    DIR_PATH: "haproxy-ci"
+    BASE_IMAGE: "haproxytech/haproxy-ubuntu:$IMAGE_VERSION"
+    IMAGE_VERSION: "3.1"
+    IMAGE_VERSION_CUS: "3.1-ci"
+    IMAGE_PATH: "base/haproxy/haproxy-ubuntu:$IMAGE_VERSION_CUS"
+    
+haproxy-ci-test:
+  extends: [.haproxy-ci, .test]
+
+haproxy-ci-build:
+  extends: [.haproxy-ci, .build]
+  needs: ["haproxy-ci-test"]

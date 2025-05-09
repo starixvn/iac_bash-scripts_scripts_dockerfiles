@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Unavailable</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+            margin: 0;
+            padding: 0; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+        }
+        .main-message {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        .sub-message {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+        .help-box {
+            background-color: #f1f3f5;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+        .help-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #444;
+        }
+        .cluster-info {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.7rem;
+            color: #aaa;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="main-message">Service Unavailable</h1>
+        <p class="sub-message">The server is currently unable to handle the request due to a temporary overload or maintenance. Please try again later.</p>
+        
+        <div class="help-box">
+            <p class="help-title">What you can do</p>
+            <ul>
+                <li>Wait a few minutes and refresh the page</li>
+                <li>Check your network connection</li>
+                <li>Contact the website administrator if the problem persists</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
