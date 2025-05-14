@@ -6,7 +6,7 @@ LABEL maintainer=NexOps
 ENV VAULT_VERSION=1.17.2
 
 RUN apk update && apk upgrade && \
-        apk add ansible aws-cli jq curl unzip && \
+        apk add ansible aws-cli jq curl unzip yamllint && \
         rm -rf /var/cache/apk/*
 
 RUN wget https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_386.zip -O vault.zip && \
