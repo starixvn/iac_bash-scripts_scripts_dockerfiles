@@ -1,7 +1,5 @@
 stages:
   - test
-  - build
-  - deploy
 ############
 include:
   - local: "base.yml"
