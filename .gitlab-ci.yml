@@ -38,8 +38,7 @@ include:
     when: always
     paths:
       - ${TRIVY_REPORT_FILE}
-    reports:
-      security: ${TRIVY_REPORT_FILE}
+
 
 .defectdojo_upload:
   stage: test
