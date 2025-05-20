@@ -8,7 +8,7 @@
     IMAGE_PATH: "base/awx/awx-runner:$IMAGE_VERSION"
     
 awx-runner-test:
-  extends: [.awx-runner, .trivy_scan]
+  extends: [.awx-runner, .test]
 
 awx-runner-reports:
   extends: [.defectdojo_upload, .awx-runner]

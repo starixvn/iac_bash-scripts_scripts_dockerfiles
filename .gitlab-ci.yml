@@ -6,7 +6,7 @@ include:
   - local: "/alpine/ci.yml"
   - local: "/awx-runner/ci.yml"
   - local: "/awx-web/ci.yml"
-.trivy_scan:
+.test:
   stage: test
   variables:
     TRIVY_REPORT_FILE: "trivy-report.json"
