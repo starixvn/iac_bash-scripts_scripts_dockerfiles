@@ -53,7 +53,7 @@ include:
       if [ -z "$ENGAGEMENT_NAME" ]; then
         echo "❌ Error: ENGAGEMENT_NAME could not be constructed"; exit 1
       fi
-      echo "DEBUG: CI_PROJECT_NAME=$CI_PROJECT_NAME, ENGAGEMENT_NAME=$ENGAGEMENT_NAME"
+      echo "DEBUG: CI_PROJECT_NAME=$CI_PROJECT_NAME, =$, ENGAGEMENT_NAME=$ENGAGEMENT_NAME"
 
     # Check or create product type
     - |
