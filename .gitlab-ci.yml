@@ -47,7 +47,7 @@ defectdojo_create_engagement:
     - ENDDAY=$(date -d "+${DEFECTDOJO_ENGAGEMENT_PERIOD} days" +%Y-%m-%d)
   script:
     - |
-        ENGAGEMENTID=`curl --fail --location --request POST "${DEFECTDOJO_URL}/engagements/" \
+        ENGAGEMENTID=`curl --fail --location --request POST "${DEFECTDOJO_URL}/api/v2/engagements/" \
               --header "Authorization: Token ${DEFECTDOJO_API_KEY}" \
               --header 'Content-Type: application/json' \
                 --data-raw "{
@@ -103,7 +103,7 @@ defectdojo_publish:
   allow_failure: true
   script:
     - |
-        curl --fail --location --request POST "${DEFECTDOJO_URL}/import-scan/" \
+        curl --fail --location --request POST "${DEFECTDOJO_URL}/api/v2/import-scan/" \
             --header "Authorization: Token ${DEFECTDOJO_API_KEY}" \
             --form "scan_date=\"${TODAY}\"" \
             --form "minimum_severity=\"${DEFECTDOJO_SCAN_MINIMUM_SEVERITY}\"" \
