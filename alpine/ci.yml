@@ -1,5 +1,3 @@
-include:
-  - local: "../base.yml"
 .alpine:
 #  extends: .base-rules
   variables:
