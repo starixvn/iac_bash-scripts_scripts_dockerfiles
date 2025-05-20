@@ -106,7 +106,6 @@ include:
           handle_api_error "$STATUS" "$BODY" "create product type"
         fi
       fi
-      fi
 
     # Check if product exists
     - |
