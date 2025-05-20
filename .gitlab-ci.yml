@@ -11,7 +11,7 @@ include:
     # Download and extract Trivy scanner
     - wget --no-verbose https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz?inline=false -O - | tar -zxvf -
     # Display Dockerfile contents
-    - cat /alpine/Dockerfile
+    - cat $DIR_PATH/Dockerfile
     # Log Trivy version and server info
     - echo "$TRIVY_SERVER - $TRIVY_VERSION"
     # Run Trivy security scan
@@ -19,7 +19,7 @@ include:
       ./trivy config \
         --exit-code 1 \
         --severity HIGH,CRITICAL \
-        /alpine \
+        $DIR_PATH \
         --output "$TRIVY_REPORT_FILE"
     # Scan completion message  
     - echo "done Scan Dockerfile !"
