@@ -48,13 +48,13 @@ include:
         fi
       done
 
-    - |
-      ENGAGEMENT_NAME="${CI_PROJECT_NAME}"
-      ENGAGEMENT_NAME=$(echo "$ENGAGEMENT_NAME" | tr -s '[:space:]' '-' | tr -d '[:punct:]' | tr '[:upper:]' '[:lower:]')
-      if [ -z "$ENGAGEMENT_NAME" ]; then
-        echo "❌ Error: ENGAGEMENT_NAME could not be constructed"; exit 1
-      fi
-      echo "DEBUG: CI_PROJECT_NAME=$CI_PROJECT_NAME, =$, ENGAGEMENT_NAME=$ENGAGEMENT_NAME"
+    # - |
+    #   ENGAGEMENT_NAME="${CI_PROJECT_NAME}"
+    #   ENGAGEMENT_NAME=$(echo "$ENGAGEMENT_NAME" | tr -s '[:space:]' '-' | tr -d '[:punct:]' | tr '[:upper:]' '[:lower:]')
+    #   if [ -z "$ENGAGEMENT_NAME" ]; then
+    #     echo "❌ Error: ENGAGEMENT_NAME could not be constructed"; exit 1
+    #   fi
+    #   echo "DEBUG: CI_PROJECT_NAME=$CI_PROJECT_NAME, =$, ENGAGEMENT_NAME=$ENGAGEMENT_NAME"
 
     # Check or create product type
     - |
