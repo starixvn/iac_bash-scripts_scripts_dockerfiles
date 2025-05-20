@@ -186,7 +186,7 @@ include:
   tags:
     - docker
 
-.trivy_defectdojo:
+trivy_defectdojo:
   needs:
     - job: .alpine-test
       artifacts: true
@@ -196,8 +196,21 @@ include:
     DEFECTDOJO_SCAN_FILE: "trivy-report.json"
     DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
     DEFECTDOJO_SCAN_TEST_TYPE: "GitLab-CI Trivy Scan"
+  # Add script section to handle potential errors
+  script:
+    - |
+      if [ ! -f "${DEFECTDOJO_SCAN_FILE}" ]; then
+        echo "❌ Error: Scan file ${DEFECTDOJO_SCAN_FILE} not found"
+        exit 1
+      fi
+    - echo "✅ Scan file validation complete"
   tags:
     - docker
+  # Add artifacts section to ensure scan file is preserved
+  artifacts:
+    when: always
+    paths:
+      - ${DEFECTDOJO_SCAN_FILE}
 
 # .test:
 #   stage: test
