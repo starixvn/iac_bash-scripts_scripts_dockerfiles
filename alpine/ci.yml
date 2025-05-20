@@ -7,8 +7,8 @@
     BASE_IMAGE: "alpine:3.21"
     IMAGE_PATH: "base/alpine:$IMAGE_TAG"
     
-alpine-test:
-  extends: [.alpine, .trivy_scan, .trivy_defecdojo]
+.alpine-test:
+  extends: [.alpine, .trivy_scan]
 
 #alpine-build:
 #  extends: [.alpine, .build]
