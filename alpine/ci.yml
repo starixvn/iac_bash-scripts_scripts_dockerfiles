@@ -1,7 +1,6 @@
 .alpine:
 #  extends: .base-rules
   variables:
-    ENGAGEMENT_NAME: "${DIR_PATH}"
     RULES_CHANGES_PATH: "alpine/**/*"
     DIR_PATH: "alpine"
     IMAGE_TAG: "git-3.21"
@@ -13,6 +12,7 @@ alpine-test:
 trivy-reports:
   extends: [.defectdojo_upload]
   variables:
+    ENGAGEMENT_NAME: "${DIR_PATH}"
     DEFECTDOJO_SCAN_FILE: "trivy-report.json"
     DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
     DEFECTDOJO_SCAN_TEST_TYPE: "GitLab-CI Trivy Scan"
