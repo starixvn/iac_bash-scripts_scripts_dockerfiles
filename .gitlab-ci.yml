@@ -32,7 +32,7 @@ include:
       - ${TRIVY_REPORT_FILE}
 
 defectdojo_create_engagement:
-  stage: .pre
+  stage: test
   image: $DOCKER_REG_LOCAL_URL/base/alpine:git-3.21
   variables:
     GIT_STRATEGY: none
@@ -80,9 +80,11 @@ defectdojo_create_engagement:
   artifacts:
     reports:
       dotenv: defectdojo.env
+  tags:
+    - docker
 
 defectdojo_publish:
-  stage: .post
+  stage: test
   image: $DOCKER_REG_LOCAL_URL/base/alpine:git-3.21
   rules:
     - when: never
@@ -92,6 +94,8 @@ defectdojo_publish:
   script:
     - echo "$CI_JOB_NAME is used for configuration only, and its script should not be executed"
     - exit 1
+  tags:
+    - docker
 
 .defectdojo_upload:
   extends: defectdojo_publish
@@ -111,3 +115,5 @@ defectdojo_publish:
             --form "push_to_jira=\"${DEFECTDOJO_SCAN_PUSH_TO_JIRA}\"" \
             --form "test_type=\"${DEFECTDOJO_SCAN_TEST_TYPE}\"" \
             --form "environment=\"${DEFECTDOJO_SCAN_ENVIRONMENT}\""
+  tags:
+    - docker
