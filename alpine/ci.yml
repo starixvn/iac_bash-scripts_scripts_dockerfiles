@@ -10,7 +10,7 @@
 alpine-test:
   extends: [.alpine, .trivy_scan]
 trivy-reports:
-  extends: [.defectdojo_upload]
+  extends: [.defectdojo_upload, .alpine]
   variables:
     ENGAGEMENT_NAME: "$IMAGE_PATH"
     DEFECTDOJO_SCAN_FILE: "trivy-report.json"
