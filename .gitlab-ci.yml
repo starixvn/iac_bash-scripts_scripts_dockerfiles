@@ -44,21 +44,6 @@ defectdojo_create_engagement:
     - ENDDAY=$(date -d "+${DEFECTDOJO_ENGAGEMENT_PERIOD} days" +%Y-%m-%d)
   script:
     - |
-      # Create engagement payload
-      cat << EOF > payload.json
-      {
-        "tags": ["GITLAB-CI"],
-        "name": "#${CI_PIPELINE_ID}",
-        "description": "${CI_COMMIT_DESCRIPTION}",
-        "version": "${CI_COMMIT_REF_NAME}",
-        "target_start": "${TODAY}",
-        "target_end": "${ENDDAY}",
-        "product": "${DEFECTDOJO_PRODUCTID}",
-        "engagement_type": "CI/CD",
-        "deduplication_on_engagement": ${DEFECTDOJO_ENGAGEMENT_DEDUPLICATION_ON_ENGAGEMENT}
-      }
-      EOF
-
       # Create engagement and get ID
       ENGAGEMENTID=$(curl --fail --location --request POST "${DEFECTDOJO_URL}/api/v2/engagements/" \
         --header "Authorization: Token ${DEFECTDOJO_API_KEY}" \
