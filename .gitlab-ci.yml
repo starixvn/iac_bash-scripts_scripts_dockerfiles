@@ -32,7 +32,7 @@ include:
     paths:
       - ${TRIVY_REPORT_FILE}
 
-efectdojo_create_engagement:
+defectdojo_create_engagement:
   stage: test
   image: $DOCKER_REG_LOCAL_URL/base/alpine:git-3.21
   variables:
