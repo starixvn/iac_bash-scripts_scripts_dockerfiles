@@ -1,5 +1,5 @@
 .awx-web:
-  extends: .base-rules
+  # extends: .base-rules
   variables:
     RULES_CHANGES_PATH: "awx-web/**/*"
     DIR_PATH: "awx-web"
@@ -10,6 +10,18 @@
 awx-web-test:
   extends: [.awx-web, .test]
 
-awx-web-build:
-  extends: [.awx-web, .build]
-  needs: ["awx-web-test"]
+
+awx-web-reports:
+  extends: [.defectdojo_upload, .awx-web]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "trivy-report.json"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "GitLab-CI Trivy Scan"
+  needs:
+    - job: awx-web-test
+      artifacts: true
+
+# awx-web-build:
+#   extends: [.awx-web, .build]
+#   needs: ["awx-web-test"]

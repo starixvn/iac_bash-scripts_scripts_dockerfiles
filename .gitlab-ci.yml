@@ -5,7 +5,7 @@ include:
   - local: "base.yml"
   - local: "/alpine/ci.yml"
   - local: "/awx-runner/ci.yml"
-
+  - local: "/awx-web/ci.yml"
 .trivy_scan:
   stage: test
   variables:
