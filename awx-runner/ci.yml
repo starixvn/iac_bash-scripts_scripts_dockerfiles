@@ -10,6 +10,19 @@
 awx-runner-test:
   extends: [.awx-runner, .test]
 
-awx-runner-build:
-  extends: [.awx-runner, .build]
-  needs: ["awx-runner-test"]
+trivy-reports:
+  extends: [.defectdojo_upload, .alpine]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "trivy-report.json"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "GitLab-CI Trivy Scan"
+  needs:
+    - job: awx-runner-test
+      artifacts: true
+
+
+
+# awx-runner-build:
+#   extends: [.awx-runner, .build]
+#   needs: ["awx-runner-test"]
