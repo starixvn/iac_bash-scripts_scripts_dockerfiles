@@ -10,8 +10,8 @@
 awx-runner-test:
   extends: [.awx-runner, .trivy_scan]
 
-trivy-reports:
-  extends: [.defectdojo_upload, .alpine]
+awx-runner-reports:
+  extends: [.defectdojo_upload, .awx-runner]
   variables:
     ENGAGEMENT_NAME: "$DIR_PATH"
     DEFECTDOJO_SCAN_FILE: "trivy-report.json"

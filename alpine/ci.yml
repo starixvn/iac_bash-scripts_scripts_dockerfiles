@@ -9,7 +9,7 @@
     
 alpine-test:
   extends: [.alpine, .trivy_scan]
-trivy-reports:
+alpine-reports:
   extends: [.defectdojo_upload, .alpine]
   variables:
     ENGAGEMENT_NAME: "$DIR_PATH"
