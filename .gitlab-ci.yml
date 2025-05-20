@@ -32,7 +32,7 @@ include:
     paths:
       - ${TRIVY_REPORT_FILE}
 
-defectdojo_create_engagement:
+efectdojo_create_engagement:
   stage: test
   image: $DOCKER_REG_LOCAL_URL/base/alpine:git-3.21
   variables:
@@ -40,42 +40,53 @@ defectdojo_create_engagement:
   allow_failure: true
   before_script:
     - apk add curl jq coreutils
-    - TODAY=`date +%Y-%m-%d`
+    - TODAY=$(date +%Y-%m-%d)
     - ENDDAY=$(date -d "+${DEFECTDOJO_ENGAGEMENT_PERIOD} days" +%Y-%m-%d)
   script:
     - |
-      # Create engagement and get ID
-      ENGAGEMENTID=$(curl -s -w -X POST "${DEFECTDOJO_URL}/api/v2/engagements/" \
+      # Escape JSON cho description
+      ESCAPED_DESCRIPTION=$(echo "${CI_COMMIT_DESCRIPTION}" | jq -Rs .)
+
+      # Tạo engagement và get ID
+      ENGAGEMENTID=$(curl -v -sS -w "\n%{http_code}" -X POST "${DEFECTDOJO_URL}/api/v2/engagements/" \
         --header "Authorization: Token ${DEFECTDOJO_API_KEY}" \
         --header 'Content-Type: application/json' \
         --data-raw "{
           \"tags\": [\"GITLAB-CI\"],
           \"name\": \"#${CI_PIPELINE_ID}\",
-          \"description\": \"${CI_COMMIT_DESCRIPTION}\",
+          \"description\": ${ESCAPED_DESCRIPTION},
           \"version\": \"${CI_COMMIT_REF_NAME}\",
           \"first_contacted\": \"${TODAY}\",
           \"target_start\": \"${TODAY}\",
           \"target_end\": \"${ENDDAY}\",
-          \"reason\": \"string\",
+          \"reason\": \"Security Scan\",
           \"tracker\": \"${CI_PROJECT_URL}/-/issues\",
-          \"threat_model\": \"${DEFECTDOJO_ENGAGEMENT_THREAT_MODEL}\",
-          \"api_test\": \"${DEFECTDOJO_ENGAGEMENT_API_TEST}\",
-          \"pen_test\": \"${DEFECTDOJO_ENGAGEMENT_PEN_TEST}\",
-          \"check_list\": \"${DEFECTDOJO_ENGAGEMENT_CHECK_LIST}\",
+          \"threat_model\": ${DEFECTDOJO_ENGAGEMENT_THREAT_MODEL},
+          \"api_test\": ${DEFECTDOJO_ENGAGEMENT_API_TEST},
+          \"pen_test\": ${DEFECTDOJO_ENGAGEMENT_PEN_TEST},
+          \"check_list\": ${DEFECTDOJO_ENGAGEMENT_CHECK_LIST},
           \"status\": \"${DEFECTDOJO_ENGAGEMENT_STATUS}\",
           \"engagement_type\": \"CI/CD\",
           \"build_id\": \"${CI_PIPELINE_ID}\",
           \"commit_hash\": \"${CI_COMMIT_SHORT_SHA}\",
           \"branch_tag\": \"${CI_COMMIT_REF_NAME}\",
-          \"deduplication_on_engagement\": \"${DEFECTDOJO_ENGAGEMENT_DEDUPLICATION_ON_ENGAGEMENT}\",
+          \"deduplication_on_engagement\": ${DEFECTDOJO_ENGAGEMENT_DEDUPLICATION_ON_ENGAGEMENT},
           \"product\": \"${DEFECTDOJO_PRODUCTID}\",
           \"source_code_management_uri\": \"${CI_PROJECT_URL}\",
-          \"build_server\": ${DEFECTDOJO_ENGAGEMENT_BUILD_SERVER},
-          \"source_code_management_server\": ${DEFECTDOJO_ENGAGEMENT_SOURCE_CODE_MANAGEMENT_SERVER},
-          \"orchestration_engine\": ${DEFECTDOJO_ENGAGEMENT_ORCHESTRATION_ENGINE}
-        }" | jq -r '.id')
+          \"build_server\": null,
+          \"source_code_management_server\": null,
+          \"orchestration_engine\": null
+        }" | tee response.txt | jq -r '.id')
 
-      # Save engagement ID to environment file
+      # Xử lý lỗi HTTP
+      HTTP_STATUS=$(grep 'HTTP_STATUS' response.txt | cut -d':' -f2)
+      if [ "$HTTP_STATUS" -ne 201 ]; then
+        echo "ERROR: Failed to create engagement (HTTP $HTTP_STATUS)"
+        cat response.txt
+        exit 1
+      fi
+
+      # Save engagement ID
       mkdir -p $(dirname defectdojo.env)
       echo "DEFECTDOJO_ENGAGEMENTID=${ENGAGEMENTID}" >> defectdojo.env
   artifacts:
