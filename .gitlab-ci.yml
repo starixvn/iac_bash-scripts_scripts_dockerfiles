@@ -76,6 +76,7 @@ defectdojo_create_engagement:
                   \"source_code_management_server\": ${DEFECTDOJO_ENGAGEMENT_SOURCE_CODE_MANAGEMENT_SERVER},
                   \"orchestration_engine\": ${DEFECTDOJO_ENGAGEMENT_ORCHESTRATION_ENGINE}
                 }" | jq -r '.id'`
+    - mkdir -p $(dirname defectdojo.env)
     - echo "DEFECTDOJO_ENGAGEMENTID=${ENGAGEMENTID}" >> defectdojo.env
   artifacts:
     reports:
