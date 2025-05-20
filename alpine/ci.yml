@@ -1,6 +1,7 @@
 .alpine:
 #  extends: .base-rules
   variables:
+    ENGAGEMENT_NAME: "${DIR_PATH}"
     RULES_CHANGES_PATH: "alpine/**/*"
     DIR_PATH: "alpine"
     IMAGE_TAG: "git-3.21"
