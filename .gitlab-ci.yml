@@ -3,7 +3,7 @@ stages:
 ############
 include:
   - local: "*/base.yml"
-  - local: "/alpine/ci.yml"
+  - local: "./alpine/ci.yml"
 .trivy_scan:
   stage: test
   script:
