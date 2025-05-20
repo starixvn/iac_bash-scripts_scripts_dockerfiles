@@ -9,8 +9,9 @@
     
 .alpine-test:
   extends: [.alpine, .trivy_scan]
-# .trivy-reports:
-#   extends: [.alpine-test, .defectdojo_upload]
+.trivy-reports:
+  extends: [.defectdojo_upload]
+  needs: ["alpine-test"]
 #alpine-build:
 #  extends: [.alpine, .build]
 #  needs: ["alpine-test"]
