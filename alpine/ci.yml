@@ -12,7 +12,7 @@ alpine-test:
 trivy-reports:
   extends: [.defectdojo_upload, .alpine]
   variables:
-    ENGAGEMENT_NAME: "$IMAGE_PATH"
+    ENGAGEMENT_NAME: "$DIR_PATH"
     DEFECTDOJO_SCAN_FILE: "trivy-report.json"
     DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
     DEFECTDOJO_SCAN_TEST_TYPE: "GitLab-CI Trivy Scan"
