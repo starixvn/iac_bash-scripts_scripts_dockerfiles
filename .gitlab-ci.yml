@@ -128,7 +128,7 @@ include:
       curl -s -S -X POST "${DEFECTDOJO_URL}/api/v2/reimport-scan/" \
         -H "Authorization: Token ${DEFECTDOJO_API_KEY}" \
         -F "scan_date=$(date +%F)" \
-        -F "minimum_severity=Medium" \
+        -F "minimum_severity=${DEFECTDOJO_SCAN_MINIMUM_SEVERITY}" \
         -F "scan_type=${DEFECTDOJO_SCAN_TYPE}" \
         -F "active=true" \
         -F "verified=true" \
