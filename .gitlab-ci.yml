@@ -220,7 +220,7 @@ include:
     - echo "✅ Upload completed"
   tags:
     - docker
-
+## scan image
 .build:
   stage: scan
   script:
