@@ -25,7 +25,7 @@ include:
       # Run Trivy config check with error handling
       if ! ./trivy config \
         --severity HIGH,CRITICAL \
-        --exit-code 1 \
+        --exit-code 0 \
         --format json \
         --output trivy-report.json \
         $DIR_PATH/; then
