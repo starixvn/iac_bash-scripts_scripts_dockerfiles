@@ -21,12 +21,21 @@ include:
     - cat $DIR_PATH/Dockerfile
     # Log Trivy version and server info
     - echo "$TRIVY_SERVER - $TRIVY_VERSION"
-    # Run Trivy security scan with error handling
-    - |
+
       # Check for HIGH severity issues with proper error handling
-      ./trivy config --exit-code 0 --severity HIGH $DIR_PATH/ --format json --output ${TRIVY_REPORT_FILE}
+    - ./trivy config \
+      --exit-code 0 \
+      --severity HIGH \
+      --format json \
+      --output "${TRIVY_REPORT_FILE}" \
+      "${DIR_PATH}"
       # Check for CRITICAL severity issues with proper error handling
-#      ./trivy config --exit-code 1 --severity CRITICAL $DIR_PATH/ --format json --output ${TRIVY_REPORT_FILE}
+    - ./trivy config \
+      --exit-code 1 \
+      --severity CRITICAL \
+      --format json \
+      --output "${TRIVY_REPORT_FILE}" \
+      "${DIR_PATH}"  
     - echo "done Scan Dockerfile !"
   tags:
     - docker
@@ -180,7 +189,7 @@ include:
       curl -s -S -X POST "${DEFECTDOJO_URL}/api/v2/reimport-scan/" \
         -H "Authorization: Token ${DEFECTDOJO_API_KEY}" \
         -F "scan_date=$(date +%F)" \
-        -F "minimum_severity=Medium" \
+        -F "minimum_severity=${DEFECTDOJO_SCAN_MINIMUM_SEVERITY}" \
         -F "scan_type=${DEFECTDOJO_SCAN_TYPE}" \
         -F "active=true" \
         -F "verified=true" \
