@@ -47,11 +47,13 @@ defectdojo_create_engagement:
       export DEFECTDOJO_PRODUCT_ID=$(curl $DEFECTDOJO_URL/api/v2/products/ \
         -H "Authorization: Token $DEFECTDOJO_API_KEY" \
         -G --data-urlencode "name_exact=$[[ inputs.DEFECTDOJO_PRODUCT_NAME ]]" | jq -r .results[].id)
+      echo "Product ID is $DEFECTDOJO_PRODUCT_ID"
     - >
       export DEFECTDOJO_ENGAGEMENT_ID=$(curl $DEFECTDOJO_URL/api/v2/engagements/ \
         -H "Authorization: Token $DEFECTDOJO_API_KEY" \
         -G --data-urlencode "name=Pipeline #$CI_PIPELINE_ID" \
         --data-urlencode "product=$DEFECTDOJO_PRODUCT_ID" | jq -r .results[].id)
+      echo "Product ID is $DEFECTDOJO_ENGAGEMENT_ID"
     - >
       if [ -z "$DEFECTDOJO_ENGAGEMENT_ID" ]; then
         export DEFECTDOJO_ENGAGEMENT_ID=$(curl -X POST $DEFECTDOJO_URL/api/v2/engagements/ \
