@@ -202,7 +202,7 @@ include:
         -F "scan_type=${DEFECTDOJO_SCAN_TYPE}" \
         -F "active=true" \
         -F "verified=true" \
-        -F "product_name=${CI_PROJECT_NAME}" \
+        -F "product_name=${DIR_PATH}" \
         -F "engagement_name=${ENGAGEMENT_NAME}" \
         -F "engagement=${ENGAGEMENT_ID}" \
         -F "test_type=\"${DEFECTDOJO_SCAN_TEST_TYPE}\"" \
