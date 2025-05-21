@@ -34,7 +34,7 @@ include:
         --format json \
         --output ${TRIVY_REPORT_FILE} \
         $DIR_PATH/
-    - ./trivy config \
+      ./trivy config \
         --severity HIGH,CRITICAL \
         --exit-code 1 \
         $DIR_PATH/
