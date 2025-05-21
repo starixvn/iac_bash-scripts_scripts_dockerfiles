@@ -20,11 +20,18 @@ include:
     - echo "$TRIVY_SERVER - $TRIVY_VERSION"
     # Scan for HIGH severity issues (non-blocking) and export report
     - |
-      if ! ./trivy config --exit-code 0 --severity HIGH,CRITICAL --format json --output ${TRIVY_REPORT_FILE} $DIR_PATH/; then
+      if ! ./trivy config \
+        --exit-code 0,1 \
+        --severity HIGH,CRITICAL \
+        --format json \
+        --output ${TRIVY_REPORT_FILE} \
+        --config-policy /path/to/policy \
+        --config-data /path/to/data \
+        $DIR_PATH/; then
         echo "❌ Trivy scan failed"
         exit 1
       fi
-    # Indicate scan completion
+    # Indicate scan completion  
     - echo "✅ Dockerfile scan completed!"
   tags:
     - docker
