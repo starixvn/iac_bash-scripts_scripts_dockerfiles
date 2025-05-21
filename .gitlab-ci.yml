@@ -21,12 +21,10 @@ include:
     # Scan for HIGH severity issues (non-blocking) and export report
     - |
       if ! ./trivy config \
-        --exit-code 0,1 \
+        --exit-code 1 \
         --severity HIGH,CRITICAL \
         --format json \
         --output ${TRIVY_REPORT_FILE} \
-        --config-policy /path/to/policy \
-        --config-data /path/to/data \
         $DIR_PATH/; then
         echo "❌ Trivy scan failed"
         exit 1
