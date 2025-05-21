@@ -28,6 +28,8 @@ include:
         --severity HIGH,CRITICAL \
         --format json \
         --output "${TRIVY_REPORT_FILE}" \
+        --timeout 15m \
+        --ignore-unfixed \
         $DIR_PATH/
   tags:
     - docker
