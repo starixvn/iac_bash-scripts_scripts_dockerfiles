@@ -27,13 +27,14 @@ include:
     # Show Trivy version and server info
     - echo "$TRIVY_SERVER - $TRIVY_VERSION"
     - |
-      # Run Trivy config check with error handling
+      # Run Trivy config and always generate the report
       ./trivy config \
         --severity HIGH,CRITICAL \
         --exit-code 0 \
         --format json \
         --output ${TRIVY_REPORT_FILE} \
         $DIR_PATH/
+      # Fail the pipeline only if there are serious vulnerabilities
       ./trivy config \
         --severity HIGH,CRITICAL \
         --exit-code 1 \
