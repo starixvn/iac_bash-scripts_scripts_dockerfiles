@@ -1,5 +1,5 @@
 .alpine:
-#  extends: .base-rules
+  extends: .base-rules
   variables:
     RULES_CHANGES_PATH: "alpine/**/*"
     DIR_PATH: "alpine"
@@ -10,9 +10,9 @@
 alpine-test:
   extends: [.alpine, .test]
 
-# alpine-build:
-#  extends: [.alpine, .build]
-#  needs: ["alpine-test"]
+alpine-build:
+ extends: [.alpine, .build]
+ needs: ["alpine-test"]
 
 alpine-reports:
   extends: [.defectdojo_upload, .alpine]
@@ -24,9 +24,10 @@ alpine-reports:
   needs:
     - job: alpine-test
       artifacts: true
+    - job: alpine-build
+      artifacts: true
   when: always
-    # - job: alpine-build
-    #   artifacts: true
+
 
 
 
