@@ -9,8 +9,9 @@
     
 alpine-test:
   extends: [.alpine, .test]
+
 alpine-reports:
-  extends: [.defectdojo_upload, .alpine]
+  extends: [.defectdojo_upload]
   needs: ["defectdojo_create_engagement", "alpine-test"]
   allow_failure: true
   variables:
