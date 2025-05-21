@@ -1,5 +1,6 @@
 stages:
   - test
+  - upload
 ############
 include:
   - local: "base.yml"
@@ -37,7 +38,7 @@ include:
 
 .defectdojo_upload:
   image: $DOCKER_REG_LOCAL_URL/base/alpine:git-3.21
-  stage: test
+  stage: upload
   needs: []
   script:
     - echo "🔍 Checking DefectDojo product and engagement availability"
