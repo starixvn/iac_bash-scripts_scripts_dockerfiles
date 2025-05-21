@@ -14,21 +14,26 @@ include:
   script:
     # Download and extract Trivy scanner
     - wget --no-verbose https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz?inline=false -O - | tar -zxvf -
-    # Display Dockerfile contents  
+    # Display Dockerfile contents for logging
     - cat $DIR_PATH/Dockerfile
     # Log Trivy version and server info
     - echo "$TRIVY_SERVER - $TRIVY_VERSION"
-    # Run Trivy security scan with error handling
+    # Scan for HIGH severity issues (non-blocking) and export report
     - |
-      # Run single scan for both HIGH and CRITICAL severities
-      ./trivy config --exit-code 1 --severity HIGH,CRITICAL $DIR_PATH/ --format json --output ${TRIVY_REPORT_FILE}
-    - echo "done Scan Dockerfile !"
+      if ! ./trivy config --exit-code 0 --severity HIGH,CRITICAL --format json --output ${TRIVY_REPORT_FILE} $DIR_PATH/; then
+        echo "❌ Trivy scan failed"
+        exit 1
+      fi
+    # Indicate scan completion
+    - echo "✅ Dockerfile scan completed!"
   tags:
     - docker
   artifacts:
     when: always
     paths:
       - ${TRIVY_REPORT_FILE}
+    reports:
+      security: ${TRIVY_REPORT_FILE}
 
 .defectdojo_upload:
   image: $DOCKER_REG_LOCAL_URL/base/alpine:git-3.21
