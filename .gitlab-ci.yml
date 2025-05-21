@@ -4,8 +4,8 @@ stages:
 include:
   - local: "base.yml"
   - local: "/alpine/ci.yml"
-#  - local: "/awx-runner/ci.yml"
-#  - local: "/awx-web/ci.yml"
+  - local: "/awx-runner/ci.yml"
+  - local: "/awx-web/ci.yml"
 
 .test:
   stage: test
