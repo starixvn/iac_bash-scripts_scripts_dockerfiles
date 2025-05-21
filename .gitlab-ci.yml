@@ -43,105 +43,90 @@ include:
     - |
       set -eo pipefail
 
-      # Validate all required environment variables
-      validate_env() {
-        local required_vars=(
-          DEFECTDOJO_URL DEFECTDOJO_API_KEY
-          CI_PROJECT_NAME DEFECTDOJO_DEPT
-          ENGAGEMENT_NAME DEFECTDOJO_SCAN_FILE
-          DEFECTDOJO_SCAN_TYPE DEFECTDOJO_SCAN_TEST_TYPE
-        )
+      # List of required variables (POSIX sh)
+      REQUIRED_VARS="\
+        DEFECTDOJO_URL \
+        DEFECTDOJO_API_KEY \
+        CI_PROJECT_NAME \
+        DEFECTDOJO_DEPT \
+        ENGAGEMENT_NAME \
+        DEFECTDOJO_SCAN_FILE \
+        DEFECTDOJO_SCAN_TYPE \
+        DEFECTDOJO_SCAN_TEST_TYPE\
+        "
 
-        for var in "${required_vars[@]}"; do
+      validate_env() {
+        for var in $REQUIRED_VARS; do
           if [ -z "${!var:-}" ]; then
             echo "❌ Error: $var is not set" >&2
             exit 1
           fi
         done
 
-        [ -f "$DEFECTDOJO_SCAN_FILE" ] || {
+        if [ ! -f "$DEFECTDOJO_SCAN_FILE" ]; then
           echo "❌ Scan file $DEFECTDOJO_SCAN_FILE not found" >&2
           exit 1
-        }
+        fi
       }
 
-      # Universal API request handler
       api_call() {
-        local method=$1
-        local endpoint=$2
-        local data=${3:-}
-        local response
-        local status_code
-
+        method=$1; endpoint=$2; data=${3:-}
         response=$(curl -sS -w "\n%{http_code}" -X "$method" \
           -H "Authorization: Token $DEFECTDOJO_API_KEY" \
           ${data:+-H "Content-Type: application/json" -d "$data"} \
           "$DEFECTDOJO_URL/api/v2/$endpoint")
-
-        status_code=$(echo "$response" | tail -n1)
-        body=$(echo "$response" | sed '$d')
-
-        if [[ $status_code -ge 400 ]]; then
+        status_code=$(printf "%s" "$response" | tail -n1)
+        body=$(printf "%s" "$response" | sed '$d')
+        if [ "$status_code" -ge 400 ]; then
           echo "❌ API Error ($status_code): ${body:-No response body}" >&2
           exit 1
         fi
-
-        echo "$body"
+        printf "%s" "$body"
       }
 
-      # Resource management function
       manage_resource() {
-        local resource=$1
-        local query=$2
-        local create_data=$3
-        local result
-        
-        # Check existing resource
-        result=$(api_call "GET" "${resource}/?$query") || exit $?
-        
-        if [ $(jq -r '.count' <<< "$result") -gt 0 ]; then
-          local id=$(jq -r '.results[0].id' <<< "$result")
+        resource=$1; query=$2; create_data=$3
+        result=$(api_call GET "${resource}/?$query")
+        count=$(printf "%s" "$result" | jq -r '.count')
+        if [ "$count" -gt 0 ]; then
+          id=$(printf "%s" "$result" | jq -r '.results[0].id')
           echo "✅ Existing $resource found: $id"
         else
           echo "📝 Creating new $resource..."
-          result=$(api_call "POST" "${resource}/" "$create_data") || exit $?
-          id=$(jq -r '.id' <<< "$result")
+          result=$(api_call POST "${resource}/" "$create_data")
+          id=$(printf "%s" "$result" | jq -r '.id')
           echo "✅ Created $resource: $id"
         fi
-        
-        eval "export ${resource^^}_ID=$id"
+        # Export ID variable
+        eval "export $(echo $resource | tr a-z A-Z)_ID=$id"
       }
 
-      # Main execution flow
       validate_env
 
-      # Manage Product Type
-      manage_resource "product_types" "name=$DEFECTDOJO_DEPT" \
+      manage_resource product_types "name=$DEFECTDOJO_DEPT" \
         "$(jq -n --arg name "$DEFECTDOJO_DEPT" \
           '{name: $name, description: "Auto-created product type"}')"
 
-      # Manage Product
-      manage_resource "products" "name=$CI_PROJECT_NAME" \
+      manage_resource products "name=$CI_PROJECT_NAME" \
         "$(jq -n --arg name "$CI_PROJECT_NAME" --arg pt "$PRODUCT_TYPE_ID" \
           '{name: $name, prod_type: $pt, description: "Auto-created product"}')"
 
-      # Manage Engagement
       engagement_payload() {
-        jq -n --arg name "$ENGAGEMENT_NAME" \
+        jq -n \
+          --arg name "$ENGAGEMENT_NAME" \
           --arg product "$PRODUCT_ID" \
           --arg start "$(date +%Y-%m-%d)" \
           --arg end "$(date -d "+${DEFECTDOJO_ENGAGEMENT_PERIOD:-30} days" +%Y-%m-%d)" \
           --argjson dedup "${DEFECTDOJO_ENGAGEMENT_DEDUPLICATION_ON_ENGAGEMENT:-true}" \
-          '{name: $name, product: $product, 
+          '{name: $name, product: $product,
             target_start: $start, target_end: $end,
             status: "In Progress", deduplication_on_engagement: $dedup,
             threat_model: false, api_test: false, pen_test: false, check_list: false}'
       }
 
-      manage_resource "engagements" "product=$PRODUCT_ID&name=$ENGAGEMENT_NAME" \
+      manage_resource engagements "product=$PRODUCT_ID&name=$ENGAGEMENT_NAME" \
         "$(engagement_payload)"
 
-      # Upload scan results
       echo "📤 Uploading scan report..."
       upload_response=$(curl -sS -X POST "$DEFECTDOJO_URL/api/v2/reimport-scan/" \
         -H "Authorization: Token $DEFECTDOJO_API_KEY" \
@@ -153,10 +138,10 @@ include:
         -F "close_old_findings=true" \
         -F "verified=true")
 
-      if jq -e '.success' <<< "$upload_response" >/dev/null; then
+      if printf "%s" "$upload_response" | jq -e '.success' >/dev/null; then
         echo "✅ Upload successful"
-        jq -r '.message' <<< "$upload_response"
+        printf "%s\n" "$upload_response" | jq -r '.message'
       else
-        echo "❌ Upload failed: $(jq -r '.message' <<< "$upload_response")" >&2
+        echo "❌ Upload failed: $(printf "%s" "$upload_response" | jq -r '.message')" >&2
         exit 1
       fi
