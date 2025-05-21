@@ -37,7 +37,7 @@ include:
     - ./trivy config \
         --severity HIGH,CRITICAL \
         --exit-code 1 \
-        "$DIR_PATH/"
+        $DIR_PATH/
     - echo "done Scan Dockerfile !"
   tags:
     - docker

@@ -15,7 +15,7 @@ alpine-test:
 #  needs: ["alpine-test"]
 
 alpine-reports:
-  extends: [.defectdojo_upload, .alpine, alpine-test]
+  extends: [.defectdojo_upload, .alpine]
   variables:
     ENGAGEMENT_NAME: "$DIR_PATH"
     DEFECTDOJO_SCAN_FILE: "trivy-report.json"
