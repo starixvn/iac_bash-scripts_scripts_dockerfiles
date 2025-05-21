@@ -34,10 +34,12 @@ include:
         --format json \
         --output ${TRIVY_REPORT_FILE} \
         $DIR_PATH/
-    - ./trivy config \
+    - |
+      # Run Trivy config check with error handling
+      ./trivy config \
         --severity HIGH,CRITICAL \
         --exit-code 1 \
-        "$DIR_PATH/"
+        $DIR_PATH/
     - echo "done Scan Dockerfile !"
   tags:
     - docker
