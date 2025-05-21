@@ -59,8 +59,8 @@ include:
   stage: upload
   before_script:
   - apk add --no-cache bash curl jq
-  - TODAY=`date +%Y-%m-%d`
-  - ENDDAY=$(date -d "+${DEFECTDOJO_ENGAGEMENT_PERIOD} days" +%Y-%m-%d)
+  # - TODAY=`date +%Y-%m-%d`
+  # - ENDDAY=$(date -d "+${DEFECTDOJO_ENGAGEMENT_PERIOD} days" +%Y-%m-%d)
   script:
     - echo "🔍 Checking DefectDojo product and engagement availability"
     # Validate critical environment variables
