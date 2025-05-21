@@ -7,7 +7,7 @@
     BASE_IMAGE: "alpine:3.21"
     IMAGE_PATH: "base/alpine:$IMAGE_TAG"
     
-alpine-test:
+.alpine-test:
   extends: [.alpine, .test]
 
 # alpine-build:
@@ -15,15 +15,15 @@ alpine-test:
 #  needs: ["alpine-test"]
 
 alpine-reports:
-  extends: [.defectdojo_upload, .alpine]
+  extends: [.defectdojo_upload, .alpine, .alpine-test]
   variables:
     ENGAGEMENT_NAME: "$DIR_PATH"
     DEFECTDOJO_SCAN_FILE: "trivy-report.json"
     DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
     DEFECTDOJO_SCAN_TEST_TYPE: "GitLab-CI Trivy Scan"
-  needs:
-    - job: alpine-test
-      artifacts: true
+  # needs:
+  #   - job: alpine-test
+  #     artifacts: true
     # - job: alpine-build
     #   artifacts: true
 
