@@ -17,6 +17,7 @@ alpine-test:
 alpine-reports:
   extends: [.defectdojo_upload, .alpine]
   variables:
+    DEFECTDOJO_PRODUCT_NAME: "$DIR_PATH"
     ENGAGEMENT_NAME: "$DIR_PATH"
     DEFECTDOJO_SCAN_FILE: "trivy-report.json"
     DEFECTDOJO_SCAN_TYPE: "Trivy Scan"

@@ -14,6 +14,7 @@ awx-web-test:
 awx-web-reports:
   extends: [.defectdojo_upload, .awx-web]
   variables:
+    DEFECTDOJO_PRODUCT_NAME: "$DIR_PATH"
     ENGAGEMENT_NAME: "$DIR_PATH"
     DEFECTDOJO_SCAN_FILE: "trivy-report.json"
     DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
@@ -22,6 +23,7 @@ awx-web-reports:
     - job: awx-web-test
       artifacts: true
   when: always
+
 # awx-web-build:
 #   extends: [.awx-web, .build]
 #   needs: ["awx-web-test"]
