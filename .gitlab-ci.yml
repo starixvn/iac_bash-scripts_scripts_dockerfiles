@@ -122,31 +122,31 @@ include:
         echo "✅ Engagement created (ID: ${ENGAGEMENT_ID})"
       fi
 
+    - test -f ${DEFECTDOJO_SCAN_FILE} || { echo "❌ Trivy report not found"; exit 1; }
+    - echo "📤 Uploading Trivy scan report to DefectDojo"
     - |
-      if [ -f "${DEFECTDOJO_SCAN_FILE}" ]; then
-        echo "📤 Uploading Trivy scan report to DefectDojo"
-        response=$(curl -s -S -X POST "${DEFECTDOJO_URL}/api/v2/reimport-scan/" \
-          -H "Authorization: Token ${DEFECTDOJO_API_KEY}" \
-          -F "scan_date=$(date +%F)" \
-          -F "minimum_severity=Medium" \
-          -F "scan_type=${DEFECTDOJO_SCAN_TYPE}" \
-          -F "active=true" \
-          -F "verified=true" \
-          -F "product_name=${CI_PROJECT_NAME}" \
-          -F "engagement_name=${ENGAGEMENT_NAME}" \
-          -F "engagement=${ENGAGEMENT_ID}" \
-          -F "test_type=${DEFECTDOJO_SCAN_TEST_TYPE}" \
-          -F "auto_create_context=true" \
-          -F "deduplication_on_engagement=true" \
-          -F "close_old_findings=true" \
-          -F "file=@${DEFECTDOJO_SCAN_FILE}" \
-          -w "\nHTTP Status: %{http_code}\n")
-        
-        process_response "$response" 201 "Failed to upload scan results"
-        echo "✅ Upload completed"
-      else
-        echo "❌ Trivy report not found at ${DEFECTDOJO_SCAN_FILE}"
+      curl -s -S -X POST "${DEFECTDOJO_URL}/api/v2/reimport-scan/" \
+        -H "Authorization: Token ${DEFECTDOJO_API_KEY}" \
+        -F "scan_date=$(date +%F)" \
+        -F "minimum_severity=Medium" \
+        -F "scan_type=${DEFECTDOJO_SCAN_TYPE}" \
+        -F "active=true" \
+        -F "verified=true" \
+        -F "product_name=${CI_PROJECT_NAME}" \
+        -F "engagement_name=${ENGAGEMENT_NAME}" \
+        -F "engagement=${ENGAGEMENT_ID}" \
+        -F "test_type=\"${DEFECTDOJO_SCAN_TEST_TYPE}\"" \
+        -F "auto_create_context=true" \
+        -F "deduplication_on_engagement=true" \
+        -F "close_old_findings=true" \
+        -F "file=@${DEFECTDOJO_SCAN_FILE}" \
+        -w "\nHTTP Status: %{http_code}\n" \
+        || ECHO_CURL_ERROR=$?
+    - |
+      if [ -n "$ECHO_CURL_ERROR" ]; then
+        echo "❌ Failed to upload report (curl error code: $ECHO_CURL_ERROR)"
         exit 1
       fi
+    - echo "✅ Upload completed"
   tags:
     - docker
