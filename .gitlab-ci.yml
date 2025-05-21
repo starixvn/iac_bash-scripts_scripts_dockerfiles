@@ -32,95 +32,89 @@ include:
     paths:
       - ${TRIVY_REPORT_FILE}
 
-defectdojo_create_engagement:
-  stage: test
-  image: $DOCKER_REG_LOCAL_URL/base/alpine:git-3.21
-  variables:
-    GIT_STRATEGY: none
-  allow_failure: true
-  before_script:
-    - apk add curl jq coreutils
-    - export TODAY=$(date +%Y-%m-%d)
-    - export TARGET_END=$(date -d "+$DEFECTDOJO_ENGAGEMENT_PERIOD days" +%Y-%m-%d)
-  script:
-    - |
-      export DEFECTDOJO_PRODUCT_ID=$(curl $DEFECTDOJO_URL/api/v2/products/ \
-        -H "Authorization: Token $DEFECTDOJO_API_KEY" \
-        -G --data-urlencode "name_exact=$[[ inputs.DEFECTDOJO_PRODUCT_NAME ]]" | jq -r .results[].id)
-      echo "Product ID is $DEFECTDOJO_PRODUCT_ID"
-    - >
-      export DEFECTDOJO_ENGAGEMENT_ID=$(curl $DEFECTDOJO_URL/api/v2/engagements/ \
-        -H "Authorization: Token $DEFECTDOJO_API_KEY" \
-        -G --data-urlencode "name=Pipeline #$CI_PIPELINE_ID" \
-        --data-urlencode "product=$DEFECTDOJO_PRODUCT_ID" | jq -r .results[].id)
-      echo "Product ID is $DEFECTDOJO_ENGAGEMENT_ID"
-    - >
-      if [ -z "$DEFECTDOJO_ENGAGEMENT_ID" ]; then
-        export DEFECTDOJO_ENGAGEMENT_ID=$(curl -X POST $DEFECTDOJO_URL/api/v2/engagements/ \
-          -H "accept: application/json" \
-          -H "Content-Type: multipart/form-data" \
-          -H "Authorization: Token $DEFECTDOJO_API_KEY" \
-          -F "tags=GITLAB-CI" \
-          -F "name=Pipeline #$CI_PIPELINE_ID" \
-          -F "description=$CI_COMMIT_DESCRIPTION" \
-          -F "version=$CI_COMMIT_REF_NAME" \
-          -F "first_contacted=$TODAY" \
-          -F "target_start=$TODAY" \
-          -F "target_end=$TARGET_END" \
-          -F "reason=string" \
-          -F "tracker=$CI_PROJECT_URL" \
-          -F "threat_model=$DEFECTDOJO_ENGAGEMENT_THREAT_MODEL" \
-          -F "api_test=$DEFECTDOJO_ENGAGEMENT_THREAT_MODEL" \
-          -F "pen_test=$DEFECTDOJO_ENGAGEMENT_PEN_TEST" \
-          -F "check_list=$DEFECTDOJO_ENGAGEMENT_CHECK_LIST" \
-          -F "status=$DEFECTDOJO_ENGAGEMENT_STATUS" \
-          -F "engagement_type=CI/CD" \
-          -F "build_id=$CI_PIPELINE_ID" \
-          -F "commit_hash=$CI_COMMIT_SHORT_SHA" \
-          -F "branch_tag=$CI_COMMIT_REF_NAME" \
-          -F "deduplication_on_engagement=$DEFECTDOJO_ENGAGEMENT_DEDUPLICATION_ON_ENGAGEMENT" \
-          -F "product=$DEFECTDOJO_PRODUCT_ID" \
-          -F "source_code_management_uri=$CI_PROJECT_URL" | jq -r .id)
-      fi
-    - echo "DEFECTDOJO_ENGAGEMENTID=${ENGAGEMENTID}" >> defectdojo.env
-  artifacts:
-    reports:
-      dotenv: defectdojo.env
-  tags:
-    - docker
-
-defectdojo_publish:
-  stage: test
-  image: $DOCKER_REG_LOCAL_URL/base/alpine:git-3.21
-  rules:
-    - when: never
-  before_script:
-    - apk add curl coreutils
-    - TODAY=`date +%Y-%m-%d`
-  script:
-    - echo "$CI_JOB_NAME is used for configuration only, and its script should not be executed"
-    - exit 1
-  tags:
-    - docker
-
 .defectdojo_upload:
-  extends: defectdojo_publish
-  allow_failure: true
+  image: $DOCKER_REG_LOCAL_URL/base/alpine:git-3.21
+  stage: test
+  needs: []
   script:
     - |
-      # Upload scan results to DefectDojo
-      curl --fail --location --request POST "${DEFECTDOJO_URL}/api/v2/import-scan/" \
-        --header "Authorization: Token ${DEFECTDOJO_API_KEY}" \
-        --form "scan_date=\"${TODAY}\"" \
-        --form "minimum_severity=\"${DEFECTDOJO_SCAN_MINIMUM_SEVERITY}\"" \
-        --form "active=\"${DEFECTDOJO_SCAN_ACTIVE}\"" \
-        --form "verified=\"${DEFECTDOJO_SCAN_VERIFIED}\"" \
-        --form "scan_type=\"${DEFECTDOJO_SCAN_TYPE}\"" \
-        --form "engagement=\"${DEFECTDOJO_ENGAGEMENTID}\"" \
-        --form "file=@${DEFECTDOJO_SCAN_FILE}" \
-        --form "close_old_findings=\"${DEFECTDOJO_SCAN_CLOSE_OLD_FINDINGS}\"" \
-        --form "push_to_jira=\"${DEFECTDOJO_SCAN_PUSH_TO_JIRA}\"" \
-        --form "test_type=\"${DEFECTDOJO_SCAN_TEST_TYPE}\"" \
-        --form "environment=\"${DEFECTDOJO_SCAN_ENVIRONMENT}\""
+      # Combined setup and validation
+      validate_vars() {
+        for var in DEFECTDOJO_URL DEFECTDOJO_API_KEY CI_PROJECT_NAME DEFECTDOJO_DEPT ENGAGEMENT_NAME; do
+          [ -z "${!var}" ] && echo "❌ $var not set" >&2 && exit 1
+        done
+        [ -f "${DEFECTDOJO_SCAN_FILE}" ] || { echo "❌ Scan file missing"; exit 1; }
+      }
+
+      api_request() {
+        local method=${1:-GET}
+        local url="$2"
+        local data="${3:-}"
+        local response=$(curl -s -w "\n%{http_code}" -X "$method" \
+          -H "Authorization: Token ${DEFECTDOJO_API_KEY}" \
+          ${data:+-H "Content-Type: application/json" -d "$data"} \
+          "$url")
+        echo "${response%$'\n'*}" && return ${response##*$'\n'}
+      }
+
+      ensure_resource() {
+        local type=$1 name=$2 query=$3 create_data=$4
+        echo "🔍 Checking $type: $name"
+        local response=$(api_request "GET" "${DEFECTDOJO_URL}/api/v2/${type}/?${query}")
+        local status=$? body="${response%$'\n'*}"
+        
+        if [ $status -eq 200 ] && [ $(jq -r '.count' <<< "$body") -gt 0 ]; then
+          local id=$(jq -r '.results[0].id' <<< "$body")
+          echo "✅ Found $type ID: $id" && eval "${type^^}_ID=$id"
+        else
+          echo "📝 Creating $type..." && response=$(api_request "POST" "${DEFECTDOJO_URL}/api/v2/${type}/" "$create_data")
+          [ $? -eq 201 ] && id=$(jq -r '.id' <<< "${response%$'\n'*}") && eval "${type^^}_ID=$id" && echo "✅ Created $type ID: $id" || 
+            { echo "❌ Create failed"; jq <<< "$body"; exit 1; }
+        fi
+      }
+
+      # Main execution flow
+      validate_vars
+      
+      ensure_resource product_types "product type" "name=${DEFECTDOJO_DEPT}" \
+        "$(jq -n --arg n "$DEFECTDOJO_DEPT" '{name: $n, description: "Auto-created for \($n)"}')"
+
+      ensure_resource products "product" "name=${CI_PROJECT_NAME}" \
+        "$(jq -n --arg n "$CI_PROJECT_NAME" --arg pt "$PRODUCT_TYPE_ID" \
+        '{name: $n, description: "Auto-created product", prod_type: $pt}')"
+
+      engagement_data=$(jq -n --arg n "$ENGAGEMENT_NAME" --arg p "$PRODUCT_ID" \
+        --argjson d "${DEFECTDOJO_ENGAGEMENT_DEDUPLICATION_ON_ENGAGEMENT:-true}" \
+        --arg ts "$(date +%F)" --arg te "$(date -d "+${DEFECTDOJO_ENGAGEMENT_PERIOD:-30} days" +%F)" \
+        '{name: $n, product: $p, target_start: $ts, target_end: $te, status: "In Progress",
+          deduplication_on_engagement: $d, threat_model: false, api_test: false, pen_test: false, check_list: false}')
+      ensure_resource engagements "engagement" "product=${PRODUCT_ID}&name=${ENGAGEMENT_NAME}" "$engagement_data"
+
+    - test -f ${DEFECTDOJO_SCAN_FILE} || { echo "❌ Trivy report not found"; exit 1; }
+    - echo "📤 Uploading Trivy scan report to DefectDojo"
+    - |
+      curl -s -S -X POST "${DEFECTDOJO_URL}/api/v2/reimport-scan/" \
+        -H "Authorization: Token ${DEFECTDOJO_API_KEY}" \
+        -F "scan_date=$(date +%F)" \
+        -F "minimum_severity=Medium" \
+        -F "scan_type=${DEFECTDOJO_SCAN_TYPE}" \
+        -F "active=true" \
+        -F "verified=true" \
+        -F "product_name=${CI_PROJECT_NAME}" \
+        -F "engagement_name=${ENGAGEMENT_NAME}" \
+        -F "engagement=${ENGAGEMENT_ID}" \
+        -F "test_type=\"${DEFECTDOJO_SCAN_TEST_TYPE}\"" \
+        -F "auto_create_context=true" \
+        -F "deduplication_on_engagement=true" \
+        -F "close_old_findings=true" \
+        -F "file=@${DEFECTDOJO_SCAN_FILE}" \
+        -w "\nHTTP Status: %{http_code}\n" \
+        || ECHO_CURL_ERROR=$?
+    - |
+      if [ -n "$ECHO_CURL_ERROR" ]; then
+        echo "❌ Failed to upload report (curl error code: $ECHO_CURL_ERROR)"
+        exit 1
+      fi
+    - echo "✅ Upload completed"
   tags:
     - docker
