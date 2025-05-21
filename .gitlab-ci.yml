@@ -19,9 +19,9 @@ include:
     - wget --no-verbose https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz?inline=false -O - | tar -zxvf -
     # Display Dockerfile contents  
     - cat $DIR_PATH/Dockerfile
-    # Log Trivy version and server info
+    # Show Trivy version and server info
     - echo "$TRIVY_SERVER - $TRIVY_VERSION"
-    - trivy config \
+    - ./trivy config \
       --severity HIGH,CRITICAL \
       --exit-code 1 \
       --format json \
