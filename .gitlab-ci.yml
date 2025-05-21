@@ -29,7 +29,7 @@ include:
         --format json \
         --output "${TRIVY_REPORT_FILE}" \
         --ignore-unfixed \
-        "${DIR_PATH}" || TRIVY_EXIT=$?
+        $DIR_PATH/ || TRIVY_EXIT=$?
   tags:
     - docker
   artifacts:
