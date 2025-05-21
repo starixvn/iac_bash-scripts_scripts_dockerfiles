@@ -16,7 +16,7 @@ awx-web-reports:
   variables:
     ENGAGEMENT_NAME: "$DIR_PATH"
     DEFECTDOJO_SCAN_FILE: "trivy-report.json"
-    DEFECTDOJO_SCAN_TYPE: "$DIR_PATH (Trivy Scan)"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
     DEFECTDOJO_SCAN_TEST_TYPE: "GitLab-CI Trivy Scan"
   needs:
     - job: awx-web-test
