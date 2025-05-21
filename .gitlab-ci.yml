@@ -49,51 +49,59 @@ include:
 
       # Helper functions
       handle_error() { echo "❌ $1"; exit 1; }
-      api_call() { curl -s -w "\n%{http_code}" -H "Authorization: Token ${DEFECTDOJO_API_KEY}" "$@"; }
+      api_call() { 
+        local response
+        response=$(curl -s -S -w "\n%{http_code}" -H "Authorization: Token ${DEFECTDOJO_API_KEY}" "$@")
+        echo "$response"
+      }
       get_id() { echo "$1" | jq -r '.results[0].id'; }
+      process_response() {
+        local response=$1
+        local expected_status=$2
+        local error_msg=$3
+        local status=$(echo "$response" | tail -n1)
+        local body=$(echo "$response" | sed '$d')
+        [ "$status" -eq "$expected_status" ] || handle_error "$error_msg (HTTP $status)"
+        echo "$body"
+      }
 
       # Get/Create product type
       response=$(api_call "${DEFECTDOJO_URL}/api/v2/product_types/?name=${DEFECTDOJO_DEPT}") || handle_error "Failed to query product type"
-      status=$(echo "$response" | tail -n1)
-      body=$(echo "$response" | sed '$d')
+      body=$(process_response "$response" 200 "Failed to query product type")
       
-      if [ "$status" -eq 200 ] && [ "$(echo "$body" | jq '.count')" -ge 1 ]; then
+      if [ "$(echo "$body" | jq '.count')" -ge 1 ]; then
         PRODUCT_TYPE_ID=$(get_id "$body")
         echo "✅ Product type '${DEFECTDOJO_DEPT}' found (ID: ${PRODUCT_TYPE_ID})"
       else
         echo "📝 Creating product type '${DEFECTDOJO_DEPT}'..."
         payload=$(jq -n --arg name "${DEFECTDOJO_DEPT}" --arg desc "Auto-created for ${DEFECTDOJO_DEPT}" '{name: $name, description: $desc}')
-        response=$(api_call -X POST -H "Content-Type: application/json" "${DEFECTDOJO_URL}/api/v2/product_types/" -d "$payload") || handle_error "Failed to create product type"
-        status=$(echo "$response" | tail -n1)
-        body=$(echo "$response" | sed '$d')
-        [ "$status" -eq 201 ] && PRODUCT_TYPE_ID=$(echo "$body" | jq -r '.id') || handle_error "Failed to create product type (HTTP $status)"
+        response=$(api_call -X POST -H "Content-Type: application/json" "${DEFECTDOJO_URL}/api/v2/product_types/" -d "$payload")
+        body=$(process_response "$response" 201 "Failed to create product type")
+        PRODUCT_TYPE_ID=$(echo "$body" | jq -r '.id')
         echo "✅ Product type created (ID: ${PRODUCT_TYPE_ID})"
       fi
 
       # Get/Create product
-      response=$(api_call "${DEFECTDOJO_URL}/api/v2/products/?name=${CI_PROJECT_NAME}") || handle_error "Failed to query product"
-      status=$(echo "$response" | tail -n1)
-      body=$(echo "$response" | sed '$d')
+      response=$(api_call "${DEFECTDOJO_URL}/api/v2/products/?name=${CI_PROJECT_NAME}")
+      body=$(process_response "$response" 200 "Failed to query product")
       
-      if [ "$status" -eq 200 ] && [ "$(echo "$body" | jq '.count')" -ge 1 ]; then
+      if [ "$(echo "$body" | jq '.count')" -ge 1 ]; then
         PRODUCT_ID=$(get_id "$body")
         echo "✅ Product '${CI_PROJECT_NAME}' found (ID: ${PRODUCT_ID})"
       else
         echo "📝 Creating product '${CI_PROJECT_NAME}'..."
         payload=$(jq -n --arg name "${CI_PROJECT_NAME}" --arg desc "Auto-created for ${CI_PROJECT_NAME}" --argjson type "${PRODUCT_TYPE_ID}" '{name: $name, description: $desc, prod_type: $type}')
-        response=$(api_call -X POST -H "Content-Type: application/json" "${DEFECTDOJO_URL}/api/v2/products/" -d "$payload") || handle_error "Failed to create product"
-        status=$(echo "$response" | tail -n1)
-        body=$(echo "$response" | sed '$d')
-        [ "$status" -eq 201 ] && PRODUCT_ID=$(echo "$body" | jq -r '.id') || handle_error "Failed to create product (HTTP $status)"
+        response=$(api_call -X POST -H "Content-Type: application/json" "${DEFECTDOJO_URL}/api/v2/products/" -d "$payload")
+        body=$(process_response "$response" 201 "Failed to create product")
+        PRODUCT_ID=$(echo "$body" | jq -r '.id')
         echo "✅ Product created (ID: ${PRODUCT_ID})"
       fi
 
       # Get/Create engagement
-      response=$(api_call "${DEFECTDOJO_URL}/api/v2/engagements/?product=${PRODUCT_ID}&name=${ENGAGEMENT_NAME}") || handle_error "Failed to query engagement"
-      status=$(echo "$response" | tail -n1)
-      body=$(echo "$response" | sed '$d')
+      response=$(api_call "${DEFECTDOJO_URL}/api/v2/engagements/?product=${PRODUCT_ID}&name=${ENGAGEMENT_NAME}")
+      body=$(process_response "$response" 200 "Failed to query engagement")
       
-      if [ "$status" -eq 200 ] && [ "$(echo "$body" | jq '.count')" -ge 1 ]; then
+      if [ "$(echo "$body" | jq '.count')" -ge 1 ]; then
         ENGAGEMENT_ID=$(get_id "$body")
         echo "✅ Engagement '${ENGAGEMENT_NAME}' found (ID: ${ENGAGEMENT_ID})"
       else
@@ -102,16 +110,15 @@ include:
           --arg name "$ENGAGEMENT_NAME" \
           --argjson product "$PRODUCT_ID" \
           --arg start "$(date +%F)" \
-          --arg end "$(date -d "+${DEFECTDOJO_ENGAGEMENT_PERIOD:-30} days" +%F)" \
-          --arg status "${DEFECTDOJO_ENGAGEMENT_STATUS:-In Progress}" \
+          --arg end "$(date -d "+${DEFECTDOJO_ENGAGEMENT_PERIOD} days" +%F)" \
+          --arg status "${DEFECTDOJO_ENGAGEMENT_STATUS}" \
           '{name: $name, product: $product, target_start: $start, target_end: $end, status: $status, 
             deduplication_on_engagement: true, threat_model: false, api_test: false, 
             pen_test: false, check_list: false}')
         
-        response=$(api_call -X POST -H "Content-Type: application/json" "${DEFECTDOJO_URL}/api/v2/engagements/" -d "$payload") || handle_error "Failed to create engagement"
-        status=$(echo "$response" | tail -n1)
-        body=$(echo "$response" | sed '$d')
-        [ "$status" -eq 201 ] && ENGAGEMENT_ID=$(echo "$body" | jq -r '.id') || handle_error "Failed to create engagement (HTTP $status)"
+        response=$(api_call -X POST -H "Content-Type: application/json" "${DEFECTDOJO_URL}/api/v2/engagements/" -d "$payload")
+        body=$(process_response "$response" 201 "Failed to create engagement")
+        ENGAGEMENT_ID=$(echo "$body" | jq -r '.id')
         echo "✅ Engagement created (ID: ${ENGAGEMENT_ID})"
       fi
 
@@ -133,10 +140,9 @@ include:
         -F "deduplication_on_engagement=true" \
         -F "close_old_findings=true" \
         -F "file=@${DEFECTDOJO_SCAN_FILE}" \
-        -w "\nHTTP Status: %{http_code}\n") || handle_error "Failed to upload scan results"
-
-      status=$(echo "$response" | tail -n1)
-      [ "$status" -eq 201 ] || handle_error "Failed to upload scan results (HTTP $status)"
+        -w "\nHTTP Status: %{http_code}\n")
+      
+      process_response "$response" 201 "Failed to upload scan results"
     - echo "✅ Upload completed"
   tags:
     - docker
