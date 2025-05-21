@@ -40,44 +40,50 @@ defectdojo_create_engagement:
   allow_failure: true
   before_script:
     - apk add curl jq coreutils
-    - TODAY=$(date +%Y-%m-%d)
-    - ENDDAY=$(date -d "+${DEFECTDOJO_ENGAGEMENT_PERIOD} days" +%Y-%m-%d)
+    - export TODAY=$(date +%Y-%m-%d)
+    - export TARGET_END=$(date -d "+$DEFECTDOJO_ENGAGEMENT_PERIOD days" +%Y-%m-%d)
   script:
     - |
-        ENGAGEMENTID=`curl --fail --location --request POST "${DEFECTDOJO_URL}/api/v2/engagements/" \
-              --header "Authorization: Token ${DEFECTDOJO_API_KEY}" \
-              --header 'Content-Type: application/json' \
-                --data-raw "{
-                  \"tags\": [\"GITLAB-CI\"],
-                  \"name\": \"#${CI_PIPELINE_ID}\",
-                  \"description\": \"${CI_COMMIT_DESCRIPTION}\",
-                  \"version\": \"${CI_COMMIT_REF_NAME}\",
-                  \"first_contacted\": \"${TODAY}\",
-                  \"target_start\": \"${TODAY}\",
-                  \"target_end\": \"${ENDDAY}\",
-                  \"reason\": \"string\",
-                  \"tracker\": \"${CI_PROJECT_URL}/-/issues\",
-                  \"threat_model\": \"${DEFECTDOJO_ENGAGEMENT_THREAT_MODEL}\",
-                  \"api_test\": \"${DEFECTDOJO_ENGAGEMENT_API_TEST}\",
-                  \"pen_test\": \"${DEFECTDOJO_ENGAGEMENT_PEN_TEST}\",
-                  \"check_list\": \"${DEFECTDOJO_ENGAGEMENT_CHECK_LIST}\",
-                  \"status\": \"${DEFECTDOJO_ENGAGEMENT_STATUS}\",
-                  \"engagement_type\": \"CI/CD\",
-                  \"build_id\": \"${CI_PIPELINE_ID}\",
-                  \"commit_hash\": \"${CI_COMMIT_SHORT_SHA}\",
-                  \"branch_tag\": \"${CI_COMMIT_REF_NAME}\",
-                  \"deduplication_on_engagement\": \"${DEFECTDOJO_ENGAGEMENT_DEDUPLICATION_ON_ENGAGEMENT}\",
-                  \"product\": \"${DEFECTDOJO_PRODUCTID}\",
-                  \"source_code_management_uri\": \"${CI_PROJECT_URL}\",
-                  \"build_server\": ${DEFECTDOJO_ENGAGEMENT_BUILD_SERVER},
-                  \"source_code_management_server\": ${DEFECTDOJO_ENGAGEMENT_SOURCE_CODE_MANAGEMENT_SERVER},
-                  \"orchestration_engine\": ${DEFECTDOJO_ENGAGEMENT_ORCHESTRATION_ENGINE}
-                }" | jq -r '.id'`
+      export DEFECTDOJO_PRODUCT_ID=$(curl $DEFECTDOJO_URL/api/v2/products/ \
+        -H "Authorization: Token $DEFECTDOJO_API_KEY" \
+        -G --data-urlencode "name_exact=$[[ inputs.DEFECTDOJO_PRODUCT_NAME ]]" | jq -r .results[].id)
+    - >
+      export DEFECTDOJO_ENGAGEMENT_ID=$(curl $DEFECTDOJO_URL/api/v2/engagements/ \
+        -H "Authorization: Token $DEFECTDOJO_API_KEY" \
+        -G --data-urlencode "name=Pipeline #$CI_PIPELINE_ID" \
+        --data-urlencode "product=$DEFECTDOJO_PRODUCT_ID" | jq -r .results[].id)
+    - >
+      if [ -z "$DEFECTDOJO_ENGAGEMENT_ID" ]; then
+        export DEFECTDOJO_ENGAGEMENT_ID=$(curl -X POST $DEFECTDOJO_URL/api/v2/engagements/ \
+          -H "accept: application/json" \
+          -H "Content-Type: multipart/form-data" \
+          -H "Authorization: Token $DEFECTDOJO_API_KEY" \
+          -F "tags=GITLAB-CI" \
+          -F "name=Pipeline #$CI_PIPELINE_ID" \
+          -F "description=$CI_COMMIT_DESCRIPTION" \
+          -F "version=$CI_COMMIT_REF_NAME" \
+          -F "first_contacted=$TODAY" \
+          -F "target_start=$TODAY" \
+          -F "target_end=$TARGET_END" \
+          -F "reason=string" \
+          -F "tracker=$CI_PROJECT_URL" \
+          -F "threat_model=$DEFECTDOJO_ENGAGEMENT_THREAT_MODEL" \
+          -F "api_test=$DEFECTDOJO_ENGAGEMENT_THREAT_MODEL" \
+          -F "pen_test=$DEFECTDOJO_ENGAGEMENT_PEN_TEST" \
+          -F "check_list=$DEFECTDOJO_ENGAGEMENT_CHECK_LIST" \
+          -F "status=$DEFECTDOJO_ENGAGEMENT_STATUS" \
+          -F "engagement_type=CI/CD" \
+          -F "build_id=$CI_PIPELINE_ID" \
+          -F "commit_hash=$CI_COMMIT_SHORT_SHA" \
+          -F "branch_tag=$CI_COMMIT_REF_NAME" \
+          -F "deduplication_on_engagement=$DEFECTDOJO_ENGAGEMENT_DEDUPLICATION_ON_ENGAGEMENT" \
+          -F "product=$DEFECTDOJO_PRODUCT_ID" \
+          -F "source_code_management_uri=$CI_PROJECT_URL" | jq -r .id)
+      fi
     - echo "DEFECTDOJO_ENGAGEMENTID=${ENGAGEMENTID}" >> defectdojo.env
   artifacts:
     reports:
       dotenv: defectdojo.env
-
   tags:
     - docker
 
