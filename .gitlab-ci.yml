@@ -41,7 +41,10 @@ include:
     - |
       # Validate required variables
       for var in DEFECTDOJO_URL DEFECTDOJO_API_KEY CI_PROJECT_NAME DEFECTDOJO_DEPT; do
-        [ -z "${!var}" ] && echo "❌ Error: $var not set" && exit 1
+        if [ -z "$(eval echo \$$var)" ]; then
+          echo "❌ Error: $var not set"
+          exit 1
+        fi
       done
 
       # Helper functions
@@ -77,7 +80,7 @@ include:
         echo "✅ Product '${CI_PROJECT_NAME}' found (ID: ${PRODUCT_ID})"
       else
         echo "📝 Creating product '${CI_PROJECT_NAME}'..."
-        payload="{\"name\":\"${CI_PROJECT_NAME}\",\"description\":\"Auto-created for ${CI_PROJECT_NAME}\",\"prod_type\":${PRODUCT_TYPE_ID}}"
+        payload=$(jq -n --arg name "${CI_PROJECT_NAME}" --arg desc "Auto-created for ${CI_PROJECT_NAME}" --argjson type "${PRODUCT_TYPE_ID}" '{name: $name, description: $desc, prod_type: $type}')
         response=$(api_call -X POST -H "Content-Type: application/json" "${DEFECTDOJO_URL}/api/v2/products/" -d "$payload") || handle_error "Failed to create product"
         status=$(echo "$response" | tail -n1)
         body=$(echo "$response" | sed '$d')
@@ -112,10 +115,10 @@ include:
         echo "✅ Engagement created (ID: ${ENGAGEMENT_ID})"
       fi
 
-    - test -f ${DEFECTDOJO_SCAN_FILE} || { echo "❌ Trivy report not found"; exit 1; }
+    - test -f "${DEFECTDOJO_SCAN_FILE}" || { echo "❌ Trivy report not found"; exit 1; }
     - echo "📤 Uploading Trivy scan report to DefectDojo"
     - |
-      curl -s -S -X POST "${DEFECTDOJO_URL}/api/v2/reimport-scan/" \
+      response=$(curl -s -S -X POST "${DEFECTDOJO_URL}/api/v2/reimport-scan/" \
         -H "Authorization: Token ${DEFECTDOJO_API_KEY}" \
         -F "scan_date=$(date +%F)" \
         -F "minimum_severity=Medium" \
@@ -125,18 +128,15 @@ include:
         -F "product_name=${CI_PROJECT_NAME}" \
         -F "engagement_name=${ENGAGEMENT_NAME}" \
         -F "engagement=${ENGAGEMENT_ID}" \
-        -F "test_type=\"${DEFECTDOJO_SCAN_TEST_TYPE}\"" \
+        -F "test_type=${DEFECTDOJO_SCAN_TEST_TYPE}" \
         -F "auto_create_context=true" \
         -F "deduplication_on_engagement=true" \
         -F "close_old_findings=true" \
         -F "file=@${DEFECTDOJO_SCAN_FILE}" \
-        -w "\nHTTP Status: %{http_code}\n" \
-        || ECHO_CURL_ERROR=$?
-    - |
-      if [ -n "$ECHO_CURL_ERROR" ]; then
-        echo "❌ Failed to upload report (curl error code: $ECHO_CURL_ERROR)"
-        exit 1
-      fi
+        -w "\nHTTP Status: %{http_code}\n") || handle_error "Failed to upload scan results"
+
+      status=$(echo "$response" | tail -n1)
+      [ "$status" -eq 201 ] || handle_error "Failed to upload scan results (HTTP $status)"
     - echo "✅ Upload completed"
   tags:
     - docker
