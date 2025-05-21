@@ -32,8 +32,6 @@ include:
     when: always
     paths:
       - ${TRIVY_REPORT_FILE}
-    reports:
-      security: ${TRIVY_REPORT_FILE}
 
 .defectdojo_upload:
   image: $DOCKER_REG_LOCAL_URL/base/alpine:git-3.21
