@@ -21,16 +21,12 @@ include:
     - cat $DIR_PATH/Dockerfile
     # Log Trivy version and server info
     - echo "$TRIVY_SERVER - $TRIVY_VERSION"
-
-      # Combined scan for HIGH and CRITICAL
-    - ./trivy config \
-        --exit-code 0,1 \
-        --severity HIGH,CRITICAL \
-        --format json \
-        --output "${TRIVY_REPORT_FILE}" \
-        --timeout 15m \
-        --ignore-unfixed \
-        $DIR_PATH/
+    - |
+      # Check for HIGH severity issues with proper error handling
+      ./trivy config --exit-code 0 --severity HIGH $DIR_PATH/ --format json --output ${TRIVY_REPORT_FILE}
+      # Check for CRITICAL severity issues with proper error handling
+      ./trivy config --exit-code 1 --severity CRITICAL $DIR_PATH/ --format json --output ${TRIVY_REPORT_FILE}
+    - echo "done Scan Dockerfile !"
   tags:
     - docker
   artifacts:
