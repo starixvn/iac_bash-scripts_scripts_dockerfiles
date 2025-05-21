@@ -10,7 +10,7 @@
 alpine-test:
   extends: [.alpine, .test]
 
-awx-web-reports:
+alpine-reports:
   extends: [.defectdojo_upload, .alpine]
   variables:
     ENGAGEMENT_NAME: "$DIR_PATH"
