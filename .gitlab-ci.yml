@@ -28,7 +28,7 @@ include:
         --exit-code 0 \
         --format json \
         --output trivy-report.json \
-        $DIR_PATH/; then
+        $DIR_PATH/
     - echo "done Scan Dockerfile !"
   tags:
     - docker
