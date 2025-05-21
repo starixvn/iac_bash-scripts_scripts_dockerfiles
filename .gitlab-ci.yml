@@ -21,10 +21,11 @@ include:
     # Scan for HIGH severity issues (non-blocking) and export report
     - |
       ./trivy config \
-        --exit-code 1 \
-        --severity HIGH,CRITICAL \
-        --format json \
-        --output ${TRIVY_REPORT_FILE}
+      --exit-code 1 \
+      --severity HIGH,CRITICAL \
+      --format json \
+      --output "${TRIVY_REPORT_FILE}" \
+      "$DIR_PATH/"
     # Indicate scan completion  
     - echo "✅ Dockerfile scan completed!"
   tags:
