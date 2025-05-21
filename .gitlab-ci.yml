@@ -39,7 +39,10 @@ include:
 .defectdojo_upload:
   image: $DOCKER_REG_LOCAL_URL/base/alpine:git-3.21
   stage: upload
-  needs: []
+  before_script:
+  - apk add --no-cache bash
+  - TODAY=`date +%Y-%m-%d`
+  - ENDDAY=$(date -d "+${DEFECTDOJO_ENGAGEMENT_PERIOD} days" +%Y-%m-%d)
   script:
     - echo "🔍 Checking DefectDojo product and engagement availability"
     # Validate critical environment variables
