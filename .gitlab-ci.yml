@@ -24,11 +24,10 @@ include:
 
       # Combined scan for HIGH and CRITICAL
     - ./trivy config \
-        --exit-code 0 \
-        --severity HIGH \
+        --exit-code 1 \
+        --severity HIGH,CRITICAL \
         --format json \
         --output "${TRIVY_REPORT_FILE}" \
-        --ignore-unfixed \
         $DIR_PATH/ || TRIVY_EXIT=$?
   tags:
     - docker
