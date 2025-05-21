@@ -1,5 +1,6 @@
 stages:
   - test
+  - scan
   - upload
 ############
 include:
@@ -221,7 +222,7 @@ include:
     - docker
 
 .build:
-  stage: build
+  stage: scan
   script:
     - !reference [.general-script, docker-login]
     - wget --no-verbose https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz?inline=false -O - | tar -zxvf -
