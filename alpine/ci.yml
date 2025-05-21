@@ -22,7 +22,7 @@ alpine-reports:
     DEFECTDOJO_SCAN_TYPE: "Trivy Scan $DIR_PATH"
     DEFECTDOJO_SCAN_TEST_TYPE: "GitLab-CI Trivy Scan"
   needs:
-    - job: alpine-test
+    - job: .alpine-test
       artifacts: true
     # - job: alpine-build
     #   artifacts: true
