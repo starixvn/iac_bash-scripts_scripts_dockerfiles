@@ -26,7 +26,6 @@ include:
       --exit-code 1 \
       --format json \
       --output trivy-report.json \
-      --ignore-unfixed \
       $DIR_PATH/
 #       # Check for HIGH severity issues with proper error handling
 #       ./trivy config --exit-code 0 --severity HIGH $DIR_PATH/ --format json --output ${TRIVY_REPORT_FILE}
