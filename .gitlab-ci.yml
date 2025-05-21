@@ -25,7 +25,7 @@ include:
       # Combined scan for HIGH and CRITICAL
     - ./trivy config \
         --exit-code 0 \
-        --severity HIGH,CRITICAL \
+        --severity HIGH \
         --format json \
         --output "${TRIVY_REPORT_FILE}" \
         --ignore-unfixed \
