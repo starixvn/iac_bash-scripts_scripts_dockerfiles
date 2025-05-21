@@ -10,6 +10,10 @@
 alpine-test:
   extends: [.alpine, .test]
 
+# alpine-build:
+#  extends: [.alpine, .build]
+#  needs: ["alpine-test"]
+
 alpine-reports:
   extends: [.defectdojo_upload, .alpine]
   variables:
@@ -20,7 +24,11 @@ alpine-reports:
   needs:
     - job: alpine-test
       artifacts: true
-  
+    # - job: alpine-build
+    #   artifacts: true
+
+
+
 #alpine-build:
 #  extends: [.alpine, .build]
 #  needs: ["alpine-test"]
