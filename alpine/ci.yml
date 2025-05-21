@@ -24,6 +24,7 @@ alpine-reports:
   needs:
     - job: alpine-test
       artifacts: true
+  when: always
     # - job: alpine-build
     #   artifacts: true
 
