@@ -28,7 +28,7 @@ include:
         --severity HIGH,CRITICAL \
         --format json \
         --output "${TRIVY_REPORT_FILE}" \
-        $DIR_PATH/ || TRIVY_EXIT=$?
+        $DIR_PATH/
   tags:
     - docker
   artifacts:
