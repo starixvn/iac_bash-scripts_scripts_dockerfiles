@@ -6,6 +6,9 @@ include:
   - local: "/alpine/ci.yml"
   - local: "/awx-runner/ci.yml"
   - local: "/awx-web/ci.yml"
+  - local: "/axosyslog/ci.yml"
+  
+
 .test:
   stage: test
   variables:

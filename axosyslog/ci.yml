@@ -1,5 +1,5 @@
 .axosyslog:
-  extends: .base-rules
+  # extends: .base-rules
   variables:
     RULES_CHANGES_PATH: "axosyslog/**/*"
     DIR_PATH: "axosyslog"
@@ -10,6 +10,17 @@
 axosyslog-test:
   extends: [.axosyslog, .test]
 
-axosyslog-build:
-  extends: [.axosyslog, .build]
-  needs: ["axosyslog-test"]
+axosyslog-reports:
+  extends: [.defectdojo_upload, .axosyslog]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "trivy-report.json"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "GitLab-CI Trivy Scan"
+  needs:
+    - job: axosyslog-test
+      artifacts: true
+
+# axosyslog-build:
+#   extends: [.axosyslog, .build]
+#   needs: ["axosyslog-test"]
