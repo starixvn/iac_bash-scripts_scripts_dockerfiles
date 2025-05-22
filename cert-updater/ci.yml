@@ -1,5 +1,5 @@
 .cert-updater:
-  extends: .base-rules
+  # extends: .base-rules
   variables:
     RULES_CHANGES_PATH: "cert-updater/**/*"
     DIR_PATH: "cert-updater"
