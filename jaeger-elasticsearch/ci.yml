@@ -13,3 +13,30 @@ jaeger-elasticsearch-test:
 jaeger-elasticsearch-build:
   extends: [.jaeger-elasticsearch, .build]
   needs: ["jaeger-elasticsearch-test"]
+
+jaeger-elasticsearch-config-scan-reports:
+  extends: [.defectdojo_upload, .jaeger-elasticsearch]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$CONFIG_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Config Scan "
+  needs:
+    - job: jaeger-elasticsearch-test
+      artifacts: true
+  when: always
+
+
+jaeger-elasticsearch-image-scan-reports:
+  extends: [.defectdojo_upload, .jaeger-elasticsearch]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$IMAGE_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Image Scan "
+  needs:
+    - job: jaeger-elasticsearch-build
+      artifacts: true
+  when: always

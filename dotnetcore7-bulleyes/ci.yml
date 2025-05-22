@@ -15,3 +15,29 @@ dotnetcore7-bulleyes-build:
   extends: [.dotnetcore7-bulleyes, .build]
   needs: ["dotnetcore7-bulleyes-test"]
 
+dotnetcore7-bulleyes-config-scan-reports:
+  extends: [.defectdojo_upload, .dotnetcore7-bulleyes]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$CONFIG_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Config Scan "
+  needs:
+    - job: dotnetcore7-bulleyes-test
+      artifacts: true
+  when: always
+
+
+dotnetcore7-bulleyes-image-scan-reports:
+  extends: [.defectdojo_upload, .dotnetcore7-bulleyes]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$IMAGE_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Image Scan "
+  needs:
+    - job: dotnetcore7-bulleyes-build
+      artifacts: true
+  when: always

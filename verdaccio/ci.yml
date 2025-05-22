@@ -13,3 +13,30 @@ verdaccio-test:
 verdaccio-build:
   extends: [.verdaccio, .build]
   needs: ["verdaccio-test"]
+
+verdaccio-config-scan-reports:
+  extends: [.defectdojo_upload, .verdaccio]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$CONFIG_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Config Scan "
+  needs:
+    - job: verdaccio-test
+      artifacts: true
+  when: always
+
+
+verdaccio-image-scan-reports:
+  extends: [.defectdojo_upload, .verdaccio]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$IMAGE_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Image Scan "
+  needs:
+    - job: verdaccio-build
+      artifacts: true
+  when: always

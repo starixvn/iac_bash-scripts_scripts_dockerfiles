@@ -14,6 +14,33 @@ docker-alpine-build:
   extends: [.docker-alpine, .build]
   needs: ["docker-alpine-test"]
 
+docker-alpine-config-scan-reports:
+  extends: [.defectdojo_upload, .docker-alpine]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$CONFIG_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Config Scan "
+  needs:
+    - job: docker-alpine-test
+      artifacts: true
+  when: always
+
+
+docker-alpine-image-scan-reports:
+  extends: [.defectdojo_upload, .docker-alpine]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$IMAGE_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Image Scan "
+  needs:
+    - job: docker-alpine-build
+      artifacts: true
+  when: always
+
 # docker-deploy:
 #   extends: [.docker, .deploy]
 #   needs: ["docker-build"]

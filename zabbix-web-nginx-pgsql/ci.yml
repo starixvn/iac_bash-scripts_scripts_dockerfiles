@@ -13,3 +13,30 @@ zabbix-web-nginx-pgsql-test:
 zabbix-web-nginx-pgsql-build:
   extends: [.zabbix-web-nginx-pgsql, .build]
   needs: ["zabbix-web-nginx-pgsql-test"]
+
+zabbix-web-nginx-pgsql-config-scan-reports:
+  extends: [.defectdojo_upload, .zabbix-web-nginx-pgsql]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$CONFIG_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Config Scan "
+  needs:
+    - job: zabbix-web-nginx-pgsql-test
+      artifacts: true
+  when: always
+
+
+zabbix-web-nginx-pgsql-image-scan-reports:
+  extends: [.defectdojo_upload, .zabbix-web-nginx-pgsql]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$IMAGE_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Image Scan "
+  needs:
+    - job: zabbix-web-nginx-pgsql-build
+      artifacts: true
+  when: always

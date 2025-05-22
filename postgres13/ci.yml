@@ -13,3 +13,30 @@ postgres13-test:
 postgres13-build:
   extends: [.postgres13, .build]
   needs: ["postgres13-test"]
+
+postgres13-config-scan-reports:
+  extends: [.defectdojo_upload, .postgres13]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$CONFIG_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Config Scan "
+  needs:
+    - job: postgres13-test
+      artifacts: true
+  when: always
+
+
+postgres13-image-scan-reports:
+  extends: [.defectdojo_upload, .postgres13]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$IMAGE_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Image Scan "
+  needs:
+    - job: postgres13-build
+      artifacts: true
+  when: always
