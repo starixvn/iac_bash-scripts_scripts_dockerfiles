@@ -190,7 +190,7 @@ include:
         fi
       fi
 
-    - test -f ${CONFIG_REPORT} || { echo "❌ Trivy report not found"; exit 1; }
+    - test -f ${DEFECTDOJO_SCAN_FILE} || { echo "❌ Trivy report not found"; exit 1; }
     - echo "📤 Uploading Trivy scan report to DefectDojo"
     - |
       curl -s -S -X POST "${DEFECTDOJO_URL}/api/v2/reimport-scan/" \
@@ -208,7 +208,7 @@ include:
         -F "test_title=${DEFECTDOJO_TEST_TITLE}"
         -F "deduplication_on_engagement=true" \
         -F "close_old_findings=true" \
-        -F "file=@${CONFIG_REPORT}" \
+        -F "file=@${DEFECTDOJO_SCAN_FILE}" \
         -w "\nHTTP Status: %{http_code}\n" \
         || ECHO_CURL_ERROR=$?
     - |
