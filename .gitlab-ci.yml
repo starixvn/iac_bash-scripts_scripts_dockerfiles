@@ -59,13 +59,11 @@ include:
   stage: upload
   before_script:
   - apk add --no-cache bash curl jq
-  #  - TODAY=`date +%Y-%m-%d`
-  #  - ENDDAY=$(date -d "+${DEFECTDOJO_ENGAGEMENT_PERIOD} days" +%Y-%m-%d)
   script:
     - echo "🔍 Checking DefectDojo product and engagement availability"
     # Validate critical environment variables
     - |
-      for var in DEFECTDOJO_URL DEFECTDOJO_API_KEY DIR_PATH DEFECTDOJO_DEPT ; do
+      for var in DEFECTDOJO_URL DEFECTDOJO_API_KEY DEFECTDOJO_PRODUCT_NAME DEFECTDOJO_DEPT ; do
         eval value='$'"$var"
         if [ -z "$value" ]; then
           echo "❌ Error: $var is not set"; exit 1
@@ -123,27 +121,27 @@ include:
     # Check if product exists
     - |
       PRODUCT_RESPONSE=$(curl -s -w "\n%{http_code}" -H "Authorization: Token ${DEFECTDOJO_API_KEY}" \
-        "${DEFECTDOJO_URL}/api/v2/products/?name=${DIR_PATH}" || { echo "❌ Error: Failed to query product"; exit 1; })
+        "${DEFECTDOJO_URL}/api/v2/products/?name=${DEFECTDOJO_PRODUCT_NAME}" || { echo "❌ Error: Failed to query product"; exit 1; })
       PRODUCT_STATUS=$(echo "$PRODUCT_RESPONSE" | tail -n1)
       PRODUCT_BODY=$(echo "$PRODUCT_RESPONSE" | sed '$d')
       echo "DEBUG: Product response body: $PRODUCT_BODY"
       if [ "$PRODUCT_STATUS" -eq 200 ] && [ "$(echo "$PRODUCT_BODY" | jq '.count')" -ge 1 ]; then
         PRODUCT_ID=$(echo "$PRODUCT_BODY" | jq -r '.results[0].id')
-        echo "✅ Product '${DIR_PATH}' found with ID: ${PRODUCT_ID}"
+        echo "✅ Product '${DEFECTDOJO_PRODUCT_NAME}' found with ID: ${PRODUCT_ID}"
       else
-        echo "📝 Product '${DIR_PATH}' not found, creating..."
+        echo "📝 Product '${DEFECTDOJO_PRODUCT_NAME}' not found, creating..."
         CREATE_PRODUCT_RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
           -H "Authorization: Token ${DEFECTDOJO_API_KEY}" \
           -H "Content-Type: application/json" \
           "${DEFECTDOJO_URL}/api/v2/products/" \
-          -d "{\"name\": \"${DIR_PATH}\", \"description\": \"Auto-created product for ${DIR_PATH}\", \"prod_type\": ${PRODUCT_TYPE_ID}}" \
+          -d "{\"name\": \"${DEFECTDOJO_PRODUCT_NAME}\", \"description\": \"Auto-created product for ${DEFECTDOJO_PRODUCT_NAME}\", \"prod_type\": ${PRODUCT_TYPE_ID}}" \
           || { echo "❌ Error: Failed to create product"; exit 1; })
         CREATE_PRODUCT_STATUS=$(echo "$CREATE_PRODUCT_RESPONSE" | tail -n1)
         CREATE_PRODUCT_BODY=$(echo "$CREATE_PRODUCT_RESPONSE" | sed '$d')
         echo "DEBUG: Create product response body: $CREATE_PRODUCT_BODY"
         if [ "$CREATE_PRODUCT_STATUS" -eq 201 ]; then
           PRODUCT_ID=$(echo "$CREATE_PRODUCT_BODY" | jq -r '.id')
-          echo "✅ Product '${DIR_PATH}' created with ID: ${PRODUCT_ID}"
+          echo "✅ Product '${DEFECTDOJO_PRODUCT_NAME}' created with ID: ${PRODUCT_ID}"
         else
           echo "❌ Failed to create product (HTTP $CREATE_PRODUCT_STATUS, Response: $CREATE_PRODUCT_BODY)"
           exit 1
@@ -202,7 +200,7 @@ include:
         -F "scan_type=${DEFECTDOJO_SCAN_TYPE}" \
         -F "active=true" \
         -F "verified=true" \
-        -F "product_name=${DIR_PATH}" \
+        -F "product_name=${DEFECTDOJO_PRODUCT_NAME}" \
         -F "engagement_name=${ENGAGEMENT_NAME}" \
         -F "engagement=${ENGAGEMENT_ID}" \
         -F "test_type=\"${DEFECTDOJO_SCAN_TEST_TYPE}\"" \
