@@ -6,19 +6,16 @@
     IMAGE_TAG: "git-3.21"
     BASE_IMAGE: "alpine:3.21"
     IMAGE_PATH: "base/alpine:$IMAGE_TAG"
-    CONFIG_REPORT: "$DIR_PATH-configscan.json"
-    # IMAGE_REPORT: "image-$DIR_PATH-trivy-report.json"
+
     
 alpine-test:
   extends: [.alpine, .test]
-  # variables:
-  #   CONFIG_REPORT: "trivy-report.json"
 
 # alpine-build:
 #  extends: [.alpine, .build]
 #  needs: ["alpine-test"]
 
-alpine-reports:
+alpine-config-scan-reports:
   extends: [.defectdojo_upload, .alpine]
   variables:
     ENGAGEMENT_NAME: "$DIR_PATH"
@@ -35,7 +32,18 @@ alpine-reports:
   #   # - job: alpine-build
   #   #   artifacts: true
 
-
+# alpine-image-scan-reports:
+#   extends: [.defectdojo_upload, .alpine]
+#   variables:
+#     ENGAGEMENT_NAME: "$DIR_PATH"
+#     DEFECTDOJO_SCAN_FILE: "$CONFIG_REPORT"
+#     DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+#     DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+#     DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Config Scan "
+#   needs:
+#     - job: alpine-test
+#       artifacts: true
+#   when: always
 
 
 

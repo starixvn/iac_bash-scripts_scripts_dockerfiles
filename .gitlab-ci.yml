@@ -51,6 +51,27 @@ include:
     paths:
       - ${CONFIG_REPORT}
 
+# # image scan
+# .build:
+#   stage: scan
+#   script:
+#     - !reference [.general-script, docker-login]
+#     - wget --no-verbose https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz?inline=false -O - | tar -zxvf -
+#     - wget -O .trivyignore https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivyignore?inline=false
+#     - echo "build - $DIR_PATH"
+#     - echo "docker build --no-cache --build-arg BASE_IMAGE="$BASE_IMAGE" -f $DIR_PATH/Dockerfile -t $DOCKER_REG_URL/$IMAGE_PATH ."
+#     - docker build --no-cache --build-arg BASE_IMAGE="$BASE_IMAGE" -f $DIR_PATH/Dockerfile -t $DOCKER_REG_URL/$IMAGE_PATH .
+#     - echo "$DIR_PATH - Build is DONE!";
+#     - echo "Trivy Scan image $DOCKER_REG_URL/$IMAGE_PATH"
+#     - echo "$TRIVY_SERVER - $TRIVY_VERSION";
+#     - ./trivy image --timeout 25m --server $TRIVY_SERVER --ignore-unfixed --exit-code 0 --severity HIGH,CRITICAL --token $TRIVY_TOKEN --vuln-type os $DOCKER_REG_URL/$IMAGE_PATH --output ${IMAGE_SCAN_REPORT}
+#     - echo "done Scan Image $DOCKER_REG_URL/$IMAGE_PATH !"
+#   tags:
+#     - docker
+#   artifacts:
+#     when: always
+#     paths:
+#       - ${IMAGE_SCAN_REPORT}
 
 .defectdojo_upload:
   image: $DOCKER_REG_LOCAL_URL/base/alpine:git-3.21
@@ -217,23 +238,7 @@ include:
     - echo "✅ Upload completed"
   tags:
     - docker
-## scan image
-# .build:
-#   stage: scan
-#   script:
-#     - !reference [.general-script, docker-login]
-#     - wget --no-verbose https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz?inline=false -O - | tar -zxvf -
-#     - wget -O .trivyignore https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivyignore?inline=false
-#     - echo "build - $DIR_PATH"
-#     - echo "docker build --no-cache --build-arg BASE_IMAGE="$BASE_IMAGE" -f $DIR_PATH/Dockerfile -t $DOCKER_REG_URL/$IMAGE_PATH ."
-#     - docker build --no-cache --build-arg BASE_IMAGE="$BASE_IMAGE" -f $DIR_PATH/Dockerfile -t $DOCKER_REG_URL/$IMAGE_PATH .
-#     - echo "$DIR_PATH - Build is DONE!";
-#     - echo "Trivy Scan image $DOCKER_REG_URL/$IMAGE_PATH"
-#     - echo "$TRIVY_SERVER - $TRIVY_VERSION";
-#     - ./trivy image --timeout 25m --server $TRIVY_SERVER --ignore-unfixed --exit-code 0 --severity HIGH,CRITICAL --token $TRIVY_TOKEN --vuln-type os $DOCKER_REG_URL/$IMAGE_PATH --output ${TRIVY_REPORT_FILE}
-#     - echo "done Scan Image $DOCKER_REG_URL/$IMAGE_PATH !"
-#   tags:
-#     - docker
+
 
 # .build:
 #   stage: build
