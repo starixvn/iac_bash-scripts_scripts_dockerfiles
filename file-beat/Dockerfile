@@ -1,3 +1,5 @@
 ARG BASE_IMAGE
 FROM $BASE_IMAGE
 LABEL maintainer=NexOps
+ENV DEFECTDOJO_URL="https://defectdojo.example.com" \
+    DEFECTDOJO_API_KEY="0123456789abcdef0123456789abcdef01234567"
