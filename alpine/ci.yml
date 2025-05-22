@@ -11,6 +11,7 @@
 alpine-test:
   extends: [.alpine, .test]
   artifacts:
+    when: always
     paths:
       - ${CONFIG_REPORT}
 # alpine-build:
