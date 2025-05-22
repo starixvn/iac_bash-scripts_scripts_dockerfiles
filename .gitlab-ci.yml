@@ -65,7 +65,7 @@ include:
     - echo "🔍 Checking DefectDojo product and engagement availability"
     # Validate critical environment variables
     - |
-      for var in DEFECTDOJO_URL DEFECTDOJO_API_KEY $DIR_PATH DEFECTDOJO_DEPT ; do
+      for var in DEFECTDOJO_URL DEFECTDOJO_API_KEY DIR_PATH DEFECTDOJO_DEPT ; do
         eval value='$'"$var"
         if [ -z "$value" ]; then
           echo "❌ Error: $var is not set"; exit 1
@@ -202,7 +202,7 @@ include:
         -F "scan_type=${DEFECTDOJO_SCAN_TYPE}" \
         -F "active=true" \
         -F "verified=true" \
-        -F "product_name=${CI_PROJECT_NAME}" \
+        -F "product_name=${DIR_PATH}" \
         -F "engagement_name=${ENGAGEMENT_NAME}" \
         -F "engagement=${ENGAGEMENT_ID}" \
         -F "test_type=\"${DEFECTDOJO_SCAN_TEST_TYPE}\"" \
