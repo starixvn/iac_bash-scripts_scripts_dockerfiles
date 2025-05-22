@@ -24,11 +24,15 @@ alpine-reports:
     DEFECTDOJO_SCAN_FILE: "$CONFIG_REPORT"
     DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
     DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
-    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Config Scan"
-  dependencies:
-    - alpine-test
-    # - job: alpine-build
-    #   artifacts: true
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Config Scan "
+  needs: ["alpine-test"]
+  artifacts:
+    paths:
+      - $CONFIG_REPORT
+  # dependencies:
+  #   - alpine-test
+  #   # - job: alpine-build
+  #   #   artifacts: true
   when: always
 
 
