@@ -9,9 +9,8 @@
     
 alpine-test:
   extends: [.alpine, .test]
-  artifacts:
-    paths:
-      - ${TRIVY_REPORT_FILE}
+  variables:
+    TRIVY_REPORT_FILE: "confif-$DIR_PATH-trivy-report.json"
 # alpine-build:
 #  extends: [.alpine, .build]
 #  needs: ["alpine-test"]
