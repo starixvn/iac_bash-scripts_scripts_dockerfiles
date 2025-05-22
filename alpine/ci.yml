@@ -15,14 +15,13 @@ alpine-test:
 #  needs: ["alpine-test"]
 
 alpine-reports:
-  extends: [.defectdojo_upload, .alpine]
+  extends: [.defectdojo_upload, .alpine, .test]
   variables:
     ENGAGEMENT_NAME: "$DIR_PATH"
     DEFECTDOJO_SCAN_FILE: "${TRIVY_REPORT_FILE}"
     DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
     DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
     DEFECTDOJO_TEST_TITLE: "$DIR_PATH (Trivy Scan)"
-
   needs:
     - job: alpine-test
       artifacts: true
