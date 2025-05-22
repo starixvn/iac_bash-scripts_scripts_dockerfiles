@@ -9,13 +9,15 @@
     
 alpine-test:
   extends: [.alpine, .test]
-
+  artifacts:
+    paths:
+      - ${TRIVY_REPORT_FILE}
 # alpine-build:
 #  extends: [.alpine, .build]
 #  needs: ["alpine-test"]
 
 alpine-reports:
-  extends: [.defectdojo_upload, .alpine, .test]
+  extends: [.defectdojo_upload, .alpine]
   variables:
     ENGAGEMENT_NAME: "$DIR_PATH"
     DEFECTDOJO_SCAN_FILE: "${TRIVY_REPORT_FILE}"
