@@ -35,7 +35,7 @@ include:
     - echo "$TRIVY_SERVER - $TRIVY_VERSION"
     - |
       # Run Trivy config and always generate the report
-      ./trivy config \
+      ./trivy filesystem --scanner secret \
         --severity HIGH,CRITICAL \
         --exit-code 0 \
         --format json \
