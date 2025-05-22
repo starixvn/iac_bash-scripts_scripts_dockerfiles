@@ -205,6 +205,7 @@ include:
         -F "engagement=${ENGAGEMENT_ID}" \
         -F "test_type=\"${DEFECTDOJO_SCAN_TEST_TYPE}\"" \
         -F "auto_create_context=true" \
+        -F "test_title=${DEFECTDOJO_TEST_TITLE}"
         -F "deduplication_on_engagement=true" \
         -F "close_old_findings=true" \
         -F "file=@${DEFECTDOJO_SCAN_FILE}" \

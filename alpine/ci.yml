@@ -20,7 +20,9 @@ alpine-reports:
     ENGAGEMENT_NAME: "$DIR_PATH"
     DEFECTDOJO_SCAN_FILE: "trivy-report.json"
     DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
-    DEFECTDOJO_SCAN_TEST_TYPE: "Test"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$DIR_PATH (Trivy Scan)"
+
   needs:
     - job: alpine-test
       artifacts: true
