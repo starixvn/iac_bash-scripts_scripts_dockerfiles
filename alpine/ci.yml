@@ -6,12 +6,12 @@
     IMAGE_TAG: "git-3.21"
     BASE_IMAGE: "alpine:3.21"
     IMAGE_PATH: "base/alpine:$IMAGE_TAG"
-    # CONFIG_REPORT: "config-$DIR_PATH-trivy-report.json"
+    CONFIG_REPORT: "trivy-report.json"
     
 alpine-test:
   extends: [.alpine, .test]
-  variables:
-    CONFIG_REPORT: "trivy-report.json"
+  # variables:
+  #   CONFIG_REPORT: "trivy-report.json"
 
 # alpine-build:
 #  extends: [.alpine, .build]
