@@ -10,8 +10,6 @@
     
 alpine-test:
   extends: [.alpine, .test]
-  variables:
-    TRIVY_REPORT_FILE: "config-$DIR_PATH-trivy-report.json"
   artifacts:
     paths:
       - ${CONFIG_REPORT}
@@ -23,7 +21,7 @@ alpine-reports:
   extends: [.defectdojo_upload, .alpine]
   variables:
     ENGAGEMENT_NAME: "$DIR_PATH"
-    DEFECTDOJO_SCAN_FILE: "${CONFIG_REPORT}"
+    DEFECTDOJO_SCAN_FILE: "$CONFIG_REPORT"
     DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
     DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
     DEFECTDOJO_TEST_TITLE: "$DIR_PATH (Trivy Scan)"
