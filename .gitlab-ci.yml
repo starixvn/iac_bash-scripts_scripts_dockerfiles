@@ -5,11 +5,11 @@ stages:
 ############
 include:
   - local: "base.yml"
-  - local: "/alpine/ci.yml"
+  # - local: "/alpine/ci.yml"
   - local: "/awx-runner/ci.yml"
-  - local: "/awx-web/ci.yml"
-  - local: "/axosyslog/ci.yml"
-  - local: "/cert-updater/ci.yml"
+  # - local: "/awx-web/ci.yml"
+  # - local: "/axosyslog/ci.yml"
+  # - local: "/cert-updater/ci.yml"
   
 
 .general-script:
