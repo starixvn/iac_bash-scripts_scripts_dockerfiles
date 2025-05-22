@@ -13,7 +13,7 @@ alpine-test:
   artifacts:
     when: always
     paths:
-      - "$CONFIG_REPORT"
+      - $CONFIG_REPORT
 # alpine-build:
 #  extends: [.alpine, .build]
 #  needs: ["alpine-test"]
@@ -22,7 +22,7 @@ alpine-reports:
   extends: [.defectdojo_upload, .alpine]
   variables:
     ENGAGEMENT_NAME: "$DIR_PATH"
-    DEFECTDOJO_SCAN_FILE: "$CONFIG_REPORT"
+    # DEFECTDOJO_SCAN_FILE: "$CONFIG_REPORT"
     DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
     DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
     DEFECTDOJO_TEST_TITLE: "$DIR_PATH (Trivy Scan)"
