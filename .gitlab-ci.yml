@@ -200,12 +200,11 @@ include:
         -F "scan_type=${DEFECTDOJO_SCAN_TYPE}" \
         -F "active=true" \
         -F "verified=true" \
-        -F "product_name=${DEFECTDOJO_PRODUCT_NAME}" \
+        -F "product_name=${CI_PROJECT_NAME}" \
         -F "engagement_name=${ENGAGEMENT_NAME}" \
         -F "engagement=${ENGAGEMENT_ID}" \
         -F "test_type=\"${DEFECTDOJO_SCAN_TEST_TYPE}\"" \
         -F "auto_create_context=true" \
-        -F "test_title=${DEFECTDOJO_TEST_TITLE}"
         -F "deduplication_on_engagement=true" \
         -F "close_old_findings=true" \
         -F "file=@${DEFECTDOJO_SCAN_FILE}" \
