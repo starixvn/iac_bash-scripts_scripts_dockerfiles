@@ -38,7 +38,7 @@ include:
         --severity HIGH,CRITICAL \
         --exit-code 0 \
         --format json \
-        --output ${TRIVY_REPORT_FILE} \
+        --output ${CONFIG_REPORT} \
         $DIR_PATH/
       # Fail the pipeline only if there are serious vulnerabilities
       ./trivy config \
