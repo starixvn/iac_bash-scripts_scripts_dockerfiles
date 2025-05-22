@@ -27,10 +27,7 @@ alpine-config-scan-reports:
     - job: alpine-test
       artifacts: true
   when: always
-  # dependencies:
-  #   - alpine-test
-  #   # - job: alpine-build
-  #   #   artifacts: true
+
 
 alpine-image-scan-reports:
   extends: [.defectdojo_upload, .alpine]
@@ -44,9 +41,3 @@ alpine-image-scan-reports:
     - job: alpine-build
       artifacts: true
   when: always
-
-
-
-#alpine-build:
-#  extends: [.alpine, .build]
-#  needs: ["alpine-test"]

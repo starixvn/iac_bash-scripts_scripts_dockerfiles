@@ -13,3 +13,30 @@ cert-updater-test:
 cert-updater-build:
   extends: [.cert-updater, .build]
   needs: ["cert-updater-test"]
+
+cert-updater-config-scan-reports:
+  extends: [.defectdojo_upload, .cert-updater]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$CONFIG_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Config Scan "
+  needs:
+    - job: cert-updater-test
+      artifacts: true
+  when: always
+
+
+cert-updater-image-scan-reports:
+  extends: [.defectdojo_upload, .cert-updater]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$IMAGE_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Image Scan "
+  needs:
+    - job: cert-updater-build
+      artifacts: true
+  when: always

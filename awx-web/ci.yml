@@ -10,20 +10,33 @@
 awx-web-test:
   extends: [.awx-web, .test]
 
+awx-web-build:
+  extends: [.awx-web, .build]
+  needs: ["awx-web-test"]
 
-awx-web-reports:
+awx-web-config-scan-reports:
   extends: [.defectdojo_upload, .awx-web]
   variables:
-
     ENGAGEMENT_NAME: "$DIR_PATH"
-    DEFECTDOJO_SCAN_FILE: "trivy-report.json"
+    DEFECTDOJO_SCAN_FILE: "$CONFIG_SCAN_REPORT"
     DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
     DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Config Scan "
   needs:
     - job: awx-web-test
       artifacts: true
   when: always
 
-# awx-web-build:
-#   extends: [.awx-web, .build]
-#   needs: ["awx-web-test"]
+
+awx-web-image-scan-reports:
+  extends: [.defectdojo_upload, .awx-web]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$IMAGE_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Image Scan "
+  needs:
+    - job: awx-web-build
+      artifacts: true
+  when: always

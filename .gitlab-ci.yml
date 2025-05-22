@@ -6,10 +6,11 @@ stages:
 include:
   - local: "base.yml"
   - local: "/alpine/ci.yml"
-  # - local: "/awx-runner/ci.yml"
-  # - local: "/awx-web/ci.yml"
-  # - local: "/axosyslog/ci.yml"
-
+  - local: "/awx-runner/ci.yml"
+  - local: "/awx-web/ci.yml"
+  - local: "/axosyslog/ci.yml"
+  - local: "/cert-updater/ci.yml"
+  
 
 .general-script:
   docker-login:
@@ -43,7 +44,7 @@ include:
     #    --severity HIGH,CRITICAL \
     #    --exit-code 1 \
     #    $DIR_PATH/
-    # - echo "done Scan Dockerfile !"
+    - echo "done Scan Dockerfile !"
   tags:
     - docker
   artifacts:
