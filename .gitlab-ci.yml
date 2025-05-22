@@ -5,11 +5,11 @@ stages:
 ############
 include:
   - local: "base.yml"
-  # - local: "/alpine/ci.yml"
+  - local: "/alpine/ci.yml"
   - local: "/awx-runner/ci.yml"
-  # - local: "/awx-web/ci.yml"
-  # - local: "/axosyslog/ci.yml"
-  # - local: "/cert-updater/ci.yml"
+  - local: "/awx-web/ci.yml"
+  - local: "/axosyslog/ci.yml"
+  - local: "/cert-updater/ci.yml"
   
 
 .general-script:
@@ -39,11 +39,11 @@ include:
         --format json \
         --output ${CONFIG_SCAN_REPORT} \
         $DIR_PATH/
-    #   # Fail the pipeline only if there are serious vulnerabilities
-    #   ./trivy config \
-    #    --severity HIGH,CRITICAL \
-    #    --exit-code 1 \
-    #    $DIR_PATH/
+      # Fail the pipeline only if there are serious vulnerabilities
+      ./trivy config \
+       --severity HIGH,CRITICAL \
+       --exit-code 1 \
+       $DIR_PATH/
     - echo "done Scan Dockerfile !"
   tags:
     - docker
