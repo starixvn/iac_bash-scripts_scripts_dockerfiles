@@ -30,8 +30,8 @@ variables:
   DEFECTDOJO_SCAN_ENVIRONMENT: "Default"
   DEFECTDOJO_API_KEY: "19c0a551c892ba79f1bf36d6d1fe87a504d0d406"
   DEFECTDOJO_URL: "https://defectdojo.nexdev.net"
-  CONFIG_REPORT: "configscan.json"
-  # IMAGE_SCAN_REPORT: "image-$DIR_PATH-trivy-report.json"
+  CONFIG_SCAN_REPORT: "configscan.json"
+  IMAGE_SCAN_REPORT: "imagescan.json"
 
 
 #  TRIVY_VERSION: "0.22.0"
