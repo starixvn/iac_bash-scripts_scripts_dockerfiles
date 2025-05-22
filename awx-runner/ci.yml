@@ -16,7 +16,7 @@ awx-runner-build:
 
 
 awx-runner-config-scan-reports:
-  extends: [.defectdojo_upload, .alpine]
+  extends: [.defectdojo_upload, .awx-runner]
   variables:
     ENGAGEMENT_NAME: "$DIR_PATH"
     DEFECTDOJO_SCAN_FILE: "$CONFIG_SCAN_REPORT"
@@ -30,7 +30,7 @@ awx-runner-config-scan-reports:
 
 
 awx-runner-image-scan-reports:
-  extends: [.defectdojo_upload, .alpine]
+  extends: [.defectdojo_upload, .awx-runner]
   variables:
     ENGAGEMENT_NAME: "$DIR_PATH"
     DEFECTDOJO_SCAN_FILE: "$IMAGE_SCAN_REPORT"
