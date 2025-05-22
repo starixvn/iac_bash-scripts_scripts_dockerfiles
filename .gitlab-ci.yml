@@ -23,8 +23,6 @@ include:
 
 .test:
   stage: test
-  variables:
-    CONFIG_REPORT: "$DIR_PATH-configscan.json"
   script:
     # Download and extract Trivy scanner
     - wget --no-verbose https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz?inline=false -O - | tar -zxvf -
