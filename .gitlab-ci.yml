@@ -26,23 +26,24 @@ include:
 
 .test:
   stage: test
+  image: aquasec/trivy:latest
   script:
     # Download and extract Trivy scanner
-    - wget --no-verbose https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz?inline=false -O - | tar -zxvf -
+    # - wget --no-verbose https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz?inline=false -O - | tar -zxvf -
     # Display Dockerfile contents  
     - cat $DIR_PATH/Dockerfile
     # Show Trivy version and server info
-    - echo "$TRIVY_SERVER - $TRIVY_VERSION"
+    # - echo "$TRIVY_SERVER - $TRIVY_VERSION"
     - |
       # Run Trivy config and always generate the report
-      ./trivy config \
+      trivy config \
         --severity HIGH,CRITICAL \
         --exit-code 0 \
         --format json \
         --output ${CONFIG_SCAN_REPORT} \
         $DIR_PATH/
       # Fail the pipeline only if there are serious vulnerabilities
-      ./trivy config \
+      trivy config \
        --severity HIGH,CRITICAL \
        --exit-code 1 \
        $DIR_PATH/
