@@ -248,12 +248,12 @@ include:
   tags:
     - docker
 
-# .deploy:
-#   stage: deploy
-#   script:
-#     - !reference [.general-script, docker-login]
-#     - echo "Push - hub.nexdev.net/$IMAGE_PATH"
-#     - docker push hub.nexdev.net/$IMAGE_PATH
-#     - echo "hub.nexdev.net/$IMAGE_PATH - deploy is DONE!";
-#   tags:
-#     - docker
+.deploy:
+  stage: deploy
+  script:
+    - !reference [.general-script, docker-login]
+    - echo "Push - hub.nexdev.net/$IMAGE_PATH"
+    - docker push hub.nexdev.net/$IMAGE_PATH
+    - echo "hub.nexdev.net/$IMAGE_PATH - deploy is DONE!";
+  tags:
+    - docker
