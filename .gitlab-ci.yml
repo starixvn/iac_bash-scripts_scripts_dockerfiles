@@ -13,8 +13,7 @@ include:
   # - local: "/axosyslog/ci.yml"
   # - local: "/cert-updater/ci.yml"
   # - local: "/file-beat/ci.yml"
-  
-  
+    
 
 .general-script:
   docker-login:
