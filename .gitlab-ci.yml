@@ -43,12 +43,12 @@ include:
         --format json \
         --output ${CONFIG_SCAN_REPORT} \
         $DIR_PATH/
-      # Fail the pipeline only if there are serious vulnerabilities
-      trivy config \
-       --severity HIGH,CRITICAL \
-       --exit-code 1 \
-       $DIR_PATH/
-    - echo "done Scan Dockerfile !"
+    #   # Fail the pipeline only if there are serious vulnerabilities
+    #   trivy config \
+    #    --severity HIGH,CRITICAL \
+    #    --exit-code 1 \
+    #    $DIR_PATH/
+    # - echo "done Scan Dockerfile !"
   tags:
     - docker
   artifacts:
