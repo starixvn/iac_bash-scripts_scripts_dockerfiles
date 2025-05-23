@@ -1,7 +1,8 @@
 stages:
   - test
-  - scan
+  - build
   - upload
+  - deploy
 ############
 include:
   - local: "base.yml"
@@ -57,7 +58,7 @@ include:
 
 # image scan
 .build:
-  stage: scan
+  stage: build
   script:
     - !reference [.general-script, docker-login]
     - wget --no-verbose https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz?inline=false -O - | tar -zxvf -
@@ -70,6 +71,9 @@ include:
     - echo "$TRIVY_SERVER - $TRIVY_VERSION";
     - ./trivy image --timeout 25m --server $TRIVY_SERVER --ignore-unfixed --exit-code 0 --severity HIGH,CRITICAL --token $TRIVY_TOKEN --vuln-type os $DOCKER_REG_URL/$IMAGE_PATH --output ${IMAGE_SCAN_REPORT}
     - echo "done Scan Image $DOCKER_REG_URL/$IMAGE_PATH !"
+#      - echo "Push - $DOCKER_REG_URL/$IMAGE_PATH"
+#      - docker push $DOCKER_REG_URL/$IMAGE_PATH
+#      - echo "$DOCKER_REG_URL/$IMAGE_PATH - Push is DONE!";
   tags:
     - docker
   artifacts:
@@ -265,16 +269,5 @@ include:
 #      - docker push $DOCKER_REG_URL/$IMAGE_PATH
 #      - echo "$DOCKER_REG_URL/$IMAGE_PATH - Push is DONE!";
 #   # allow_failure: true
-#   tags:
-#     - docker
-
-
-# .deploy:
-#   stage: deploy
-#   script:
-#     - !reference [.general-script, docker-login]
-#     - echo "Push - hub.nexdev.net/$IMAGE_PATH"
-#     - docker push hub.nexdev.net/$IMAGE_PATH
-#     - echo "hub.nexdev.net/$IMAGE_PATH - deploy is DONE!";
 #   tags:
 #     - docker
