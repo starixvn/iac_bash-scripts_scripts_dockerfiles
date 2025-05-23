@@ -9,7 +9,6 @@ variables:
 
    #Defect Dojo Variable
   DEFECTDOJO_DEPT: "NX-Atomix"
-  # DEFECTDOJO_PRODUCT_VERSION: "${CI_COMMIT_REF_NAME}"
   DEFECTDOJO_PRODUCT_NAME: "${CI_PROJECT_NAME}"
   DEFECTDOJO_ENGAGEMENT_PERIOD: "90"  # engagement period in days
   DEFECTDOJO_ENGAGEMENT_STATUS: "In Progress"
@@ -28,8 +27,8 @@ variables:
   DEFECTDOJO_SCAN_CLOSE_OLD_FINDINGS: true
   DEFECTDOJO_SCAN_PUSH_TO_JIRA: false
   DEFECTDOJO_SCAN_ENVIRONMENT: "Default"
-  CONFIG_SCAN_REPORT: "configscan.json"
-  IMAGE_SCAN_REPORT: "imagescan.json"
+  CONFIG_SCAN_REPORT: "configreport.json"
+  IMAGE_SCAN_REPORT: "imagereport.json"
 
 
 #  TRIVY_VERSION: "0.22.0"

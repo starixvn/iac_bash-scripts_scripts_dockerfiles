@@ -6,6 +6,7 @@ stages:
 ############
 include:
   - local: "base.yml"
+  # - local: "**/ci.yml"
   - local: "/alpine/ci.yml"
   # - local: "/awx-runner/ci.yml"
   # - local: "/awx-web/ci.yml"
@@ -18,13 +19,14 @@ include:
 .general-script:
   docker-login:
     - docker login -u $docker_reg_user -p $docker_reg_pass $docker_reg_url
+
 .base-rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
       changes: 
         - $RULES_CHANGES_PATH
 
-
+#Scan Config 
 .test:
   stage: test
   image: aquasec/trivy:latest
@@ -56,7 +58,7 @@ include:
     paths:
       - ${CONFIG_SCAN_REPORT}
 
-# image scan
+# Build → Scan → Push image
 .build:
   stage: build
   script:
@@ -71,16 +73,16 @@ include:
     - echo "$TRIVY_SERVER - $TRIVY_VERSION";
     - ./trivy image --timeout 25m --server $TRIVY_SERVER --ignore-unfixed --exit-code 0 --severity HIGH,CRITICAL --token $TRIVY_TOKEN --vuln-type os $DOCKER_REG_URL/$IMAGE_PATH --output ${IMAGE_SCAN_REPORT}
     - echo "done Scan Image $DOCKER_REG_URL/$IMAGE_PATH !"
-#      - echo "Push - $DOCKER_REG_URL/$IMAGE_PATH"
-#      - docker push $DOCKER_REG_URL/$IMAGE_PATH
-#      - echo "$DOCKER_REG_URL/$IMAGE_PATH - Push is DONE!";
+    # - echo "Push - $DOCKER_REG_URL/$IMAGE_PATH"
+    # - docker push $DOCKER_REG_URL/$IMAGE_PATH
+    # - echo "$DOCKER_REG_URL/$IMAGE_PATH - Push is DONE!";
   tags:
     - docker
   artifacts:
-    when: always
     paths:
       - ${IMAGE_SCAN_REPORT}
 
+# Upload to DefectDojo
 .defectdojo_upload:
   image: $DOCKER_REG_LOCAL_URL/base/alpine:git-3.21
   stage: upload
@@ -247,27 +249,12 @@ include:
   tags:
     - docker
 
-
-# .build:
-#   stage: build
+# .deploy:
+#   stage: deploy
 #   script:
 #     - !reference [.general-script, docker-login]
-#     - wget --no-verbose https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz?inline=false -O - | tar -zxvf -
-#     - wget -O .trivyignore https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivyignore?inline=false
-#     - echo "build - $DIR_PATH"
-#     - echo "docker build --no-cache --build-arg BASE_IMAGE="$BASE_IMAGE" -f $DIR_PATH/Dockerfile -t $DOCKER_REG_URL/$IMAGE_PATH ."
-#     - docker build --no-cache --build-arg BASE_IMAGE="$BASE_IMAGE" -f $DIR_PATH/Dockerfile -t $DOCKER_REG_URL/$IMAGE_PATH .
-#     - echo "$DIR_PATH - Build is DONE!";
-#     - echo "Trivy Scan image $DOCKER_REG_URL/$IMAGE_PATH"
-#     - echo "$TRIVY_SERVER - $TRIVY_VERSION";
-#     # - ./trivy image --server $TRIVY_SERVER --ignore-unfixed --exit-code 0 --severity HIGH --token $TRIVY_TOKEN $DOCKER_REG_URL/$IMAGE_PATH
-#     - ./trivy image --timeout 25m --server $TRIVY_SERVER --ignore-unfixed --exit-code 1 --severity CRITICAL --token $TRIVY_TOKEN --vuln-type os $DOCKER_REG_URL/$IMAGE_PATH
-#     # - ./trivy image --server $TRIVY_SERVER  --ignore-unfixed --vuln-type os --exit-code 0 --severity HIGH --token $TRIVY_TOKEN 
-#     # - ./trivy image --server $TRIVY_SERVER  --ignore-unfixed --vuln-type os --exit-code 1 --severity HIGH --token $TRIVY_TOKEN     
-#      - echo "done Scan Image $DOCKER_REG_URL/$IMAGE_PATH !"
-#      - echo "Push - $DOCKER_REG_URL/$IMAGE_PATH"
-#      - docker push $DOCKER_REG_URL/$IMAGE_PATH
-#      - echo "$DOCKER_REG_URL/$IMAGE_PATH - Push is DONE!";
-#   # allow_failure: true
+#     - echo "Push - hub.nexdev.net/$IMAGE_PATH"
+#     - docker push hub.nexdev.net/$IMAGE_PATH
+#     - echo "hub.nexdev.net/$IMAGE_PATH - deploy is DONE!";
 #   tags:
 #     - docker
