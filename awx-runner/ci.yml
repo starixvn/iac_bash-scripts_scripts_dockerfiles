@@ -13,3 +13,47 @@ awx-runner-test:
 awx-runner-build:
   extends: [.awx-runner, .build]
   needs: ["awx-runner-test"]
+
+
+awx-runner-config-scan-reports:
+  extends: [.defectdojo_upload, .awx-runner]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$CONFIG_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Config Scan "
+  needs:
+    - job: awx-runner-test
+      artifacts: true
+  when: always
+
+
+awx-runner-image-scan-reports:
+  extends: [.defectdojo_upload, .awx-runner]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$IMAGE_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Image Scan "
+  needs:
+    - job: awx-runner-build
+      artifacts: true
+  when: always
+
+
+# awx-runner-reports:
+#   extends: [.defectdojo_upload, .awx-runner]
+#   variables:
+
+#     ENGAGEMENT_NAME: "$DIR_PATH"
+#     DEFECTDOJO_SCAN_FILE: "trivy-report.json"
+#     DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+#     DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+#   needs:
+#     - job: awx-runner-test
+#       artifacts: true
+#   when: always
+
+

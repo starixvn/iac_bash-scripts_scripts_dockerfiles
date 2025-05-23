@@ -1,5 +1,5 @@
 .file-beat:
-  extends: .base-rules
+  # extends: .base-rules
   variables:
     RULES_CHANGES_PATH: "file-beat/**/*"
     DIR_PATH: "file-beat"
@@ -14,3 +14,30 @@ file-beat-test:
 file-beat-build:
   extends: [.file-beat, .build]
   needs: ["file-beat-test"]
+
+file-beat-config-scan-reports:
+  extends: [.defectdojo_upload, .file-beat]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$CONFIG_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Config Scan "
+  needs:
+    - job: file-beat-test
+      artifacts: true
+  when: always
+
+
+file-beat-image-scan-reports:
+  extends: [.defectdojo_upload, .file-beat]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$IMAGE_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Image Scan "
+  needs:
+    - job: file-beat-build
+      artifacts: true
+  when: always

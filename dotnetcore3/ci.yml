@@ -14,3 +14,29 @@ dotnetcore3-build:
   extends: [.dotnetcore3, .build]
   needs: ["dotnetcore3-test"]
 
+dotnetcore3-config-scan-reports:
+  extends: [.defectdojo_upload, .dotnetcore3]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$CONFIG_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Config Scan "
+  needs:
+    - job: dotnetcore3-test
+      artifacts: true
+  when: always
+
+
+dotnetcore3-image-scan-reports:
+  extends: [.defectdojo_upload, .dotnetcore3]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$IMAGE_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Image Scan "
+  needs:
+    - job: dotnetcore3-build
+      artifacts: true
+  when: always

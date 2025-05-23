@@ -1,5 +1,5 @@
 .axosyslog:
-  extends: .base-rules
+  # extends: .base-rules
   variables:
     RULES_CHANGES_PATH: "axosyslog/**/*"
     DIR_PATH: "axosyslog"
@@ -13,3 +13,30 @@ axosyslog-test:
 axosyslog-build:
   extends: [.axosyslog, .build]
   needs: ["axosyslog-test"]
+
+axosyslog-config-scan-reports:
+  extends: [.defectdojo_upload, .axosyslog]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$CONFIG_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Config Scan "
+  needs:
+    - job: axosyslog-test
+      artifacts: true
+  when: always
+
+
+axosyslog-image-scan-reports:
+  extends: [.defectdojo_upload, .axosyslog]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$IMAGE_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Image Scan "
+  needs:
+    - job: axosyslog-build
+      artifacts: true
+  when: always
