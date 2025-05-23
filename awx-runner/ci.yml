@@ -1,5 +1,5 @@
 .awx-runner:
-#  extends: .base-rules
+  extends: .base-rules
   variables:
     RULES_CHANGES_PATH: "awx-runner/**/*"
     DIR_PATH: "awx-runner"
