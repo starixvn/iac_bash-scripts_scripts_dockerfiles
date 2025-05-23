@@ -72,9 +72,9 @@ include:
     - echo "$TRIVY_SERVER - $TRIVY_VERSION";
     - ./trivy image --timeout 25m --server $TRIVY_SERVER --ignore-unfixed --exit-code 0 --severity HIGH,CRITICAL --token $TRIVY_TOKEN --vuln-type os $DOCKER_REG_URL/$IMAGE_PATH --output ${IMAGE_SCAN_REPORT}
     - echo "done Scan Image $DOCKER_REG_URL/$IMAGE_PATH !"
-    # - echo "Push - $DOCKER_REG_URL/$IMAGE_PATH"
-    # - docker push $DOCKER_REG_URL/$IMAGE_PATH
-    # - echo "$DOCKER_REG_URL/$IMAGE_PATH - Push is DONE!";
+    - echo "Push - $DOCKER_REG_URL/$IMAGE_PATH"
+    - docker push $DOCKER_REG_URL/$IMAGE_PATH
+    - echo "$DOCKER_REG_URL/$IMAGE_PATH - Push is DONE!";
   tags:
     - docker
   artifacts:
