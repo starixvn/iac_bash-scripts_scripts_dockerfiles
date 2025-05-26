@@ -30,8 +30,6 @@ include:
   stage: test
   image: aquasec/trivy:latest
   script:
-    # Download and extract Trivy scanner
-    # - wget --no-verbose https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz?inline=false -O - | tar -zxvf -
     # Display Dockerfile contents  
     - cat $DIR_PATH/Dockerfile
     - |
