@@ -10,9 +10,6 @@ include:
   - local: "/alpine/ci.yml"
   # - local: "/awx-runner/ci.yml"
   # - local: "/awx-web/ci.yml"
-  # - local: "/axosyslog/ci.yml"
-  # - local: "/cert-updater/ci.yml"
-  # - local: "/file-beat/ci.yml"
     
 
 .general-script:
@@ -30,12 +27,8 @@ include:
   stage: test
   image: aquasec/trivy:latest
   script:
-    # Download and extract Trivy scanner
-    # - wget --no-verbose https://gitlab.nexdev.net/NEXOPS/tools/trivy-scan/-/raw/main/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz?inline=false -O - | tar -zxvf -
     # Display Dockerfile contents  
     - cat $DIR_PATH/Dockerfile
-    # Show Trivy version and server info
-    # - echo "$TRIVY_SERVER - $TRIVY_VERSION"
     - |
       # Run Trivy config and always generate the report
       trivy config \
@@ -228,7 +221,7 @@ include:
         -F "scan_type=${DEFECTDOJO_SCAN_TYPE}" \
         -F "active=true" \
         -F "verified=true" \
-        -F "product_name=${CI_PROJECT_NAME}" \
+        -F "product_name=${DEFECTDOJO_PRODUCT_NAME}" \
         -F "engagement_name=${ENGAGEMENT_NAME}" \
         -F "engagement=${ENGAGEMENT_ID}" \
         -F "test_type=\"${DEFECTDOJO_SCAN_TEST_TYPE}\"" \
