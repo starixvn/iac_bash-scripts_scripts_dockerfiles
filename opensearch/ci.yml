@@ -1,0 +1,43 @@
+.opensearch:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "opensearch/**/*"
+    DIR_PATH: "opensearch"
+    IMAGE_TAG: "2.19.2"
+    BASE_IMAGE: "opensearch:2.19.2"
+    IMAGE_PATH: "base/opensearchproject/opensearch:$IMAGE_TAG"
+
+    
+opensearch-test:
+  extends: [.opensearch, .test]
+
+opensearch-build:
+ extends: [.opensearch, .build]
+ needs: ["opensearch-test"]
+
+opensearch-config-scan-reports:
+  extends: [.defectdojo_upload, .opensearch]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$CONFIG_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Config Scan "
+  needs:
+    - job: opensearch-test
+      artifacts: true
+  when: always
+
+
+opensearch-image-scan-reports:
+  extends: [.defectdojo_upload, .opensearch]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$IMAGE_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Image Scan "
+  needs:
+    - job: opensearch-build
+      artifacts: true
+  when: always
