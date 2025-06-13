@@ -4,7 +4,7 @@
     RULES_CHANGES_PATH: "opensearch/**/*"
     DIR_PATH: "opensearch"
     IMAGE_TAG: "2.19.2"
-    BASE_IMAGE: "opensearch:2.19.2"
+    BASE_IMAGE: "opensearchproject/opensearch:2.19.2"
     IMAGE_PATH: "base/opensearchproject/opensearch:$IMAGE_TAG"
 
 
