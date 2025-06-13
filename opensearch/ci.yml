@@ -7,7 +7,7 @@
     BASE_IMAGE: "opensearch:2.19.2"
     IMAGE_PATH: "base/opensearchproject/opensearch:$IMAGE_TAG"
 
-    
+
 opensearch-test:
   extends: [.opensearch, .test]
 
