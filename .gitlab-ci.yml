@@ -7,9 +7,9 @@ stages:
 include:
   - local: "base.yml"
   - local: "**/ci.yml"
-  - local: "/alpine/ci.yml"
+  #- local: "/alpine/ci.yml"
   # - local: "/awx-runner/ci.yml"
-  # - local: "/awx-web/ci.yml"
+  - local: "/awx-web/ci.yml"
     
 
 .general-script:
