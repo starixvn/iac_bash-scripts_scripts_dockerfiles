@@ -1,5 +1,5 @@
 .file-beat:
-  # extends: .base-rules
+  extends: .base-rules
   variables:
     RULES_CHANGES_PATH: "file-beat/**/*"
     DIR_PATH: "file-beat"
