@@ -1,5 +1,5 @@
 .axosyslog:
-  # extends: .base-rules
+  extends: .base-rules
   variables:
     RULES_CHANGES_PATH: "axosyslog/**/*"
     DIR_PATH: "axosyslog"
