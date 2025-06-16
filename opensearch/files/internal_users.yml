@@ -10,6 +10,13 @@ admin:
   - "admin"
   description: "Demo admin user"
 
+nexops:
+  hash: "$2y$12$IF5skeHkdVxQdoFg3/cQMurokpICezG6QJhVQBcdXeE4gmCcNVzye"
+  reserved: true
+  backend_roles:
+  - "admin"
+  description: "Nexops admin user"
+
 anomalyadmin:
   hash: "$2y$12$TRwAAJgnNo67w3rVUz4FIeLx9Dy/llB79zf9I15CKJ9vkM4ZzAd3."
   reserved: false
