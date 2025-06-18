@@ -1,4 +1,5 @@
 .awx-web:
+  
   extends: .base-rules
   variables:
     RULES_CHANGES_PATH: "awx-web/**/*"
