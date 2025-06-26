@@ -3,7 +3,7 @@
   variables:
     RULES_CHANGES_PATH: "docker-alpine/**/*"
     DIR_PATH: "docker-alpine"
-    IMAGE_VERSION: "24.0.4-bash-jq-jinja"
+    IMAGE_VERSION: "24.0.4-bash-jq-jinja-argocd"
     BASE_IMAGE: "docker:24.0.4-cli-alpine3.18"
     IMAGE_PATH: "base/docker:$IMAGE_VERSION"
 
