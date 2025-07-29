@@ -5,7 +5,7 @@ stages:
   - deploy
 ############
 include:
-  # - local: "base.yml"
+  - local: "base.yml"
   # - local: "**/ci.yml"
   # - local: "/alpine/ci.yml"
   # - local: "/awx-runner/ci.yml"
@@ -25,20 +25,31 @@ include:
 #Scan Config 
 .test:
   stage: test
-  image: $DOCKER_REG_LOCAL_URL/docker-hub/aquasec/trivy:0.64.0
+  image: $DOCKER_REG_LOCAL_URL/docker-hub/aquasec/trivy:latest
   script:
     # Display Dockerfile contents  
     - cat $DIR_PATH/Dockerfile
     - |
       # Run Trivy config and always generate the report
-      trivy config $DIR_PATH -s HIGH,CRITICAL --exit-code 0 -f json --output configreport.json
+      trivy config \
+        --severity CRITICAL \
+        --exit-code 0 \
+        --format json \
+        --output ${CONFIG_SCAN_REPORT} \
+        $DIR_PATH/
+      # Fail the pipeline only if there are serious vulnerabilities
+      trivy config \
+       --severity CRITICAL \
+       --exit-code 1 \
+       $DIR_PATH/
     - echo "done Scan Dockerfile !"
   tags:
     - docker
   artifacts:
     when: always
     paths:
-      - configreport.json
+      - ${CONFIG_SCAN_REPORT}
+
 
 # Build → Scan → Push image
 .build:
