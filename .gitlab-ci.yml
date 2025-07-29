@@ -93,7 +93,6 @@ include:
     - echo "Push - $DOCKER_REG_URL/$IMAGE_PATH"
     - docker push $DOCKER_REG_URL/$IMAGE_PATH
     - echo "$DOCKER_REG_URL/$IMAGE_PATH - Push is DONE!";
-
   tags:
     - docker
   artifacts:
@@ -239,6 +238,7 @@ include:
         fi
       fi
 
+
      # 1. Ensure report exists
     - test -f "${DEFECTDOJO_SCAN_FILE}" || { echo "❌ Trivy report not found"; exit 1; }
     - echo "🔎 Checking for existing Test titled ${DEFECTDOJO_TEST_TITLE}"
@@ -304,6 +304,7 @@ include:
     - echo "✅ Upload completed"
   tags:
     - docker
+
 
 .deploy:
   stage: deploy
