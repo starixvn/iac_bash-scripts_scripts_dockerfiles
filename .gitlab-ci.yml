@@ -25,7 +25,7 @@ include:
 #Scan Config 
 .test:
   stage: test
-  image: $DOCKER_REG_LOCAL_URL/docker-hub/aquasec/trivy:latest
+  image: $DOCKER_REG_LOCAL_URL/docker-hub/aquasec/trivy:v0.64.1
   script:
     # Display Dockerfile contents  
     - cat $DIR_PATH/Dockerfile
