@@ -31,17 +31,15 @@ include:
     - cat $DIR_PATH/Dockerfile
     - |
       # Run Trivy config and always generate the report
-      trivy config \
+      trivy config $DIR_PATH \
         --severity HIGH,CRITICAL \
         --exit-code 0 \
         --format json \
-        --output ${CONFIG_SCAN_REPORT} \
-        $DIR_PATH
+        --output ${CONFIG_SCAN_REPORT}
       # Fail the pipeline only if there are serious vulnerabilities
-      trivy config \
+      trivy config $DIR_PATH \
        --severity CRITICAL \
-       --exit-code 1 \
-       $DIR_PATH
+       --exit-code 1
     - echo "done Scan Dockerfile !"
   tags:
     - docker
@@ -265,6 +263,7 @@ include:
           -F "product_name=${DEFECTDOJO_PRODUCT_NAME}" \
           -F "engagement_name=${ENGAGEMENT_NAME}" \
           -F "engagement=${ENGAGEMENT_ID}" \
+          -F "do_not_reactivate"="false" \
           -F "test_type=\"${DEFECTDOJO_SCAN_TEST_TYPE}\"" \
           -F "auto_create_context=${DEFECTDOJO_AUTO_CREATE_CONTEXT}" \
           -F "deduplication_on_engagement=${DEFECTDOJO_ENGAGEMENT_DEDUPLICATION_ON_ENGAGEMENT}" \
