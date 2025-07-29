@@ -10,6 +10,7 @@
 docker-alpine-test:
   extends: [.docker-alpine, .test]
 
+
 docker-alpine-build:
   extends: [.docker-alpine, .build]
   needs: ["docker-alpine-test"]
