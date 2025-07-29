@@ -31,11 +31,9 @@ include:
     - cat $DIR_PATH/Dockerfile
     - |
       # Run Trivy config and always generate the report
-      trivy config $DIR_PATH/ \
+      trivy config $DIR_PATH \
         --severity HIGH,CRITICAL \
-        --exit-code 0 \
-        --format json \
-        --output ${CONFIG_SCAN_REPORT} \
+        --exit-code 0
     - echo "done Scan Dockerfile !"
   tags:
     - docker
