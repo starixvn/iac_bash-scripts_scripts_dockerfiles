@@ -7,7 +7,6 @@
     IMAGE_VERSION: "11.2.0"
     IMAGE_PATH: "rebuild-baseimage/awx-web:$IMAGE_VERSION"
 
-
 awx-web-test:
   extends: [.awx-web, .test]
 
