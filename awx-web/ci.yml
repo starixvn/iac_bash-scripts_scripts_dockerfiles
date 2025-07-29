@@ -1,4 +1,5 @@
 .awx-web:
+  
   # extends: .base-rules
   variables:
     RULES_CHANGES_PATH: "awx-web/**/*"
@@ -6,16 +7,13 @@
     BASE_IMAGE: "hub.nexdev.net/base/awx/web:$IMAGE_VERSION"
     IMAGE_VERSION: "11.2.0"
     IMAGE_PATH: "rebuild-baseimage/awx-web:$IMAGE_VERSION"
-
-
-
+    
 awx-web-test:
   extends: [.awx-web, .test]
 
 awx-web-build:
   extends: [.awx-web, .build]
   needs: ["awx-web-test"]
-
 
 awx-web-config-scan-reports:
   extends: [.defectdojo_upload, .awx-web]
@@ -24,7 +22,7 @@ awx-web-config-scan-reports:
     DEFECTDOJO_SCAN_FILE: "$CONFIG_SCAN_REPORT"
     DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
     DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
-    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Config Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Config Scan "
   needs:
     - job: awx-web-test
       artifacts: true
@@ -38,7 +36,7 @@ awx-web-image-scan-reports:
     DEFECTDOJO_SCAN_FILE: "$IMAGE_SCAN_REPORT"
     DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
     DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
-    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Image Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Image Scan "
   needs:
     - job: awx-web-build
       artifacts: true
