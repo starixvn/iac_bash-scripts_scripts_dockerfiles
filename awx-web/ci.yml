@@ -4,7 +4,7 @@
     RULES_CHANGES_PATH: "awx-web/**/*"
     DIR_PATH: "awx-web"
     BASE_IMAGE: "hub.nexdev.net/base/awx/web:$IMAGE_VERSION"
-    IMAGE_VERSION: "11.2.0"
+    IMAGE_VERSION: "3.67.0-7.el8_5"
     IMAGE_PATH: "rebuild-baseimage/awx-web:$IMAGE_VERSION"
     
 awx-web-test:

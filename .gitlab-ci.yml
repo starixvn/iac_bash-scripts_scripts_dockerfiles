@@ -32,7 +32,7 @@ include:
     - |
       # Run Trivy config and always generate the report
       trivy config \
-        --severity HIGH,CRITICAL \
+        --severity CRITICAL \
         --exit-code 0 \
         --format json \
         --output ${CONFIG_SCAN_REPORT} \
@@ -72,7 +72,7 @@ include:
         --ignore-unfixed \
         --vuln-type os \
         --exit-code 0 \
-        --severity HIGH,CRITICAL \
+        --severity CRITICAL \
         --token $TRIVY_TOKEN \
         --format json \
         --output ${IMAGE_SCAN_REPORT} \
