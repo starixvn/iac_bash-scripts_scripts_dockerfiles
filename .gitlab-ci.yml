@@ -9,8 +9,8 @@ include:
   # - local: "**/ci.yml"
   # - local: "/alpine/ci.yml"
   # - local: "/awx-runner/ci.yml"
-  - local: "/awx-web/ci.yml"
-    
+  # - local: "/awx-web/ci.yml"
+  - local: "/docker-alpine/ci.yml"
 
 .general-script:
   docker-login:
