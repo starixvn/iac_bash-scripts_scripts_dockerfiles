@@ -3,7 +3,7 @@ FROM $BASE_IMAGE
 LABEL maintainer=NexOps
 
 
-# RUN sed -i 's/^Components: main$/& contrib/' /etc/apt/sources.list.d/debian.sources
+RUN sed -i 's/^Components: main$/& contrib/' /etc/apt/sources.list.d/debian.sources
 
 RUN apt-get update && apt-get install -y --no-install-recommends  \
     iputils-ping wget tcptraceroute bc tzdata \
