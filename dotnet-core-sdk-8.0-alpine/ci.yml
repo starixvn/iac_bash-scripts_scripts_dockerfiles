@@ -1,0 +1,15 @@
+.dotnetcoresdk-alpine:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "dotnet-core-sdk-alpine/**/*"
+    DIR_PATH: "dotnet-core-sdk-alpine"
+    IMAGE_VERSION: "8.0-alpine"
+    BASE_IMAGE: "mcr.microsoft.com/dotnet/sdk:8.0-alpine"
+    IMAGE_PATH: "base/dotnet/core/sdk:$IMAGE_VERSION"
+
+dotnetcoresdk-alpine-test:
+  extends: [.dotnetcoresdk-alpine, .test]
+
+dotnetcoresdk-alpine-build:
+  extends: [.dotnetcoresdk-alpine, .build]
+  needs: ["dotnetcoresdk-alpine-test"]
