@@ -3,13 +3,12 @@
   variables:
     RULES_CHANGES_PATH: "docker-alpine/**/*"
     DIR_PATH: "docker-alpine"
-    IMAGE_VERSION: "20.10.7-testing"
-    BASE_IMAGE: "docker:20.10.7"
+    IMAGE_VERSION: "24.0.4-bash-jq-jinja-argocd"
+    BASE_IMAGE: "docker:24.0.4-cli-alpine3.18"
     IMAGE_PATH: "base/docker:$IMAGE_VERSION"
 
 docker-alpine-test:
   extends: [.docker-alpine, .test]
-
 
 docker-alpine-build:
   extends: [.docker-alpine, .build]
@@ -22,7 +21,7 @@ docker-alpine-config-scan-reports:
     DEFECTDOJO_SCAN_FILE: "$CONFIG_SCAN_REPORT"
     DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
     DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
-    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Config Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Config Scan "
   needs:
     - job: docker-alpine-test
       artifacts: true
@@ -36,7 +35,7 @@ docker-alpine-image-scan-reports:
     DEFECTDOJO_SCAN_FILE: "$IMAGE_SCAN_REPORT"
     DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
     DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
-    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Image Scan"
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Image Scan "
   needs:
     - job: docker-alpine-build
       artifacts: true
