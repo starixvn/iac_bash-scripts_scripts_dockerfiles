@@ -1,13 +1,11 @@
 .alpine:
-  extends: .base-rules
+  # extends: .base-rules
   variables:
     RULES_CHANGES_PATH: "alpine/**/*"
     DIR_PATH: "alpine"
-    IMAGE_TAG: "git-3.17.2"
-    BASE_IMAGE: "alpine:3.17.2"
+    IMAGE_TAG: "git-3.21"
+    BASE_IMAGE: "alpine:3.21"
     IMAGE_PATH: "base/alpine:$IMAGE_TAG"
-
-
 
 alpine-test:
   extends: [.alpine, .test]
@@ -23,11 +21,12 @@ alpine-config-scan-reports:
     DEFECTDOJO_SCAN_FILE: "$CONFIG_SCAN_REPORT"
     DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
     DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
-    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Config Scan "
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Config Scan"
   needs:
     - job: alpine-test
       artifacts: true
   when: always
+
 
 alpine-image-scan-reports:
   extends: [.defectdojo_upload, .alpine]
@@ -36,7 +35,7 @@ alpine-image-scan-reports:
     DEFECTDOJO_SCAN_FILE: "$IMAGE_SCAN_REPORT"
     DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
     DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
-    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Image Scan "
+    DEFECTDOJO_TEST_TITLE: "$ENGAGEMENT_NAME - Image Scan"
   needs:
     - job: alpine-build
       artifacts: true
