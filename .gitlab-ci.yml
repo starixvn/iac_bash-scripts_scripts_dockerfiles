@@ -29,7 +29,6 @@ include:
   before_script:
     - apk add --no-cache jq
   script:
-    # Display Dockerfile contents  
     - cat $DIR_PATH/Dockerfile
     - |
       # Run Trivy config and always generate the report
@@ -40,7 +39,6 @@ include:
         --output ${CONFIG_SCAN_REPORT} \
         $DIR_PATH/
     - echo "done Scan Dockerfile !"
-  after_script:
     - |
       if [ -f "${CONFIG_SCAN_REPORT}" ]; then
         VULN_COUNT=$(jq '[.Results[]?.Misconfigurations[]? | select(.Severity == "HIGH" or .Severity == "CRITICAL")] | length' ${CONFIG_SCAN_REPORT})
@@ -48,11 +46,9 @@ include:
         if [ "$VULN_COUNT" -gt 0 ]; then
           echo "❌ HIGH/CRITICAL config vulnerabilities detected"
           echo "📊 Report will be uploaded to DefectDojo"
-          exit 1
+          exit 1  # ← Bây giờ sẽ fail job!
         fi
       fi
-  tags:
-    - docker
   artifacts:
     when: always
     paths:
