@@ -240,18 +240,24 @@ include:
 
 
      # Ensure report exists
+    - echo "🔎 EXISTING_TITLE: ${EXISTING_TITLE}"
+    - echo "🔎 DEFECTDOJO_TEST_TITLE: ${DEFECTDOJO_TEST_TITLE}"
     - test -f "${DEFECTDOJO_SCAN_FILE}" || { echo "❌ Trivy report not found"; exit 1; }
     - echo "🔎 Checking for existing Test titled ${DEFECTDOJO_TEST_TITLE}"
     - |
-      EXISTING_TITLE=$(curl -s -H "Authorization: Token ${DEFECTDOJO_API_KEY}" \
-        "${DEFECTDOJO_URL}/api/v2/tests/?engagement=${ENGAGEMENT_ID}" \
-        | jq -r --arg test_title "$DEFECTDOJO_TEST_TITLE" \
-        '.results[] | select(.title==$test_title) | .title // empty')
+      # Get existing test title with error handling
+      API_RESPONSE=$(curl -s -H "Authorization: Token ${DEFECTDOJO_API_KEY}" \
+        "${DEFECTDOJO_URL}/api/v2/tests/?engagement=${ENGAGEMENT_ID}" || echo '{"results":[]}')
       
-      # Set default value if null
+      EXISTING_TITLE=$(echo "$API_RESPONSE" | jq -r --arg test_title "$DEFECTDOJO_TEST_TITLE" \
+        '.results[]? | select(.title==$test_title) | .title // empty' 2>/dev/null || echo "")
+      
+      # Set default value if null or empty
       EXISTING_TITLE=${EXISTING_TITLE:-""}
-      echo "🔎 EXISTING_TITLE: ${EXISTING_TITLE}"
-      echo "🔎 DEFECTDOJO_TEST_TITLE: ${DEFECTDOJO_TEST_TITLE}"
+      
+      echo "🔎 EXISTING_TITLE: '${EXISTING_TITLE}'"
+      echo "🔎 DEFECTDOJO_TEST_TITLE: '${DEFECTDOJO_TEST_TITLE}'"
+      echo "🔎 Tests found: $(echo "$API_RESPONSE" | jq '.count // 0')"
     - |  
       if [ "$EXISTING_TITLE" = "${DEFECTDOJO_TEST_TITLE}" ]; then
         echo "✅ Found existing Test; doing reimport-scan"

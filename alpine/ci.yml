@@ -6,13 +6,14 @@
     IMAGE_TAG: "git-3.21"
     BASE_IMAGE: "alpine:3.21"
     IMAGE_PATH: "base/alpine:$IMAGE_TAG"
-    
+
 alpine-test:
   extends: [.alpine, .test]
 
 alpine-build:
  extends: [.alpine, .build]
  needs: ["alpine-test"]
+
 
 alpine-config-scan-reports:
   extends: [.defectdojo_upload, .alpine]
