@@ -240,8 +240,6 @@ include:
 
 
      # Ensure report exists
-    - echo "🔎 EXISTING_TITLE: ${EXISTING_TITLE}"
-    - echo "🔎 DEFECTDOJO_TEST_TITLE: ${DEFECTDOJO_TEST_TITLE}"
     - test -f "${DEFECTDOJO_SCAN_FILE}" || { echo "❌ Trivy report not found"; exit 1; }
     - echo "🔎 Checking for existing Test titled ${DEFECTDOJO_TEST_TITLE}"
     - |
