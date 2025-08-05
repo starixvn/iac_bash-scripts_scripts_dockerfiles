@@ -39,7 +39,7 @@ include:
         $DIR_PATH/
       # Fail the pipeline only if there are serious vulnerabilities
       trivy config \
-       --severity CRITICAL \
+       --severity HIGH,CRITICAL \
        --exit-code 1 \
        $DIR_PATH/
     - echo "done Scan Dockerfile !"
@@ -256,16 +256,8 @@ include:
       
       echo "🔎 EXISTING_TITLE: '${EXISTING_TITLE}'"
       echo "🔎 DEFECTDOJO_TEST_TITLE: '${DEFECTDOJO_TEST_TITLE}'"
-      echo "🔎 Tests found: $(echo "$API_RESPONSE" | jq '.count // 0')"
     - |
-      EXISTING_TITLE_FIRST=$(echo "$EXISTING_TITLE" | head -n1)
-      EXISTING_TITLE_TRIMMED=$(echo "$EXISTING_TITLE_FIRST" | xargs)
-      DEFECTDOJO_TEST_TITLE_TRIMMED=$(echo "$DEFECTDOJO_TEST_TITLE" | xargs)
-      echo "🔎 EXISTING_TITLE (first line): '${EXISTING_TITLE_FIRST}'"
-      echo "🔎 EXISTING_TITLE (trimmed): '${EXISTING_TITLE_TRIMMED}'"
-      echo "🔎 DEFECTDOJO_TEST_TITLE (trimmed): '${DEFECTDOJO_TEST_TITLE_TRIMMED}'"
-      
-      if [ "$EXISTING_TITLE_TRIMMED" = "$DEFECTDOJO_TEST_TITLE_TRIMMED" ] && [ -n "$EXISTING_TITLE_TRIMMED" ]; then
+      if [ "$EXISTING_TITLE" = "$DEFECTDOJO_TEST_TITLE" ] && [ -n "$EXISTING_TITLE" ]; then
         echo "✅ Found existing Test; doing reimport-scan"
         TEST_ID=$(curl -s -H "Authorization: Token ${DEFECTDOJO_API_KEY}" \
           "${DEFECTDOJO_URL}/api/v2/tests/?engagement=${ENGAGEMENT_ID}" \
