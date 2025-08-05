@@ -7,7 +7,6 @@
     BASE_IMAGE: "alpine:3.21"
     IMAGE_PATH: "base/alpine:$IMAGE_TAG"
 
-    
 alpine-test:
   extends: [.alpine, .test]
 

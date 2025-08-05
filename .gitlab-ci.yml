@@ -37,12 +37,18 @@ include:
         --format json \
         --output ${CONFIG_SCAN_REPORT} \
         $DIR_PATH/
-      # Fail the pipeline only if there are serious vulnerabilities
-      trivy config \
-       --severity CRITICAL \
-       --exit-code 1 \
-       $DIR_PATH/
     - echo "done Scan Dockerfile !"
+  after_script:
+    - |
+      if [ -f "${CONFIG_SCAN_REPORT}" ]; then
+        VULN_COUNT=$(jq '[.Results[]?.Misconfigurations[]? | select(.Severity == "HIGH" or .Severity == "CRITICAL")] | length' ${CONFIG_SCAN_REPORT})
+        echo "Found $VULN_COUNT HIGH/CRITICAL config vulnerabilities"
+        if [ "$VULN_COUNT" -gt 0 ]; then
+          echo "❌ HIGH/CRITICAL config vulnerabilities detected"
+          echo "📊 Report will be uploaded to DefectDojo"
+          exit 1
+        fi
+      fi
   tags:
     - docker
   artifacts:
