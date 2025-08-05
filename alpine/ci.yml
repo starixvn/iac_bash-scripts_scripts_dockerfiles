@@ -14,8 +14,6 @@ alpine-build:
  extends: [.alpine, .build]
  needs: ["alpine-test"]
 
-
-
 alpine-config-scan-reports:
   extends: [.defectdojo_upload, .alpine]
   variables:
