@@ -248,7 +248,8 @@ include:
         "${DEFECTDOJO_URL}/api/v2/tests/?engagement=${ENGAGEMENT_ID}" || echo '{"results":[]}')
       
       EXISTING_TITLE=$(echo "$API_RESPONSE" | jq -r --arg test_title "$DEFECTDOJO_TEST_TITLE" \
-        '.results[]? | select(.title | gsub("^\\s+|\\s+$"; "") == ($test_title | gsub("^\\s+|\\s+$"; ""))) | .title // empty' 2>/dev/null || echo "")
+        '.results[]? | select(.title | gsub("^\\s+|\\s+$"; "") == ($test_title | gsub("^\\s+|\\s+$"; ""))) | .title' \
+        | head -n1 | xargs || echo "")
       
       # Set default value if null or empty
       EXISTING_TITLE=${EXISTING_TITLE:-""}
@@ -257,11 +258,13 @@ include:
       echo "🔎 DEFECTDOJO_TEST_TITLE: '${DEFECTDOJO_TEST_TITLE}'"
       echo "🔎 Tests found: $(echo "$API_RESPONSE" | jq '.count // 0')"
     - |
-      EXISTING_TITLE_TRIMMED=$(echo "$EXISTING_TITLE" | xargs)
-      DEFECTDOJO_TEST_TITLE_TRIMMED=$(echo "$DEFECTDOJO_TEST_TITLE" | xargs)  
+      EXISTING_TITLE_FIRST=$(echo "$EXISTING_TITLE" | head -n1)
+      EXISTING_TITLE_TRIMMED=$(echo "$EXISTING_TITLE_FIRST" | xargs)
+      DEFECTDOJO_TEST_TITLE_TRIMMED=$(echo "$DEFECTDOJO_TEST_TITLE" | xargs)
+      echo "🔎 EXISTING_TITLE (first line): '${EXISTING_TITLE_FIRST}'"
       echo "🔎 EXISTING_TITLE (trimmed): '${EXISTING_TITLE_TRIMMED}'"
       echo "🔎 DEFECTDOJO_TEST_TITLE (trimmed): '${DEFECTDOJO_TEST_TITLE_TRIMMED}'"
-
+      
       if [ "$EXISTING_TITLE_TRIMMED" = "$DEFECTDOJO_TEST_TITLE_TRIMMED" ] && [ -n "$EXISTING_TITLE_TRIMMED" ]; then
         echo "✅ Found existing Test; doing reimport-scan"
         TEST_ID=$(curl -s -H "Authorization: Token ${DEFECTDOJO_API_KEY}" \
