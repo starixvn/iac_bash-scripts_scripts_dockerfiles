@@ -256,7 +256,8 @@ include:
         echo "✅ Found existing Test; doing reimport-scan"
         TEST_ID=$(curl -s -H "Authorization: Token ${DEFECTDOJO_API_KEY}" \
           "${DEFECTDOJO_URL}/api/v2/tests/?engagement=${ENGAGEMENT_ID}" \
-          | jq -r '.results[] | select(.title=="${DEFECTDOJO_TEST_TITLE}") | .id')
+          | jq -r --arg test_title "$DEFECTDOJO_TEST_TITLE" \
+          '.results[] | select(.title==$test_title) | .id')
         curl -S -X POST "${DEFECTDOJO_URL}/api/v2/reimport-scan/" \
           -H "Authorization: Token ${DEFECTDOJO_API_KEY}" \
           -F "scan_type=${DEFECTDOJO_SCAN_TYPE}" \
