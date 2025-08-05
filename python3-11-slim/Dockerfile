@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends  \
     libpng-dev \
     pkg-config && \
     rm -rf /var/lib/apt/lists/*
-RUN wget https://pingpros.com/pub/tcpping -O /usr/bin/tcpping && chmod +x /usr/bin/tcpping
+# RUN wget https://pingpros.com/pub/tcpping -O /usr/bin/tcpping && chmod +x /usr/bin/tcpping
 
 
 
