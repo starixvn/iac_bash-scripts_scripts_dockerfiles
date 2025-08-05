@@ -6,11 +6,11 @@ stages:
 ############
 include:
   - local: "base.yml"
-  # - local: "**/ci.yml"
-  # - local: "/alpine/ci.yml"
+  - local: "**/ci.yml"
+  #- local: "/alpine/ci.yml"
   # - local: "/awx-runner/ci.yml"
-  # - local: "/awx-web/ci.yml"
-  - local: "/docker-alpine/ci.yml"
+  #- local: "/awx-web/ci.yml"
+    
 
 .general-script:
   docker-login:
@@ -25,14 +25,14 @@ include:
 #Scan Config 
 .test:
   stage: test
-  image: $DOCKER_REG_LOCAL_URL/docker-hub/aquasec/trivy:0.64.0
+  image: $DOCKER_REG_LOCAL_URL/docker-hub/aquasec/trivy:latest
   script:
     # Display Dockerfile contents  
     - cat $DIR_PATH/Dockerfile
     - |
       # Run Trivy config and always generate the report
       trivy config \
-        --severity CRITICAL \
+        --severity HIGH,CRITICAL \
         --exit-code 0 \
         --format json \
         --output ${CONFIG_SCAN_REPORT} \
@@ -49,7 +49,6 @@ include:
     when: always
     paths:
       - ${CONFIG_SCAN_REPORT}
-
 
 # Build → Scan → Push image
 .build:
@@ -73,7 +72,7 @@ include:
         --ignore-unfixed \
         --vuln-type os \
         --exit-code 0 \
-        --severity CRITICAL \
+        --severity HIGH,CRITICAL \
         --token $TRIVY_TOKEN \
         --format json \
         --output ${IMAGE_SCAN_REPORT} \
@@ -257,7 +256,8 @@ include:
         echo "✅ Found existing Test; doing reimport-scan"
         TEST_ID=$(curl -s -H "Authorization: Token ${DEFECTDOJO_API_KEY}" \
           "${DEFECTDOJO_URL}/api/v2/tests/?engagement=${ENGAGEMENT_ID}" \
-          | jq -r '.results[] | select(.title=="${DEFECTDOJO_TEST_TITLE}") | .id')
+          | jq -r --arg test_title "$DEFECTDOJO_TEST_TITLE" \
+          '.results[] | select(.title==$test_title) | .id')
         curl -S -X POST "${DEFECTDOJO_URL}/api/v2/reimport-scan/" \
           -H "Authorization: Token ${DEFECTDOJO_API_KEY}" \
           -F "scan_type=${DEFECTDOJO_SCAN_TYPE}" \
@@ -266,7 +266,6 @@ include:
           -F "product_name=${DEFECTDOJO_PRODUCT_NAME}" \
           -F "engagement_name=${ENGAGEMENT_NAME}" \
           -F "engagement=${ENGAGEMENT_ID}" \
-          -F "do_not_reactivate"="false" \
           -F "test_type=\"${DEFECTDOJO_SCAN_TEST_TYPE}\"" \
           -F "auto_create_context=${DEFECTDOJO_AUTO_CREATE_CONTEXT}" \
           -F "deduplication_on_engagement=${DEFECTDOJO_ENGAGEMENT_DEDUPLICATION_ON_ENGAGEMENT}" \
@@ -307,12 +306,12 @@ include:
   tags:
     - docker
 
-.deploy:
-  stage: deploy
-  script:
-    - !reference [.general-script, docker-login]
-    - echo "Push - hub.nexdev.net/$IMAGE_PATH"
-    - docker push hub.nexdev.net/$IMAGE_PATH
-    - echo "hub.nexdev.net/$IMAGE_PATH - deploy is DONE!";
-  tags:
-    - docker
+# .deploy:
+#   stage: deploy
+#   script:
+#     - !reference [.general-script, docker-login]
+#     - echo "Push - hub.nexdev.net/$IMAGE_PATH"
+#     - docker push hub.nexdev.net/$IMAGE_PATH
+#     - echo "hub.nexdev.net/$IMAGE_PATH - deploy is DONE!";
+#   tags:
+#     - docker
