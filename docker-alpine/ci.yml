@@ -3,8 +3,8 @@
   variables:
     RULES_CHANGES_PATH: "docker-alpine/**/*"
     DIR_PATH: "docker-alpine"
-    IMAGE_VERSION: "24.0.4-bash-jq-jinja"
-    BASE_IMAGE: "docker:24.0.4-cli-alpine3.18"
+    IMAGE_VERSION: "20.10.7-testing"
+    BASE_IMAGE: "docker:20.10.7"
     IMAGE_PATH: "base/docker:$IMAGE_VERSION"
 
 docker-alpine-test:
