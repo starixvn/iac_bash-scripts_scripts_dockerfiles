@@ -245,7 +245,7 @@ include:
     - |
       EXISTING_TITLE=$(curl -s -H "Authorization: Token ${DEFECTDOJO_API_KEY}" \
         "${DEFECTDOJO_URL}/api/v2/tests/?engagement=${ENGAGEMENT_ID}" \
-        | jq -r --arg test_title "$DEFECTDOJO_TEST_TITLE" \
+        | jq -r --arg test_title "$DEFECTDOJO_ENGAGEMENT_NAME" \
         '.results[] | select(.title==$test_title) | .title // empty')
       
       # Set default value if null
@@ -267,6 +267,8 @@ include:
           -F "engagement_name=${ENGAGEMENT_NAME}" \
           -F "engagement=${ENGAGEMENT_ID}" \
           -F "test_type=\"${DEFECTDOJO_SCAN_TEST_TYPE}\"" \
+          -F "engagement_type"="CI/CD" \
+          -F "do_not_reactivate"="false" \
           -F "auto_create_context=${DEFECTDOJO_AUTO_CREATE_CONTEXT}" \
           -F "deduplication_on_engagement=${DEFECTDOJO_ENGAGEMENT_DEDUPLICATION_ON_ENGAGEMENT}" \
           -F "close_old_findings=${DEFECTDOJO_SCAN_CLOSE_OLD_FINDINGS}" \
