@@ -239,20 +239,21 @@ include:
       fi
 
 
-     # 1. Ensure report exists
+     # Ensure report exists
     - test -f "${DEFECTDOJO_SCAN_FILE}" || { echo "❌ Trivy report not found"; exit 1; }
-    - echo "🔎 Checking for existing Test titled ${DEFECTDOJO_TEST_TITLE}"
+    - echo "🔎 Checking for existing Test titled ${DEFECTDOJO_ENGAGEMENT_NAME}"
     - |
       EXISTING_TITLE=$(curl -s -H "Authorization: Token ${DEFECTDOJO_API_KEY}" \
         "${DEFECTDOJO_URL}/api/v2/tests/?engagement=${ENGAGEMENT_ID}" \
-        | jq -r --arg test_title "$DEFECTDOJO_TEST_TITLE" \
+        | jq -r --arg test_title "$DEFECTDOJO_ENGAGEMENT_NAME" \
         '.results[] | select(.title==$test_title) | .title // empty')
       
       # Set default value if null
       EXISTING_TITLE=${EXISTING_TITLE:-""}
       echo "🔎 EXISTING_TITLE: ${EXISTING_TITLE}"
+      echo "🔎 DEFECTDOJO_ENGAGEMENT_NAME: ${DEFECTDOJO_ENGAGEMENT_NAME}"
     - |  
-      if [ "$EXISTING_TITLE" = "${DEFECTDOJO_TEST_TITLE}" ]; then
+      if [ "$EXISTING_TITLE" = "${DEFECTDOJO_ENGAGEMENT_NAME}" ]; then
         echo "✅ Found existing Test; doing reimport-scan"
         TEST_ID=$(curl -s -H "Authorization: Token ${DEFECTDOJO_API_KEY}" \
           "${DEFECTDOJO_URL}/api/v2/tests/?engagement=${ENGAGEMENT_ID}" \
