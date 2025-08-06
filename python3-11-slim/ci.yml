@@ -1,0 +1,16 @@
+.python3-11-slim:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "python3-11-slim/**/*"
+    DIR_PATH: "python3-11-slim"
+    IMAGE_VERSION: "3.11-slim"
+    IMAGE_TAG: "3.11-slim"
+    BASE_IMAGE: "python:$IMAGE_TAG"
+    IMAGE_PATH: "base/python:$IMAGE_VERSION"
+
+python3-11-slim-test:
+  extends: [.python3-11-slim, .test]
+
+python3-11-slim-build:
+  extends: [.python3-11-slim, .build]
+  needs: ["python3-11-slim-test"]
