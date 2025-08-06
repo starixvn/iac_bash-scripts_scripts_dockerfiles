@@ -6,6 +6,7 @@
     BASE_IMAGE: "quay.io/ansible/awx-ee:24.1.0"
     IMAGE_VERSION: "24.1.0"
     IMAGE_PATH: "base/awx/awx-runner:$IMAGE_VERSION"
+
     
 awx-runner-test:
   extends: [.awx-runner, .test]
