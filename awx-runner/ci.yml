@@ -15,7 +15,6 @@ awx-runner-build:
   extends: [.awx-runner, .build]
   needs: ["awx-runner-test"]
 
-
 awx-runner-config-scan-reports:
   extends: [.defectdojo_upload, .awx-runner]
   variables:
