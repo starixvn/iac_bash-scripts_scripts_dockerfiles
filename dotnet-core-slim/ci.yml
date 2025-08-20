@@ -1,23 +1,22 @@
-.dotnetcore7:
+.dotnetcoreslim:
   extends: .base-rules
   variables:
-    RULES_CHANGES_PATH: "dotnetcore7/**/*"
-    DIR_PATH: "dotnetcore7"
-    IMAGE_VERSION: "7.0-alpine"
-    IMAGE_TAG: "7.0-alpine"
-    BASE_IMAGE: "mcr.microsoft.com/dotnet/aspnet:$IMAGE_TAG"
-    # IMAGE_PATH: "rebuild-baseimage/dotnetcore/aspnet:$IMAGE_VERSION"
+    RULES_CHANGES_PATH: "dotnet-core-slim/**/*"
+    DIR_PATH: "dotnet-core-slim"
+    IMAGE_VERSION: "8.0-slim-25h2"
+    BASE_IMAGE: "mcr.microsoft.com/dotnet/aspnet:8.0-bookworm-slim"
     IMAGE_PATH: "base/dotnet/core/aspnet:$IMAGE_VERSION"
+    # IMAGE_PATH: "base/node:$IMAGE_VERSION"
 
-dotnetcore7-test:
-  extends: [.dotnetcore7, .test]
+dotnetcoreslim-test:
+  extends: [.dotnetcoreslim, .test]
 
-dotnetcore7-build:
-  extends: [.dotnetcore7, .build]
-  needs: ["dotnetcore7-test"]
+dotnetcoreslim-build:
+  extends: [.dotnetcoreslim, .build]
+  needs: ["dotnetcoreslim-test"]
 
-dotnetcore7-config-scan-reports:
-  extends: [.defectdojo_upload, .dotnetcore7]
+dotnetcoreslim-config-scan-reports:
+  extends: [.defectdojo_upload, .dotnetcoreslim]
   variables:
     ENGAGEMENT_NAME: "$DIR_PATH"
     DEFECTDOJO_SCAN_FILE: "$CONFIG_SCAN_REPORT"
@@ -25,13 +24,13 @@ dotnetcore7-config-scan-reports:
     DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
     DEFECTDOJO_TEST_TITLE: "Dockerfile Scan"
   needs:
-    - job: dotnetcore7-test
+    - job: dotnetcoreslim-test
       artifacts: true
   when: always
 
 
-dotnetcore7-image-scan-reports:
-  extends: [.defectdojo_upload, .dotnetcore7]
+dotnetcoreslim-image-scan-reports:
+  extends: [.defectdojo_upload, .dotnetcoreslim]
   variables:
     ENGAGEMENT_NAME: "$DIR_PATH"
     DEFECTDOJO_SCAN_FILE: "$IMAGE_SCAN_REPORT"
@@ -39,6 +38,6 @@ dotnetcore7-image-scan-reports:
     DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
     DEFECTDOJO_TEST_TITLE: "$IMAGE_PATH - Image Scan"
   needs:
-    - job: dotnetcore7-build
+    - job: dotnetcoreslim-build
       artifacts: true
   when: always
