@@ -1,0 +1,46 @@
+.fluent-bit:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "fluent-bit/**/*"
+    DIR_PATH: "fluent-bit"
+    IMAGE_VERSION: "4.0.3-geoip"
+    BASE_IMAGE: "cr.fluentbit.io/fluent/fluent-bit:4.0.3"
+    IMAGE_PATH: "base/fluent/fluent-bit:$IMAGE_VERSION"
+
+fluent-bit-test:
+  extends: [.fluent-bit, .test]
+
+fluent-bit-build:
+  extends: [.fluent-bit, .build]
+  needs: ["fluent-bit-test"]
+
+fluent-bit-config-scan-reports:
+  extends: [.defectdojo_upload, .fluent-bit]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$CONFIG_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "Dockerfile Scan"
+  needs:
+    - job: fluent-bit-test
+      artifacts: true
+  when: always
+
+
+fluent-bit-image-scan-reports:
+  extends: [.defectdojo_upload, .fluent-bit]
+  variables:
+    ENGAGEMENT_NAME: "$DIR_PATH"
+    DEFECTDOJO_SCAN_FILE: "$IMAGE_SCAN_REPORT"
+    DEFECTDOJO_SCAN_TYPE: "Trivy Scan"
+    DEFECTDOJO_SCAN_TEST_TYPE: "Trivy Scan"
+    DEFECTDOJO_TEST_TITLE: "$IMAGE_PATH - Image Scan"
+  needs:
+    - job: fluent-bit-build
+      artifacts: true
+  when: always
+
+# docker-deploy:
+#   extends: [.docker, .deploy]
+#   needs: ["docker-build"]
