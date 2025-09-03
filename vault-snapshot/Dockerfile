@@ -8,8 +8,8 @@ RUN apt update && apt install -y --no-install-recommends wget unzip curl
 
 ## Install vault-cli
 RUN cd /usr/bin && \
-	wget https://releases.hashicorp.com/vault/1.18.4/vault_1.18.4_linux_amd64.zip && \
-	unzip vault_1.18.4_linux_amd64.zip && rm vault_1.18.4_linux_amd64.zip LICENSE.txt
+	wget https://releases.hashicorp.com/vault/1.20.1/vault_1.20.1_linux_amd64.zip && \
+	unzip vault_1.20.1_linux_amd64.zip && rm vault_1.20.1_linux_amd64.zip LICENSE.txt
 
 COPY --chmod=755 vault-snapshot/vault-snapshot.sh /vault-snapshot.sh
 COPY --chmod=755 vault-snapshot/alert.sh /alert.sh
