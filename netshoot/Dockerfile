@@ -7,7 +7,7 @@ RUN apt update && apt install -y --no-install-recommends vim \
 	tcptraceroute bc curl wget unzip git jq swaks kmod && \
 	rm -rf /var/lib/apt/lists/*
 
-RUN wget --no-check-certificate https://pingpros.com/pub/tcpping -O /usr/bin/tcpping && chmod +x /usr/bin/tcpping
+COPY --chmod=755 files/tcping /usr/local/bin/tcping
 
 ## Install aws-cli
 # RUN \
