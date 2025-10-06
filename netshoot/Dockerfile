@@ -2,9 +2,11 @@ ARG BASE_IMAGE
 FROM $BASE_IMAGE
 LABEL maintainer=NexOps
 
-RUN apk update && apk add -y --no-cache tcptraceroute bc curl websocat jq git && rm -rf /var/cache/apk/*
-# RUN apt update && apt install -y --no-install-recommends vim tcptraceroute bc curl wget unzip git jq && \
-# 	rm -rf /var/lib/apt/lists/*
+# RUN apk update && apk add -y --no-cache tcptraceroute bc curl websocat jq git && rm -rf /var/cache/apk/*
+RUN apt update && apt install -y --no-install-recommends vim \
+	tcptraceroute bc curl wget unzip git jq swaks kmod && \
+	rm -rf /var/lib/apt/lists/*
+
 RUN wget --no-check-certificate https://pingpros.com/pub/tcpping -O /usr/bin/tcpping && chmod +x /usr/bin/tcpping
 
 ## Install aws-cli
